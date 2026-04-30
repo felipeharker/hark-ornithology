@@ -26,13 +26,20 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
 
   const locations = useMemo(() => {
-    const locMap = new Map<string, { id: string; name: string }>();
+    const locMap = new Map<string, { id: string; name: string; count: number }>();
     data.forEach((obs) => {
-      if (obs.LocationID && !locMap.has(obs.LocationID)) {
-        locMap.set(obs.LocationID, { id: obs.LocationID, name: obs.Location });
+      if (obs.LocationID) {
+        if (!locMap.has(obs.LocationID)) {
+          locMap.set(obs.LocationID, { id: obs.LocationID, name: obs.Location, count: 0 });
+        }
+        const entry = locMap.get(obs.LocationID)!;
+        entry.count += 1;
       }
     });
-    return Array.from(locMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+    return Array.from(locMap.values()).sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.name.localeCompare(b.name);
+    });
   }, [data]);
 
   const locationData = useMemo(() => {
@@ -86,38 +93,41 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
   const selectedLocationName = locations.find(l => l.id === selectedLocationId)?.name;
 
   return (
-    <div className="flex flex-col md:flex-row border border-black min-h-[600px] bg-white">
+    <div className="flex flex-col md:flex-row min-h-[600px] bg-white">
       {/* Left Column: Locations List */}
-      <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-black flex flex-col bg-gray-50">
-        <div className="p-4 border-b border-black">
+      <div className="w-full md:w-72 flex flex-col bg-white">
+        <div className="p-4 border border-black mb-4">
           <button
             onClick={() => setSelectedLocationId(null)}
-            className={`w-full text-left p-2 border border-black font-mono text-sm transition-colors hover:bg-gray-200 ${!selectedLocationId ? 'bg-black text-white' : 'bg-white text-black'}`}
+            className={`w-full text-left p-2 border border-black font-mono text-sm transition-colors hover:bg-black hover:text-white ${!selectedLocationId ? 'bg-black text-white' : 'bg-white text-black'}`}
           >
             All Locations / View Map
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto max-h-[300px] md:max-h-[600px] p-4 space-y-2">
+        <div className="flex-1 overflow-y-auto max-h-[300px] md:max-h-[600px] p-4 border border-black space-y-2">
           {locations.map((loc) => (
             <button
               key={loc.id}
               onClick={() => setSelectedLocationId(loc.id)}
-              className={`w-full text-left p-2 border border-black font-mono text-sm transition-colors hover:bg-gray-200 ${selectedLocationId === loc.id ? 'bg-black text-white' : 'bg-white text-black'}`}
+              className={`w-full text-left p-2 border border-black font-mono text-sm transition-colors hover:bg-black hover:text-white ${selectedLocationId === loc.id ? 'bg-black text-white' : 'bg-white text-black'}`}
             >
-              {loc.name}
+              <div className="flex justify-between items-center">
+                <span className="truncate mr-2">{loc.name}</span>
+                <span className="text-xs">{loc.count} obs</span>
+              </div>
             </button>
           ))}
         </div>
       </div>
 
       {/* Right Column: Content Area */}
-      <div className="flex-1 flex flex-col relative min-h-[500px]">
+      <div className="flex-1 flex flex-col relative min-h-[500px] md:ml-8 lg:ml-12">
         {!selectedLocationId ? (
           <div className="absolute inset-0">
              <MapView data={data} />
           </div>
         ) : (
-          <div className="p-6 md:p-8 flex-1 overflow-y-auto bg-white text-black">
+          <div className="p-6 md:p-8 flex-1 overflow-y-auto bg-white text-black border border-black">
             <h2 className="text-2xl font-bold mb-8 border-b border-black pb-2">{selectedLocationName} - Analysis</h2>
 
             <div className="space-y-12">
