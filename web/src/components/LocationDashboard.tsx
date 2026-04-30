@@ -241,7 +241,7 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
 
         {/* Simple Map Outline */}
         {selectedLocationId && (
-          <div className="mt-4 border border-black p-4 bg-white flex justify-center items-center">
+          <div className="mt-4 bg-white flex justify-center items-center h-full w-full">
             <WorldMapGraphic
               latitude={selectedLocationCoords?.latitude}
               longitude={selectedLocationCoords?.longitude}
