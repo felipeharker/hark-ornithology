@@ -34,11 +34,11 @@ export default function WorldMapGraphic({ latitude, longitude, dotColor = '#ffa5
       .then((response) => response.json())
       .then((topology) => {
         // Convert TopoJSON to GeoJSON
-        // Note: the object in world-110m is "countries", sometimes it's "land". We'll use countries.
+        // Use the "land" object from TopoJSON to render only landmass outlines, no national borders.
         // Typecast topology and objects to bypass strict TS issues with topojson API if needed.
         const geojson = topojson.feature(
           topology as Parameters<typeof topojson.feature>[0],
-          topology.objects.countries
+          topology.objects.land
         ) as unknown as GeoJSONFeatureCollection;
         setWorldData(geojson);
       })
