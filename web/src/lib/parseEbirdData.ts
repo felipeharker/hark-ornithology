@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import Papa from 'papaparse';
+import { execSync } from 'child_process';
 
 export interface EbirdObservation {
   SubmissionID: string;
@@ -28,27 +29,44 @@ export interface EbirdObservation {
   MLCatalogNumbers: string;
 }
 
-export function getLatestEbirdData(): { data: EbirdObservation[], filename: string | null } {
+let cache: { data: EbirdObservation[], lastUpdated: string | null, mtime: number } | null = null;
+
+export function getLatestEbirdData(): { data: EbirdObservation[], lastUpdated: string | null } {
   const dataDir = path.join(process.cwd(), '../observation-data');
-
-  if (!fs.existsSync(dataDir)) {
-    return { data: [], filename: null };
-  }
-
-  const files = fs.readdirSync(dataDir);
-  const csvFiles = files.filter(f => f.endsWith('.csv'));
-
-  if (csvFiles.length === 0) {
-    return { data: [], filename: null };
-  }
-
-  // Sort files by name to get the latest (assuming ebird-data-YYMMDD.csv or similar)
-  // or just get the first one if there's only one
-  csvFiles.sort((a, b) => b.localeCompare(a));
-  const latestFile = csvFiles[0];
-
+  const latestFile = 'ebird-data-latest.csv';
   const filePath = path.join(dataDir, latestFile);
+
+  if (!fs.existsSync(filePath)) {
+    return { data: [], lastUpdated: null };
+  }
+
+  const stats = fs.statSync(filePath);
+  const mtime = stats.mtime.getTime();
+
+  if (cache && cache.mtime === mtime) {
+    return { data: cache.data, lastUpdated: cache.lastUpdated };
+  }
+
   const fileContent = fs.readFileSync(filePath, 'utf-8');
+
+  // Try getting last updated date from git commit history
+  let lastUpdated = '';
+  try {
+    const gitDate = execSync(`git log -1 --format=%cd --date=short -- "${filePath}"`, { stdio: ['pipe', 'pipe', 'ignore'] }).toString().trim();
+    if (gitDate) {
+      lastUpdated = gitDate;
+    } else {
+      const d = stats.mtime;
+      const month = ('0' + (d.getMonth() + 1)).slice(-2);
+      const day = ('0' + d.getDate()).slice(-2);
+      lastUpdated = `${d.getFullYear()}-${month}-${day}`;
+    }
+  } catch (_e) {
+    const d = stats.mtime;
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    lastUpdated = `${d.getFullYear()}-${month}-${day}`;
+  }
 
   const parsed = Papa.parse(fileContent, {
     header: true,
@@ -83,5 +101,6 @@ export function getLatestEbirdData(): { data: EbirdObservation[], filename: stri
     MLCatalogNumbers: row['ML Catalog Numbers'] || '',
   }});
 
-  return { data: parsedData, filename: latestFile };
+  cache = { data: parsedData, lastUpdated: lastUpdated, mtime };
+  return { data: parsedData, lastUpdated: lastUpdated };
 }
