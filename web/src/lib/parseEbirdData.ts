@@ -55,7 +55,9 @@ export function getLatestEbirdData(): { data: EbirdObservation[], filename: stri
     skipEmptyLines: true,
   });
 
-  const parsedData = parsed.data.map((row: any) => ({
+  const parsedData = parsed.data.map((rawRow: unknown) => {
+    const row = rawRow as Record<string, string>;
+    return {
     SubmissionID: row['Submission ID'] || '',
     CommonName: row['Common Name'] || '',
     ScientificName: row['Scientific Name'] || '',
@@ -79,7 +81,7 @@ export function getLatestEbirdData(): { data: EbirdObservation[], filename: stri
     ObservationDetails: row['Observation Details'] || '',
     ChecklistComments: row['Checklist Comments'] || '',
     MLCatalogNumbers: row['ML Catalog Numbers'] || '',
-  }));
+  }});
 
   return { data: parsedData, filename: latestFile };
 }
