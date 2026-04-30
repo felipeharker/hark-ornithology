@@ -39,6 +39,7 @@ interface ChecklistSummary {
 export default function MapView({ data, resetTrigger = 0 }: MapViewProps) {
   const [selectedLocation, setSelectedLocation] = useState<LocationGroup | null>(null);
   const [heatmapMode, setHeatmapMode] = useState<boolean>(false);
+  const [locationsMode, setLocationsMode] = useState<boolean>(true);
   const mapRef = useRef<MapRef>(null);
   const [lastReset, setLastReset] = useState<number>(0);
 
@@ -76,6 +77,33 @@ export default function MapView({ data, resetTrigger = 0 }: MapViewProps) {
     }
     return Object.values(groups);
   }, [data]);
+
+  // We need an array of stable colors mapped to the recent checklists to avoid re-rendering
+  const randomColors = useMemo(() => {
+    const palette = ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'];
+    const colors: string[] = [];
+    let lastColorIndex = -1;
+
+    // A simple pseudo-random number generator to replace Math.random() in render
+    // Use an object to hold the seed so it can be mutated without react-hooks/immutability complaining
+    const seedState = { value: 54321 };
+    const pseudoRandom = () => {
+      seedState.value = (seedState.value * 9301 + 49297) % 233280;
+      return seedState.value / 233280;
+    };
+
+    // Create an array large enough for the recent checklists (10)
+    for (let i = 0; i < 20; i++) {
+      let nextColorIndex;
+      do {
+        nextColorIndex = Math.floor(pseudoRandom() * palette.length);
+      } while (nextColorIndex === lastColorIndex && palette.length > 1);
+
+      colors.push(palette[nextColorIndex]);
+      lastColorIndex = nextColorIndex;
+    }
+    return colors;
+  }, []);
 
   const recentChecklists = useMemo(() => {
     // Group by SubmissionID to get unique checklists
@@ -177,6 +205,16 @@ export default function MapView({ data, resetTrigger = 0 }: MapViewProps) {
     }
   };
 
+  const toggleMode = (mode: 'heatmap' | 'locations') => {
+    if (mode === 'heatmap') {
+      if (heatmapMode && !locationsMode) return; // Prevent turning off both
+      setHeatmapMode(!heatmapMode);
+    } else {
+      if (locationsMode && !heatmapMode) return; // Prevent turning off both
+      setLocationsMode(!locationsMode);
+    }
+  };
+
   const heatmapGeoJSON = useMemo(() => {
     if (!heatmapMode) return null;
 
@@ -207,17 +245,35 @@ export default function MapView({ data, resetTrigger = 0 }: MapViewProps) {
 
   return (
     <div className={`flex flex-col ${selectedLocation ? 'lg:flex-row lg:space-x-6' : 'lg:flex-row lg:space-x-6'} space-y-6 lg:space-y-0 relative`}>
-      {!selectedLocation && (
-        <div className="absolute top-4 right-4 z-10 flex gap-2">
-          <button
-            onClick={() => setHeatmapMode(!heatmapMode)}
-            className={`px-3 py-1 font-mono text-sm border border-black transition-colors ${heatmapMode ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
-          >
-            {heatmapMode ? 'Hide Heatmap' : 'Show Heatmap'}
-          </button>
-        </div>
-      )}
       <div className={`w-full ${selectedLocation ? 'h-[500px] lg:h-[800px] lg:w-2/3' : 'h-[600px] md:h-[800px] lg:w-3/4'} border border-black relative`}>
+        {!selectedLocation && (
+          <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
+            <div className="flex gap-2">
+              <button
+                onClick={() => toggleMode('locations')}
+                className={`px-3 py-1 font-mono text-sm border border-black transition-colors ${locationsMode ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
+              >
+                Locations
+              </button>
+              <button
+                onClick={() => toggleMode('heatmap')}
+                className={`px-3 py-1 font-mono text-sm border border-black transition-colors ${heatmapMode ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
+              >
+                Heatmap
+              </button>
+            </div>
+            {heatmapMode && (
+              <div className="bg-white border border-black p-2 font-mono text-xs w-48 mt-2">
+                <div className="mb-1">Heatmap Density</div>
+                <div className="h-3 w-full" style={{ background: 'linear-gradient(to right, rgba(0, 63, 92, 0), #58508d, #bc5090, #ff6361, #ffa600)' }}></div>
+                <div className="flex justify-between mt-1">
+                  <span>Low</span>
+                  <span>High</span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         <Map
           ref={mapRef}
           initialViewState={{
@@ -283,8 +339,11 @@ export default function MapView({ data, resetTrigger = 0 }: MapViewProps) {
             </Source>
           )}
 
-          {!heatmapMode && locationGroups.map((group) => {
+          {locationsMode && locationGroups.map((group) => {
             const isSelected = selectedLocation?.id === group.id;
+            const bothModes = locationsMode && heatmapMode;
+            const markerColorClass = bothModes ? 'text-white hover:text-gray-200' : 'text-orange-500 hover:text-orange-700';
+
             return (
               <Marker
                 key={group.id}
@@ -296,10 +355,10 @@ export default function MapView({ data, resetTrigger = 0 }: MapViewProps) {
                   setSelectedLocation(group);
                 }}
               >
-                <div className={`cursor-pointer transition-colors ${isSelected ? 'text-blue-500 hover:text-blue-700 z-10 relative scale-110' : 'text-orange-500 hover:text-orange-700'}`}>
+                <div className={`cursor-pointer transition-colors ${isSelected ? 'text-blue-500 hover:text-blue-700 z-10 relative scale-110' : markerColorClass}`}>
                   <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-                    <circle cx="12" cy="9" r="3" fill="white" />
+                    <circle cx="12" cy="9" r="3" fill={bothModes ? "black" : "white"} />
                   </svg>
                 </div>
               </Marker>
@@ -385,16 +444,36 @@ export default function MapView({ data, resetTrigger = 0 }: MapViewProps) {
 
           <div className="space-y-4">
             {recentChecklists.length > 0 ? (
-              recentChecklists.map(checklist => (
-                <div
-                  key={checklist.submissionId}
-                  className="border border-gray-300 p-3 cursor-pointer hover:bg-gray-50 hover:border-black transition-colors"
-                  onClick={() => handleChecklistClick(checklist.groupId)}
-                >
-                  <div className="font-mono text-sm font-bold text-black mb-1">{checklist.date} {checklist.time}</div>
-                  <div className="font-serif text-sm text-gray-800 line-clamp-2">{checklist.location}</div>
-                </div>
-              ))
+              recentChecklists.map((checklist, idx) => {
+                const baseColor = randomColors[idx % randomColors.length];
+                const hex2rgb = (hex: string) => {
+                  const r = parseInt(hex.slice(1, 3), 16);
+                  const g = parseInt(hex.slice(3, 5), 16);
+                  const b = parseInt(hex.slice(5, 7), 16);
+                  return `${r}, ${g}, ${b}`;
+                };
+                const rgbColor = hex2rgb(baseColor);
+
+                return (
+                  <div
+                    key={checklist.submissionId}
+                    className="border border-gray-300 p-3 cursor-pointer transition-colors"
+                    style={{ backgroundColor: 'white' }}
+                    onClick={() => handleChecklistClick(checklist.groupId)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = `rgba(${rgbColor}, 0.2)`;
+                      e.currentTarget.style.borderColor = 'black';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'white';
+                      e.currentTarget.style.borderColor = '#d1d5db'; // gray-300
+                    }}
+                  >
+                    <div className="font-mono text-sm font-bold text-black mb-1">{checklist.date} {checklist.time}</div>
+                    <div className="font-serif text-sm text-gray-800 line-clamp-2">{checklist.location}</div>
+                  </div>
+                );
+              })
             ) : (
               <p className="font-mono text-gray-500 italic">No recent checklists available.</p>
             )}

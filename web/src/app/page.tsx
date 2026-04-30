@@ -2,7 +2,9 @@ import { getLatestEbirdData } from '@/lib/parseEbirdData';
 import LocationDashboard from '@/components/LocationDashboard';
 
 export default function Home() {
-  const { data, filename } = getLatestEbirdData();
+  const { data, lastUpdated } = getLatestEbirdData();
+
+  const uniqueSpecies = new Set(data.map(obs => obs.CommonName).filter(Boolean));
 
   return (
     <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black">
@@ -10,8 +12,8 @@ export default function Home() {
         <header className="border-b border-black pb-4 mb-8">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Ornithological Report</h1>
           <div className="mt-2 flex flex-col sm:flex-row sm:justify-between text-sm md:text-base text-gray-600 font-mono">
-            <p>Dataset: {filename ? filename : 'None'}</p>
-            <p>Total Observations: {data.length > 0 ? data.length : 'None'}</p>
+            <p>Last Updated: {lastUpdated ? lastUpdated : 'None'}</p>
+            <p>Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
           </div>
         </header>
 

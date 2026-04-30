@@ -29,6 +29,33 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
   const [resetTrigger, setResetTrigger] = useState(0);
 
+  // We need an array of stable colors mapped to the locations to avoid re-rendering
+  const randomColors = useMemo(() => {
+    const palette = ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'];
+    const colors: string[] = [];
+    let lastColorIndex = -1;
+
+    // A simple pseudo-random number generator to replace Math.random() in render
+    // Use an object to hold the seed so it can be mutated without react-hooks/immutability complaining
+    const seedState = { value: 12345 };
+    const pseudoRandom = () => {
+      seedState.value = (seedState.value * 9301 + 49297) % 233280;
+      return seedState.value / 233280;
+    };
+
+    // Create an array large enough for any number of locations
+    for (let i = 0; i < 1000; i++) {
+      let nextColorIndex;
+      do {
+        nextColorIndex = Math.floor(pseudoRandom() * palette.length);
+      } while (nextColorIndex === lastColorIndex && palette.length > 1);
+
+      colors.push(palette[nextColorIndex]);
+      lastColorIndex = nextColorIndex;
+    }
+    return colors;
+  }, []);
+
   const locations = useMemo(() => {
     const locMap = new Map<string, { id: string; name: string; count: number }>();
     data.forEach((obs) => {
@@ -133,18 +160,48 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
           </button>
         </div>
         <div className="flex-1 overflow-y-auto max-h-[300px] md:max-h-[600px] p-4 border border-black space-y-2">
-          {locations.map((loc) => (
-            <button
-              key={loc.id}
-              onClick={() => setSelectedLocationId(loc.id)}
-              className={`w-full text-left p-2 border border-black font-mono text-sm transition-colors hover:bg-black hover:text-white ${selectedLocationId === loc.id ? 'bg-black text-white' : 'bg-white text-black'}`}
-            >
-              <div className="flex justify-between items-center">
-                <span className="truncate mr-2">{loc.name}</span>
-                <span className="text-xs">{loc.count} obs</span>
-              </div>
-            </button>
-          ))}
+          {locations.map((loc, idx) => {
+            const isSelected = selectedLocationId === loc.id;
+            const baseColor = randomColors[idx % randomColors.length];
+            // Convert hex to rgb to create a less saturated/lighter version for hover
+            const hex2rgb = (hex: string) => {
+              const r = parseInt(hex.slice(1, 3), 16);
+              const g = parseInt(hex.slice(3, 5), 16);
+              const b = parseInt(hex.slice(5, 7), 16);
+              return `${r}, ${g}, ${b}`;
+            };
+            const rgbColor = hex2rgb(baseColor);
+
+            return (
+              <button
+                key={loc.id}
+                onClick={() => setSelectedLocationId(loc.id)}
+                className="w-full text-left p-2 border border-black font-mono text-sm transition-colors"
+                style={{
+                  backgroundColor: isSelected ? baseColor : 'white',
+                  color: isSelected ? 'white' : 'black',
+                  // Using CSS custom properties for hover effect is tricky with inline styles,
+                  // so we'll use a data attribute and global CSS or onMouseEnter/Leave
+                  // But simpler: just add a CSS class that changes background color slightly when not selected
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSelected) {
+                    e.currentTarget.style.backgroundColor = `rgba(${rgbColor}, 0.2)`;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) {
+                    e.currentTarget.style.backgroundColor = 'white';
+                  }
+                }}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="truncate mr-2">{loc.name}</span>
+                  <span className="text-xs">{loc.count} obs</span>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         {/* Simple Map Outline */}
