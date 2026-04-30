@@ -134,7 +134,7 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
               {/* Bar Chart */}
               <div>
                 <h3 className="text-lg font-bold mb-4 font-serif">Observations over Time (Month/Year)</h3>
-                <div className="h-64 border border-black p-4">
+                <div className="h-[500px] md:h-[800px] border border-black p-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={barChartData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
@@ -150,7 +150,7 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
               {/* Pie Chart */}
               <div>
                 <h3 className="text-lg font-bold mb-4 font-serif">Species Composition (All-time Observations)</h3>
-                <div className="h-80 border border-black p-4 flex items-center justify-center">
+                <div className="h-[500px] md:h-[800px] border border-black p-4 flex items-center justify-center">
                   {pieChartData.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -158,7 +158,7 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
                           data={pieChartData}
                           cx="50%"
                           cy="50%"
-                          outerRadius={100}
+                          outerRadius="75%"
                           dataKey="value"
                           isAnimationActive={false}
                           label={({name, percent}) => `${name} (${((percent || 0) * 100).toFixed(0)}%)`}
