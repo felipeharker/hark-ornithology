@@ -161,7 +161,7 @@ export default function MapView({ data }: MapViewProps) {
 
   return (
     <div className={`flex flex-col ${selectedLocation ? 'lg:flex-row lg:space-x-6' : 'lg:flex-row lg:space-x-6'} space-y-6 lg:space-y-0`}>
-      <div className={`w-full ${selectedLocation ? 'h-[500px] lg:h-[800px] lg:w-2/3' : 'h-[600px] md:h-[800px] lg:w-3/4'} border-2 border-black relative`}>
+      <div className={`w-full ${selectedLocation ? 'h-[500px] lg:h-[800px] lg:w-2/3' : 'h-[600px] md:h-[800px] lg:w-3/4'} border border-black relative`}>
         <Map
           initialViewState={{
             longitude: -95.0,
@@ -196,20 +196,20 @@ export default function MapView({ data }: MapViewProps) {
       </div>
 
       {selectedLocation ? (
-        <div className="w-full lg:w-1/3 bg-white p-4 md:p-6 border-2 border-black space-y-6 md:space-y-8 overflow-y-auto lg:max-h-[800px]">
-          <header className="border-b-2 border-black pb-4">
-            <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider">{selectedLocation.location}</h2>
-            <p className="text-sm md:text-base font-mono mt-1 uppercase text-gray-700">{selectedLocation.county}, {selectedLocation.stateProvince}</p>
+        <div className="w-full lg:w-1/3 bg-white p-4 md:p-6 border border-black space-y-6 md:space-y-8 overflow-y-auto lg:max-h-[800px]">
+          <header className="border-b border-black pb-4">
+            <h2 className="text-xl md:text-2xl font-bold tracking-wider">{selectedLocation.location}</h2>
+            <p className="text-sm md:text-base font-mono mt-1 text-gray-700">{selectedLocation.county}, {selectedLocation.stateProvince}</p>
           </header>
 
           <section>
-            <h3 className="text-base md:text-lg font-bold uppercase tracking-wider mb-3">Table 1. Overall Species Totals</h3>
-            <div className="overflow-x-auto border-t-2 border-b-2 border-black">
-              <table className="min-w-full divide-y-2 divide-black text-sm font-mono">
+            <h3 className="text-base md:text-lg font-bold tracking-wider mb-3">Table 1. Overall Species Totals</h3>
+            <div className="overflow-x-auto border-t border-b border-black">
+              <table className="min-w-full divide-y divide-black text-sm font-mono">
                 <thead>
                   <tr>
-                    <th className="px-2 py-3 text-left font-bold uppercase">Species</th>
-                    <th className="px-2 py-3 text-right font-bold uppercase">Count</th>
+                    <th className="px-2 py-3 text-left font-bold">Species</th>
+                    <th className="px-2 py-3 text-right font-bold">Count</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-300">
@@ -230,14 +230,14 @@ export default function MapView({ data }: MapViewProps) {
           </section>
 
           <section>
-            <h3 className="text-base md:text-lg font-bold uppercase tracking-wider mb-3">Table 2. Monthly Breakdown</h3>
+            <h3 className="text-base md:text-lg font-bold tracking-wider mb-3">Table 2. Monthly Breakdown</h3>
             {Object.entries(monthlyTotals).length === 0 ? (
               <p className="font-mono text-gray-500 italic">No dates available to group by month.</p>
             ) : (
               <div className="space-y-6">
                 {Object.entries(monthlyTotals).map(([monthYear, totals]) => (
-                  <div key={monthYear} className="border-t-2 border-b-2 border-black">
-                    <div className="bg-gray-100 px-2 py-2 border-b-2 border-black font-bold font-mono uppercase text-sm">
+                  <div key={monthYear} className="border-t border-b border-black">
+                    <div className="bg-gray-100 px-2 py-2 border-b border-black font-bold font-mono text-sm">
                       {monthYear}
                     </div>
                     <div className="overflow-x-auto">
@@ -264,10 +264,10 @@ export default function MapView({ data }: MapViewProps) {
           </section>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 bg-white p-4 md:p-6 border-2 border-black space-y-6 overflow-y-auto lg:max-h-[800px]">
-          <header className="border-b-2 border-black pb-4">
-            <h2 className="text-xl font-bold uppercase tracking-wider">Recent Activity</h2>
-            <p className="text-sm font-mono mt-1 text-gray-600 uppercase">Latest 10 Checklists</p>
+        <div className="w-full lg:w-1/4 bg-white p-4 md:p-6 border border-black space-y-6 overflow-y-auto lg:max-h-[800px]">
+          <header className="border-b border-black pb-4">
+            <h2 className="text-xl font-bold tracking-wider">Recent Activity</h2>
+            <p className="text-sm font-mono mt-1 text-gray-600">Latest 10 Checklists</p>
           </header>
 
           <div className="space-y-4">
