@@ -3,8 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { EbirdObservation } from '@/lib/parseEbirdData';
 import MapView from './Map';
-import * as d3Geo from 'd3-geo';
-import worldGeoJson from '@/data/world.json';
+import WorldMapGraphic from './WorldMapGraphic';
 
 import {
   LineChart,
@@ -79,33 +78,71 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
   }, [data, selectedLocationId]);
 
   const barChartData = useMemo(() => {
-    if (!locationData.length) return [];
+    if (!locationData.length || !data.length) return [];
 
-    const monthlyCounts = new Map<string, number>();
-    locationData.forEach((obs) => {
-      // Date format is likely MM/DD/YYYY or similar, we should normalize to YYYY-MM
-      // Let's assume MM/DD/YYYY or YYYY-MM-DD
-      let yearMonth = 'Unknown';
-      if (obs.Date) {
-        const parts = obs.Date.split(/[-/]/);
-        if (parts.length >= 3) {
-           // Basic check to see if year is first or last
-           if (parts[0].length === 4) {
-             // YYYY-MM-DD
-             yearMonth = `${parts[0]}-${parts[1].padStart(2, '0')}`;
-           } else {
-             // MM/DD/YYYY
-             yearMonth = `${parts[2]}-${parts[0].padStart(2, '0')}`;
-           }
+    // Helper to extract YYYY-MM from date string
+    const getYearMonth = (dateStr?: string) => {
+      if (!dateStr) return null;
+      const parts = dateStr.split(/[-/]/);
+      if (parts.length >= 3) {
+        if (parts[0].length === 4) {
+          // YYYY-MM-DD
+          return `${parts[0]}-${parts[1].padStart(2, '0')}`;
+        } else {
+          // MM/DD/YYYY
+          return `${parts[2]}-${parts[0].padStart(2, '0')}`;
         }
       }
-      monthlyCounts.set(yearMonth, (monthlyCounts.get(yearMonth) || 0) + 1);
+      return null;
+    };
+
+    // Find the global min and max dates across the entire dataset
+    let minDateStr: string | null = null;
+    let maxDateStr: string | null = null;
+    data.forEach((obs) => {
+      const ym = getYearMonth(obs.Date);
+      if (ym) {
+        if (!minDateStr || ym < minDateStr) minDateStr = ym;
+        if (!maxDateStr || ym > maxDateStr) maxDateStr = ym;
+      }
+    });
+
+    if (!minDateStr || !maxDateStr) return [];
+
+    // TypeScript narrowing
+    const minDate: string = minDateStr;
+    const maxDate: string = maxDateStr;
+
+    // Generate all months between minDateStr and maxDateStr
+    const allMonths: string[] = [];
+    let [currYear, currMonth] = minDate.split('-').map(Number);
+    const [maxYear, maxMonth] = maxDate.split('-').map(Number);
+
+    while (currYear < maxYear || (currYear === maxYear && currMonth <= maxMonth)) {
+      allMonths.push(`${currYear}-${currMonth.toString().padStart(2, '0')}`);
+      currMonth++;
+      if (currMonth > 12) {
+        currMonth = 1;
+        currYear++;
+      }
+    }
+
+    // Initialize all months with 0
+    const monthlyCounts = new Map<string, number>();
+    allMonths.forEach(m => monthlyCounts.set(m, 0));
+
+    // Populate with actual data for the selected location
+    locationData.forEach((obs) => {
+      const ym = getYearMonth(obs.Date);
+      if (ym && monthlyCounts.has(ym)) {
+        monthlyCounts.set(ym, monthlyCounts.get(ym)! + 1);
+      }
     });
 
     return Array.from(monthlyCounts.entries())
       .map(([date, count]) => ({ date, count }))
       .sort((a, b) => a.date.localeCompare(b.date));
-  }, [locationData]);
+  }, [locationData, data]);
 
   const pieChartData = useMemo(() => {
     if (!locationData.length) return [];
@@ -127,22 +164,20 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
 
   const selectedLocationName = selectedLocationData?.name;
 
-  // Calculate map outline projection if a location is selected
-  const { pathGenerator, mapDotCoords } = useMemo(() => {
-    if (!selectedLocationData) return { pathGenerator: null, mapDotCoords: null };
-    // Find the first observation for this location to get lat/lng
+  // Calculate coordinates for the selected location indicator
+  const selectedLocationCoords = useMemo(() => {
+    if (!selectedLocationData) return null;
     const obs = data.find(o => o.LocationID === selectedLocationId);
-    if (!obs || !obs.Latitude || !obs.Longitude) return { pathGenerator: null, mapDotCoords: null };
-
-    // Create a projection fitting a standard 300x150 box
-    const projection = d3Geo.geoEquirectangular()
-      .fitSize([280, 140], worldGeoJson as unknown as d3Geo.ExtendedFeatureCollection);
-
-    const pathGenerator = d3Geo.geoPath().projection(projection);
-    const mapDotCoords = projection([obs.Longitude, obs.Latitude]);
-
-    return { pathGenerator, mapDotCoords };
+    if (!obs || obs.Latitude === undefined || obs.Longitude === undefined) return null;
+    return { latitude: obs.Latitude, longitude: obs.Longitude };
   }, [selectedLocationData, selectedLocationId, data]);
+
+  const selectedLocationColor = useMemo(() => {
+    if (!selectedLocationData) return undefined;
+    const idx = locations.findIndex(l => l.id === selectedLocationId);
+    if (idx === -1) return undefined;
+    return randomColors[idx % randomColors.length];
+  }, [selectedLocationData, selectedLocationId, locations, randomColors]);
 
   return (
     <div className="flex flex-col md:flex-row min-h-[600px] bg-white">
@@ -205,24 +240,13 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
         </div>
 
         {/* Simple Map Outline */}
-        {selectedLocationId && pathGenerator && (
+        {selectedLocationId && (
           <div className="mt-4 border border-black p-4 bg-white flex justify-center items-center">
-            <svg width="280" height="140" viewBox="0 0 280 140">
-              <path
-                d={pathGenerator(worldGeoJson as unknown as d3Geo.ExtendedFeatureCollection) || ''}
-                fill="none"
-                stroke="black"
-                strokeWidth="0.5"
-              />
-              {mapDotCoords && (
-                <circle
-                  cx={mapDotCoords[0]}
-                  cy={mapDotCoords[1]}
-                  r="3"
-                  fill="#ffa500"
-                />
-              )}
-            </svg>
+            <WorldMapGraphic
+              latitude={selectedLocationCoords?.latitude}
+              longitude={selectedLocationCoords?.longitude}
+              dotColor={selectedLocationColor}
+            />
           </div>
         )}
       </div>
