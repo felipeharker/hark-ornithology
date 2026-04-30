@@ -4,8 +4,8 @@ import React, { useState, useMemo } from 'react';
 import { EbirdObservation } from '@/lib/parseEbirdData';
 import MapView from './Map';
 import {
-  BarChart,
-  Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -20,7 +20,7 @@ interface LocationDashboardProps {
   data: EbirdObservation[];
 }
 
-const MONOCHROME_COLORS = ['#000000', '#333333', '#666666', '#999999', '#CCCCCC', '#E5E5E5'];
+const CHART_COLORS = ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'];
 
 export default function LocationDashboard({ data }: LocationDashboardProps) {
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
@@ -131,18 +131,18 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
             <h2 className="text-2xl font-bold mb-8 border-b border-black pb-2">{selectedLocationName} - Analysis</h2>
 
             <div className="space-y-12">
-              {/* Bar Chart */}
+              {/* Line Chart */}
               <div>
                 <h3 className="text-lg font-bold mb-4 font-serif">Observations over Time (Month/Year)</h3>
                 <div className="h-[500px] md:h-[800px] border border-black p-4">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={barChartData}>
+                    <LineChart data={barChartData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
                       <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
                       <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
                       <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
-                      <Bar dataKey="count" fill="#000000" isAnimationActive={false} />
-                    </BarChart>
+                      <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
+                    </LineChart>
                   </ResponsiveContainer>
                 </div>
               </div>
@@ -161,14 +161,12 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
                           outerRadius="75%"
                           dataKey="value"
                           isAnimationActive={false}
-                          label={({name, percent}) => `${name} (${((percent || 0) * 100).toFixed(0)}%)`}
-                          labelLine={true}
                         >
                           {pieChartData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={MONOCHROME_COLORS[index % MONOCHROME_COLORS.length]} />
+                            <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                           ))}
                         </Pie>
-                        <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
+                        <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} formatter={(value, name) => [`${value} obs`, name]} />
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
