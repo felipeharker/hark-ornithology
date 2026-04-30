@@ -3,6 +3,9 @@
 import React, { useState, useMemo } from 'react';
 import { EbirdObservation } from '@/lib/parseEbirdData';
 import MapView from './Map';
+import * as d3Geo from 'd3-geo';
+import worldGeoJson from '@/data/world.json';
+
 import {
   LineChart,
   Line,
@@ -24,6 +27,7 @@ const CHART_COLORS = ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'];
 
 export default function LocationDashboard({ data }: LocationDashboardProps) {
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
+  const [resetTrigger, setResetTrigger] = useState(0);
 
   const locations = useMemo(() => {
     const locMap = new Map<string, { id: string; name: string; count: number }>();
@@ -90,7 +94,28 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
       .sort((a, b) => b.value - a.value); // Sort descending by count
   }, [locationData]);
 
-  const selectedLocationName = locations.find(l => l.id === selectedLocationId)?.name;
+  const selectedLocationData = useMemo(() => {
+    return locations.find(l => l.id === selectedLocationId);
+  }, [locations, selectedLocationId]);
+
+  const selectedLocationName = selectedLocationData?.name;
+
+  // Calculate map outline projection if a location is selected
+  const { pathGenerator, mapDotCoords } = useMemo(() => {
+    if (!selectedLocationData) return { pathGenerator: null, mapDotCoords: null };
+    // Find the first observation for this location to get lat/lng
+    const obs = data.find(o => o.LocationID === selectedLocationId);
+    if (!obs || !obs.Latitude || !obs.Longitude) return { pathGenerator: null, mapDotCoords: null };
+
+    // Create a projection fitting a standard 300x150 box
+    const projection = d3Geo.geoEquirectangular()
+      .fitSize([280, 140], worldGeoJson as unknown as d3Geo.ExtendedFeatureCollection);
+
+    const pathGenerator = d3Geo.geoPath().projection(projection);
+    const mapDotCoords = projection([obs.Longitude, obs.Latitude]);
+
+    return { pathGenerator, mapDotCoords };
+  }, [selectedLocationData, selectedLocationId, data]);
 
   return (
     <div className="flex flex-col md:flex-row min-h-[600px] bg-white">
@@ -98,7 +123,10 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
       <div className="w-full md:w-72 flex flex-col bg-white">
         <div className="p-4 border border-black mb-4">
           <button
-            onClick={() => setSelectedLocationId(null)}
+            onClick={() => {
+              setSelectedLocationId(null);
+              setResetTrigger(r => r + 1);
+            }}
             className={`w-full text-left p-2 border border-black font-mono text-sm transition-colors hover:bg-black hover:text-white ${!selectedLocationId ? 'bg-black text-white' : 'bg-white text-black'}`}
           >
             All Locations / View Map
@@ -118,13 +146,35 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
             </button>
           ))}
         </div>
+
+        {/* Simple Map Outline */}
+        {selectedLocationId && pathGenerator && (
+          <div className="mt-4 border border-black p-4 bg-white flex justify-center items-center">
+            <svg width="280" height="140" viewBox="0 0 280 140">
+              <path
+                d={pathGenerator(worldGeoJson as unknown as d3Geo.ExtendedFeatureCollection) || ''}
+                fill="none"
+                stroke="black"
+                strokeWidth="0.5"
+              />
+              {mapDotCoords && (
+                <circle
+                  cx={mapDotCoords[0]}
+                  cy={mapDotCoords[1]}
+                  r="3"
+                  fill="#ffa500"
+                />
+              )}
+            </svg>
+          </div>
+        )}
       </div>
 
       {/* Right Column: Content Area */}
       <div className="flex-1 flex flex-col relative min-h-[500px] md:ml-8 lg:ml-12">
         {!selectedLocationId ? (
           <div className="absolute inset-0">
-             <MapView data={data} />
+             <MapView data={data} resetTrigger={resetTrigger} />
           </div>
         ) : (
           <div className="p-6 md:p-8 flex-1 overflow-y-auto bg-white text-black border border-black">

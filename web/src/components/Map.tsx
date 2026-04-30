@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import Map, { Marker, MapRef } from 'react-map-gl/maplibre';
+import Map, { Marker, MapRef, Source, Layer } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { EbirdObservation } from '../lib/parseEbirdData';
 
 interface MapViewProps {
   data: EbirdObservation[];
+  resetTrigger?: number;
 }
 
 interface LocationGroup {
@@ -35,9 +36,26 @@ interface ChecklistSummary {
   groupId: string; // To link to the LocationGroup
 }
 
-export default function MapView({ data }: MapViewProps) {
+export default function MapView({ data, resetTrigger = 0 }: MapViewProps) {
   const [selectedLocation, setSelectedLocation] = useState<LocationGroup | null>(null);
+  const [heatmapMode, setHeatmapMode] = useState<boolean>(false);
   const mapRef = useRef<MapRef>(null);
+  const [lastReset, setLastReset] = useState<number>(0);
+
+  if (resetTrigger !== lastReset) {
+    setLastReset(resetTrigger);
+    setSelectedLocation(null);
+  }
+
+  useEffect(() => {
+    if (resetTrigger > 0 && selectedLocation === null && mapRef.current) {
+        mapRef.current.flyTo({
+          center: [-95.0, 38.0],
+          zoom: 3,
+          duration: 2000
+        });
+    }
+  }, [resetTrigger, selectedLocation]);
 
   const locationGroups = useMemo(() => {
     const groups: Record<string, LocationGroup> = {};
@@ -159,6 +177,24 @@ export default function MapView({ data }: MapViewProps) {
     }
   };
 
+  const heatmapGeoJSON = useMemo(() => {
+    if (!heatmapMode) return null;
+
+    return {
+      type: 'FeatureCollection' as const,
+      features: locationGroups.map(group => ({
+        type: 'Feature' as const,
+        geometry: {
+          type: 'Point' as const,
+          coordinates: [group.longitude, group.latitude]
+        },
+        properties: {
+          count: group.observations.length
+        }
+      }))
+    };
+  }, [locationGroups, heatmapMode]);
+
   useEffect(() => {
     if (selectedLocation && mapRef.current) {
       mapRef.current.flyTo({
@@ -170,7 +206,17 @@ export default function MapView({ data }: MapViewProps) {
   }, [selectedLocation]);
 
   return (
-    <div className={`flex flex-col ${selectedLocation ? 'lg:flex-row lg:space-x-6' : 'lg:flex-row lg:space-x-6'} space-y-6 lg:space-y-0`}>
+    <div className={`flex flex-col ${selectedLocation ? 'lg:flex-row lg:space-x-6' : 'lg:flex-row lg:space-x-6'} space-y-6 lg:space-y-0 relative`}>
+      {!selectedLocation && (
+        <div className="absolute top-4 right-4 z-10 flex gap-2">
+          <button
+            onClick={() => setHeatmapMode(!heatmapMode)}
+            className={`px-3 py-1 font-mono text-sm border border-black transition-colors ${heatmapMode ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'}`}
+          >
+            {heatmapMode ? 'Hide Heatmap' : 'Show Heatmap'}
+          </button>
+        </div>
+      )}
       <div className={`w-full ${selectedLocation ? 'h-[500px] lg:h-[800px] lg:w-2/3' : 'h-[600px] md:h-[800px] lg:w-3/4'} border border-black relative`}>
         <Map
           ref={mapRef}
@@ -181,7 +227,63 @@ export default function MapView({ data }: MapViewProps) {
           }}
           mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         >
-          {locationGroups.map((group) => {
+          {heatmapMode && heatmapGeoJSON && (
+            <Source type="geojson" data={heatmapGeoJSON}>
+              <Layer
+                id="heatmap-layer"
+                type="heatmap"
+                paint={{
+                  // Increase the heatmap weight based on frequency/count property
+                  'heatmap-weight': [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'count'],
+                    0, 0,
+                    100, 1
+                  ],
+                  // Increase the heatmap color weight weight by zoom level
+                  // heatmap-intensity is a multiplier on top of heatmap-weight
+                  'heatmap-intensity': [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    0, 1,
+                    9, 3
+                  ],
+                  // Color palette from user spec
+                  'heatmap-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['heatmap-density'],
+                    0, 'rgba(0, 63, 92, 0)',      // #003f5c (transparent start)
+                    0.2, '#58508d',
+                    0.4, '#bc5090',
+                    0.6, '#ff6361',
+                    0.8, '#ffa600',
+                    1, '#ffa600'
+                  ],
+                  // Adjust the heatmap radius by zoom level
+                  'heatmap-radius': [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    0, 10,
+                    9, 30
+                  ],
+                  // Transition from heatmap to circle layer by zoom level
+                  'heatmap-opacity': [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    7, 1,
+                    9, 0.5
+                  ]
+                }}
+              />
+            </Source>
+          )}
+
+          {!heatmapMode && locationGroups.map((group) => {
             const isSelected = selectedLocation?.id === group.id;
             return (
               <Marker
