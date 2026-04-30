@@ -24,14 +24,3 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-
-/* Custom styles for Map popup to remove maplibre's default border radius and shadow */
-.flat-popup .maplibregl-popup-content {
-  border-radius: 0;
-  box-shadow: none;
-  border: 1px solid #e5e7eb; /* tailwind gray-200 */
-  padding: 0;
-}
-.flat-popup .maplibregl-popup-tip {
-  display: none; /* Hide the arrow tip for a flatter look, or keep it if preferred */
-}
