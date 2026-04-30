@@ -26,6 +26,15 @@ interface SpeciesTotal {
   onlyX: boolean;
 }
 
+interface ChecklistSummary {
+  submissionId: string;
+  locationId: string;
+  location: string;
+  date: string;
+  time: string;
+  groupId: string; // To link to the LocationGroup
+}
+
 export default function MapView({ data }: MapViewProps) {
   const [selectedLocation, setSelectedLocation] = useState<LocationGroup | null>(null);
 
@@ -47,6 +56,33 @@ export default function MapView({ data }: MapViewProps) {
       groups[key].observations.push(obs);
     }
     return Object.values(groups);
+  }, [data]);
+
+  const recentChecklists = useMemo(() => {
+    // Group by SubmissionID to get unique checklists
+    const checklistsMap: Record<string, ChecklistSummary> = {};
+    for (const obs of data) {
+      if (obs.SubmissionID && !checklistsMap[obs.SubmissionID]) {
+        const groupId = obs.LocationID || `${obs.Latitude},${obs.Longitude}`;
+        checklistsMap[obs.SubmissionID] = {
+          submissionId: obs.SubmissionID,
+          locationId: obs.LocationID,
+          location: obs.Location,
+          date: obs.Date,
+          time: obs.Time,
+          groupId: groupId
+        };
+      }
+    }
+
+    // Convert to array and sort by Date (descending)
+    return Object.values(checklistsMap).sort((a, b) => {
+      // Compare by date first
+      const dateComparison = b.date.localeCompare(a.date);
+      if (dateComparison !== 0) return dateComparison;
+      // If dates are equal, compare by time
+      return b.time.localeCompare(a.time);
+    }).slice(0, 10); // keep only top 10 most recent
   }, [data]);
 
   const { overallTotals, monthlyTotals } = useMemo(() => {
@@ -115,9 +151,17 @@ export default function MapView({ data }: MapViewProps) {
     return { overallTotals, monthlyTotals };
   }, [selectedLocation]);
 
+  const handleChecklistClick = (groupId: string) => {
+    const group = locationGroups.find(g => g.id === groupId);
+    if (group) {
+      setSelectedLocation(group);
+      // We could also fly the map to this location here if we had a ref to the map instance.
+    }
+  };
+
   return (
-    <div className={`flex flex-col ${selectedLocation ? 'lg:flex-row lg:space-x-6' : ''} space-y-6 lg:space-y-0`}>
-      <div className={`w-full ${selectedLocation ? 'h-[500px] lg:h-[800px] lg:w-2/3' : 'h-[600px] md:h-[800px]'} border border-gray-200 relative`}>
+    <div className={`flex flex-col ${selectedLocation ? 'lg:flex-row lg:space-x-6' : 'lg:flex-row lg:space-x-6'} space-y-6 lg:space-y-0`}>
+      <div className={`w-full ${selectedLocation ? 'h-[500px] lg:h-[800px] lg:w-2/3' : 'h-[600px] md:h-[800px] lg:w-3/4'} border-2 border-black relative`}>
         <Map
           initialViewState={{
             longitude: -95.0,
@@ -151,31 +195,31 @@ export default function MapView({ data }: MapViewProps) {
         </Map>
       </div>
 
-      {selectedLocation && (
-        <div className="w-full lg:w-1/3 bg-white p-4 md:p-6 border border-gray-200 space-y-6 md:space-y-8 overflow-y-auto lg:max-h-[800px]">
-          <header>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900">{selectedLocation.location}</h2>
-            <p className="text-sm md:text-base text-gray-600">{selectedLocation.county}, {selectedLocation.stateProvince}</p>
+      {selectedLocation ? (
+        <div className="w-full lg:w-1/3 bg-white p-4 md:p-6 border-2 border-black space-y-6 md:space-y-8 overflow-y-auto lg:max-h-[800px]">
+          <header className="border-b-2 border-black pb-4">
+            <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider">{selectedLocation.location}</h2>
+            <p className="text-sm md:text-base font-mono mt-1 uppercase text-gray-700">{selectedLocation.county}, {selectedLocation.stateProvince}</p>
           </header>
 
           <section>
-            <h3 className="text-base md:text-lg font-semibold mb-3">Overall Species Totals</h3>
-            <div className="overflow-x-auto border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200 text-sm">
-                <thead className="bg-gray-50">
+            <h3 className="text-base md:text-lg font-bold uppercase tracking-wider mb-3">Table 1. Overall Species Totals</h3>
+            <div className="overflow-x-auto border-t-2 border-b-2 border-black">
+              <table className="min-w-full divide-y-2 divide-black text-sm font-mono">
+                <thead>
                   <tr>
-                    <th className="px-3 md:px-4 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Species</th>
-                    <th className="px-3 md:px-4 py-2 md:py-3 text-right font-medium text-gray-500 uppercase tracking-wider">Total Count</th>
+                    <th className="px-2 py-3 text-left font-bold uppercase">Species</th>
+                    <th className="px-2 py-3 text-right font-bold uppercase">Count</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-300">
                   {overallTotals.map(item => (
                     <tr key={item.commonName}>
-                      <td className="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap">
-                        <div className="font-medium text-gray-900">{item.commonName}</div>
-                        <div className="text-xs text-gray-500 italic">{item.scientificName}</div>
+                      <td className="px-2 py-2 whitespace-nowrap">
+                        <div className="font-bold">{item.commonName}</div>
+                        <div className="text-xs italic text-gray-600">{item.scientificName}</div>
                       </td>
-                      <td className="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap text-right font-semibold text-gray-700">
+                      <td className="px-2 py-2 whitespace-nowrap text-right font-bold">
                         {item.onlyX ? 'X' : item.total}
                       </td>
                     </tr>
@@ -186,26 +230,26 @@ export default function MapView({ data }: MapViewProps) {
           </section>
 
           <section>
-            <h3 className="text-base md:text-lg font-semibold mb-4">Monthly Breakdown</h3>
+            <h3 className="text-base md:text-lg font-bold uppercase tracking-wider mb-3">Table 2. Monthly Breakdown</h3>
             {Object.entries(monthlyTotals).length === 0 ? (
-              <p className="text-gray-500 italic text-sm md:text-base">No dates available to group by month.</p>
+              <p className="font-mono text-gray-500 italic">No dates available to group by month.</p>
             ) : (
-              <div className="space-y-4 md:space-y-6">
+              <div className="space-y-6">
                 {Object.entries(monthlyTotals).map(([monthYear, totals]) => (
-                  <div key={monthYear} className="border border-gray-200">
-                    <div className="bg-gray-50 px-3 md:px-4 py-2 md:py-3 border-b border-gray-200 font-medium text-gray-700 text-sm md:text-base">
+                  <div key={monthYear} className="border-t-2 border-b-2 border-black">
+                    <div className="bg-gray-100 px-2 py-2 border-b-2 border-black font-bold font-mono uppercase text-sm">
                       {monthYear}
                     </div>
                     <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200 text-sm">
-                        <tbody className="bg-white divide-y divide-gray-200">
+                      <table className="min-w-full divide-y divide-gray-300 text-sm font-mono">
+                        <tbody className="divide-y divide-gray-300">
                           {totals.map(item => (
                             <tr key={item.commonName}>
-                              <td className="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap w-2/3">
-                                <div className="font-medium text-gray-900">{item.commonName}</div>
-                                <div className="text-xs text-gray-500 italic">{item.scientificName}</div>
+                              <td className="px-2 py-2 whitespace-nowrap w-2/3">
+                                <div className="font-bold">{item.commonName}</div>
+                                <div className="text-xs italic text-gray-600">{item.scientificName}</div>
                               </td>
-                              <td className="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap w-1/3 text-right font-semibold text-gray-700">
+                              <td className="px-2 py-2 whitespace-nowrap w-1/3 text-right font-bold">
                                 {item.onlyX ? 'X' : item.total}
                               </td>
                             </tr>
@@ -218,7 +262,30 @@ export default function MapView({ data }: MapViewProps) {
               </div>
             )}
           </section>
+        </div>
+      ) : (
+        <div className="w-full lg:w-1/4 bg-white p-4 md:p-6 border-2 border-black space-y-6 overflow-y-auto lg:max-h-[800px]">
+          <header className="border-b-2 border-black pb-4">
+            <h2 className="text-xl font-bold uppercase tracking-wider">Recent Activity</h2>
+            <p className="text-sm font-mono mt-1 text-gray-600 uppercase">Latest 10 Checklists</p>
+          </header>
 
+          <div className="space-y-4">
+            {recentChecklists.length > 0 ? (
+              recentChecklists.map(checklist => (
+                <div
+                  key={checklist.submissionId}
+                  className="border border-gray-300 p-3 cursor-pointer hover:bg-gray-50 hover:border-black transition-colors"
+                  onClick={() => handleChecklistClick(checklist.groupId)}
+                >
+                  <div className="font-mono text-sm font-bold text-black mb-1">{checklist.date} {checklist.time}</div>
+                  <div className="font-serif text-sm text-gray-800 line-clamp-2">{checklist.location}</div>
+                </div>
+              ))
+            ) : (
+              <p className="font-mono text-gray-500 italic">No recent checklists available.</p>
+            )}
+          </div>
         </div>
       )}
     </div>
