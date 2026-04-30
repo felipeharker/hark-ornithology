@@ -28,18 +28,18 @@ export interface EbirdObservation {
   MLCatalogNumbers: string;
 }
 
-export function getLatestEbirdData(): EbirdObservation[] {
+export function getLatestEbirdData(): { data: EbirdObservation[], filename: string | null } {
   const dataDir = path.join(process.cwd(), '../observation-data');
 
   if (!fs.existsSync(dataDir)) {
-    return [];
+    return { data: [], filename: null };
   }
 
   const files = fs.readdirSync(dataDir);
   const csvFiles = files.filter(f => f.endsWith('.csv'));
 
   if (csvFiles.length === 0) {
-    return [];
+    return { data: [], filename: null };
   }
 
   // Sort files by name to get the latest (assuming ebird-data-YYMMDD.csv or similar)
@@ -55,7 +55,7 @@ export function getLatestEbirdData(): EbirdObservation[] {
     skipEmptyLines: true,
   });
 
-  return parsed.data.map((row: any) => ({
+  const parsedData = parsed.data.map((row: any) => ({
     SubmissionID: row['Submission ID'] || '',
     CommonName: row['Common Name'] || '',
     ScientificName: row['Scientific Name'] || '',
@@ -80,4 +80,6 @@ export function getLatestEbirdData(): EbirdObservation[] {
     ChecklistComments: row['Checklist Comments'] || '',
     MLCatalogNumbers: row['ML Catalog Numbers'] || '',
   }));
+
+  return { data: parsedData, filename: latestFile };
 }
