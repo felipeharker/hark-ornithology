@@ -116,8 +116,8 @@ export default function MapView({ data }: MapViewProps) {
   }, [selectedLocation]);
 
   return (
-    <div className="space-y-6">
-      <div className="w-full h-[800px] rounded-xl overflow-hidden shadow-lg border border-gray-200 relative">
+    <div className={`flex flex-col ${selectedLocation ? 'lg:flex-row lg:space-x-6' : ''} space-y-6 lg:space-y-0`}>
+      <div className={`w-full ${selectedLocation ? 'h-[500px] lg:h-[800px] lg:w-2/3' : 'h-[600px] md:h-[800px]'} border border-gray-200 relative`}>
         <Map
           initialViewState={{
             longitude: -95.0,
@@ -138,7 +138,7 @@ export default function MapView({ data }: MapViewProps) {
                   setSelectedLocation(group);
                 }}
               >
-                <div className="cursor-pointer text-orange-500 hover:text-orange-700 transition-colors drop-shadow-md">
+                <div className="cursor-pointer text-orange-500 hover:text-orange-700 transition-colors">
                   <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                     <circle cx="12" cy="9" r="3" fill="white" />
@@ -156,22 +156,25 @@ export default function MapView({ data }: MapViewProps) {
               onClose={() => setSelectedLocation(null)}
               closeOnClick={false}
               maxWidth="400px"
+              className="flat-popup"
             >
-              <div className="p-2 text-sm text-gray-800 max-h-[300px] overflow-y-auto">
-                <h3 className="font-bold text-lg mb-1">{selectedLocation.location}</h3>
-                <p className="text-gray-600 mb-3 text-xs border-b pb-2">
-                  {selectedLocation.county}, {selectedLocation.stateProvince} &bull; {selectedLocation.observations.length} observation{selectedLocation.observations.length !== 1 ? 's' : ''}
-                </p>
+              <div className="p-0 text-sm text-gray-800 max-h-[300px] overflow-y-auto">
+                <div className="p-2 border-b border-gray-200 bg-white">
+                  <h3 className="font-bold text-lg mb-1">{selectedLocation.location}</h3>
+                  <p className="text-gray-600 text-xs">
+                    {selectedLocation.county}, {selectedLocation.stateProvince} &bull; {selectedLocation.observations.length} observation{selectedLocation.observations.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
 
-                <div className="space-y-3">
+                <div className="p-2 space-y-2 bg-white">
                   {selectedLocation.observations.map(obs => (
-                    <div key={obs.SubmissionID + obs.CommonName} className="bg-gray-50 p-2 rounded border border-gray-100">
+                    <div key={obs.SubmissionID + obs.CommonName} className="bg-gray-50 p-2 border border-gray-200">
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="font-semibold">{obs.CommonName}</p>
                           <p className="italic text-gray-500 text-xs">{obs.ScientificName}</p>
                         </div>
-                        <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">
+                        <span className="bg-gray-200 text-gray-800 text-xs font-bold px-2 py-0.5">
                           Count: {obs.Count}
                         </span>
                       </div>
@@ -186,30 +189,30 @@ export default function MapView({ data }: MapViewProps) {
       </div>
 
       {selectedLocation && (
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mt-8 space-y-8">
+        <div className="w-full lg:w-1/3 bg-white p-4 md:p-6 border border-gray-200 space-y-6 md:space-y-8 overflow-y-auto lg:max-h-[800px]">
           <header>
-            <h2 className="text-2xl font-bold text-gray-900">{selectedLocation.location}</h2>
-            <p className="text-gray-600">{selectedLocation.county}, {selectedLocation.stateProvince}</p>
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900">{selectedLocation.location}</h2>
+            <p className="text-sm md:text-base text-gray-600">{selectedLocation.county}, {selectedLocation.stateProvince}</p>
           </header>
 
           <section>
-            <h3 className="text-lg font-semibold mb-3">Overall Species Totals</h3>
-            <div className="overflow-x-auto">
+            <h3 className="text-base md:text-lg font-semibold mb-3">Overall Species Totals</h3>
+            <div className="overflow-x-auto border border-gray-200">
               <table className="min-w-full divide-y divide-gray-200 text-sm">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Species</th>
-                    <th className="px-4 py-3 text-right font-medium text-gray-500 uppercase tracking-wider">Total Count</th>
+                    <th className="px-3 md:px-4 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Species</th>
+                    <th className="px-3 md:px-4 py-2 md:py-3 text-right font-medium text-gray-500 uppercase tracking-wider">Total Count</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {overallTotals.map(item => (
                     <tr key={item.commonName}>
-                      <td className="px-4 py-3 whitespace-nowrap">
+                      <td className="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap">
                         <div className="font-medium text-gray-900">{item.commonName}</div>
                         <div className="text-xs text-gray-500 italic">{item.scientificName}</div>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-right font-semibold text-gray-700">
+                      <td className="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap text-right font-semibold text-gray-700">
                         {item.onlyX ? 'X' : item.total}
                       </td>
                     </tr>
@@ -220,14 +223,14 @@ export default function MapView({ data }: MapViewProps) {
           </section>
 
           <section>
-            <h3 className="text-lg font-semibold mb-4">Monthly Breakdown</h3>
+            <h3 className="text-base md:text-lg font-semibold mb-4">Monthly Breakdown</h3>
             {Object.entries(monthlyTotals).length === 0 ? (
-              <p className="text-gray-500 italic">No dates available to group by month.</p>
+              <p className="text-gray-500 italic text-sm md:text-base">No dates available to group by month.</p>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
                 {Object.entries(monthlyTotals).map(([monthYear, totals]) => (
-                  <div key={monthYear} className="border border-gray-200 rounded-xl overflow-hidden">
-                    <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 font-medium text-gray-700">
+                  <div key={monthYear} className="border border-gray-200">
+                    <div className="bg-gray-50 px-3 md:px-4 py-2 md:py-3 border-b border-gray-200 font-medium text-gray-700 text-sm md:text-base">
                       {monthYear}
                     </div>
                     <div className="overflow-x-auto">
@@ -235,11 +238,11 @@ export default function MapView({ data }: MapViewProps) {
                         <tbody className="bg-white divide-y divide-gray-200">
                           {totals.map(item => (
                             <tr key={item.commonName}>
-                              <td className="px-4 py-3 whitespace-nowrap w-2/3">
+                              <td className="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap w-2/3">
                                 <div className="font-medium text-gray-900">{item.commonName}</div>
                                 <div className="text-xs text-gray-500 italic">{item.scientificName}</div>
                               </td>
-                              <td className="px-4 py-3 whitespace-nowrap w-1/3 text-right font-semibold text-gray-700">
+                              <td className="px-3 md:px-4 py-2 md:py-3 whitespace-nowrap w-1/3 text-right font-semibold text-gray-700">
                                 {item.onlyX ? 'X' : item.total}
                               </td>
                             </tr>
