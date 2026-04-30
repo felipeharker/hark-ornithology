@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from 'react';
-import Map, { Marker } from 'react-map-gl/maplibre';
+import { useState, useMemo, useRef, useEffect } from 'react';
+import Map, { Marker, MapRef } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { EbirdObservation } from '../lib/parseEbirdData';
 
@@ -37,6 +37,7 @@ interface ChecklistSummary {
 
 export default function MapView({ data }: MapViewProps) {
   const [selectedLocation, setSelectedLocation] = useState<LocationGroup | null>(null);
+  const mapRef = useRef<MapRef>(null);
 
   const locationGroups = useMemo(() => {
     const groups: Record<string, LocationGroup> = {};
@@ -155,14 +156,24 @@ export default function MapView({ data }: MapViewProps) {
     const group = locationGroups.find(g => g.id === groupId);
     if (group) {
       setSelectedLocation(group);
-      // We could also fly the map to this location here if we had a ref to the map instance.
     }
   };
+
+  useEffect(() => {
+    if (selectedLocation && mapRef.current) {
+      mapRef.current.flyTo({
+        center: [selectedLocation.longitude, selectedLocation.latitude],
+        zoom: 12,
+        duration: 2000
+      });
+    }
+  }, [selectedLocation]);
 
   return (
     <div className={`flex flex-col ${selectedLocation ? 'lg:flex-row lg:space-x-6' : 'lg:flex-row lg:space-x-6'} space-y-6 lg:space-y-0`}>
       <div className={`w-full ${selectedLocation ? 'h-[500px] lg:h-[800px] lg:w-2/3' : 'h-[600px] md:h-[800px] lg:w-3/4'} border border-black relative`}>
         <Map
+          ref={mapRef}
           initialViewState={{
             longitude: -95.0,
             latitude: 38.0,
