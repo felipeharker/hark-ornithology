@@ -47,11 +47,23 @@ export default function WorldMapGraphic({ latitude, longitude, dotColor = '#ffa5
 
   // Set up the projection
   const projection = useMemo(() => {
-    // Equirectangular is simple and flat
-    return geoEquirectangular()
-      .scale(150)
-      .translate([480, 250]); // Center of the 960x500 viewBox
-  }, []);
+    const proj = geoEquirectangular();
+
+    if (latitude !== undefined && longitude !== undefined) {
+      // Zoom in closer to the selected point
+      proj
+        .scale(2000) // Increase scale for a "state-level" view
+        .center([longitude, latitude])
+        .translate([480, 250]); // Center of the 960x500 viewBox
+    } else {
+      // Default to full world view
+      proj
+        .scale(150)
+        .translate([480, 250]);
+    }
+
+    return proj;
+  }, [latitude, longitude]);
 
   const pathGenerator = useMemo(() => {
     return geoPath().projection(projection);
@@ -66,12 +78,12 @@ export default function WorldMapGraphic({ latitude, longitude, dotColor = '#ffa5
   }, [latitude, longitude, projection]);
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center items-center overflow-hidden">
       <svg
         viewBox="0 0 960 500"
         width="100%"
         height="100%"
-        style={{ maxWidth: '100%', height: 'auto' }}
+        style={{ maxWidth: '100%', height: 'auto', backgroundColor: '#e0f7fa' }} /* Light blue background for water */
       >
         {/* Render Map Features */}
         {worldData && worldData.features && (
@@ -86,7 +98,7 @@ export default function WorldMapGraphic({ latitude, longitude, dotColor = '#ffa5
                 <path
                   key={i}
                   d={pathGenerator(d3Feature) || undefined}
-                  fill="none"
+                  fill="#f0f0f0" /* Light grey fill for land */
                   stroke="black"
                   strokeWidth="1"
                 />
@@ -100,7 +112,7 @@ export default function WorldMapGraphic({ latitude, longitude, dotColor = '#ffa5
           <circle
             cx={dotCoords[0]}
             cy={dotCoords[1]}
-            r="5"
+            r="10" /* 2x size of original dot (5) */
             fill={dotColor}
           />
         )}
