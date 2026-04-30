@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from 'react';
-import Map, { Marker, Popup } from 'react-map-gl/maplibre';
+import Map, { Marker } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { EbirdObservation } from '../lib/parseEbirdData';
 
@@ -127,6 +127,7 @@ export default function MapView({ data }: MapViewProps) {
           mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         >
           {locationGroups.map((group) => {
+            const isSelected = selectedLocation?.id === group.id;
             return (
               <Marker
                 key={group.id}
@@ -138,7 +139,7 @@ export default function MapView({ data }: MapViewProps) {
                   setSelectedLocation(group);
                 }}
               >
-                <div className="cursor-pointer text-orange-500 hover:text-orange-700 transition-colors">
+                <div className={`cursor-pointer transition-colors ${isSelected ? 'text-blue-500 hover:text-blue-700 z-10 relative scale-110' : 'text-orange-500 hover:text-orange-700'}`}>
                   <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                     <circle cx="12" cy="9" r="3" fill="white" />
@@ -147,44 +148,6 @@ export default function MapView({ data }: MapViewProps) {
               </Marker>
             );
           })}
-
-          {selectedLocation && (
-            <Popup
-              anchor="top"
-              longitude={selectedLocation.longitude}
-              latitude={selectedLocation.latitude}
-              onClose={() => setSelectedLocation(null)}
-              closeOnClick={false}
-              maxWidth="400px"
-              className="flat-popup"
-            >
-              <div className="p-0 text-sm text-gray-800 max-h-[300px] overflow-y-auto">
-                <div className="p-2 border-b border-gray-200 bg-white">
-                  <h3 className="font-bold text-lg mb-1">{selectedLocation.location}</h3>
-                  <p className="text-gray-600 text-xs">
-                    {selectedLocation.county}, {selectedLocation.stateProvince} &bull; {selectedLocation.observations.length} observation{selectedLocation.observations.length !== 1 ? 's' : ''}
-                  </p>
-                </div>
-
-                <div className="p-2 space-y-2 bg-white">
-                  {selectedLocation.observations.map(obs => (
-                    <div key={obs.SubmissionID + obs.CommonName} className="bg-gray-50 p-2 border border-gray-200">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-semibold">{obs.CommonName}</p>
-                          <p className="italic text-gray-500 text-xs">{obs.ScientificName}</p>
-                        </div>
-                        <span className="bg-gray-200 text-gray-800 text-xs font-bold px-2 py-0.5">
-                          Count: {obs.Count}
-                        </span>
-                      </div>
-                      <p className="text-xs text-gray-500 mt-1">{obs.Date} {obs.Time}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Popup>
-          )}
         </Map>
       </div>
 
