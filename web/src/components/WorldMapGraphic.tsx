@@ -83,7 +83,7 @@ export default function WorldMapGraphic({ latitude, longitude, dotColor = '#ffa5
         viewBox="0 0 960 500"
         width="100%"
         height="100%"
-        style={{ maxWidth: '100%', height: 'auto', backgroundColor: '#e0f7fa' }} /* Light blue background for water */
+        style={{ maxWidth: '100%', height: 'auto', backgroundColor: '#81d4fa' }} /* Darker blue background for water */
       >
         {/* Render Map Features */}
         {worldData && worldData.features && (
@@ -98,7 +98,7 @@ export default function WorldMapGraphic({ latitude, longitude, dotColor = '#ffa5
                 <path
                   key={i}
                   d={pathGenerator(d3Feature) || undefined}
-                  fill="#f0f0f0" /* Light grey fill for land */
+                  fill="#f9f9f9" /* Lighter grey fill for land */
                   stroke="black"
                   strokeWidth="1"
                 />
