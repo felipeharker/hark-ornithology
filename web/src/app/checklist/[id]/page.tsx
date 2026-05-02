@@ -18,7 +18,7 @@ export default async function ChecklistPage({
   const resolvedParams = await params;
   const submissionId = resolvedParams.id;
 
-  const { data, lastUpdated } = getLatestEbirdData();
+  const { data } = getLatestEbirdData();
 
   // Find all observations for this checklist
   const checklistData = data.filter(obs => obs.SubmissionID === submissionId);
@@ -181,12 +181,6 @@ export default async function ChecklistPage({
             })}
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="text-center text-sm font-mono text-gray-500 py-8">
-          Last updated {lastUpdated ? formatDate(lastUpdated) : 'Unknown'}
-        </div>
-
       </div>
     </main>
   );
