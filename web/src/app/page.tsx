@@ -3,7 +3,6 @@ import LocationDashboard from '@/components/LocationDashboard';
 
 export default function Home() {
   const { data, lastUpdated } = getLatestEbirdData();
-
   const uniqueSpecies = new Set(data.map(obs => obs.CommonName).filter(Boolean));
 
   return (
