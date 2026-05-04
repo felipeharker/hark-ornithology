@@ -62,3 +62,41 @@ To avoid breaking the application's functionality, please **do not** touch the f
 2.  **`useMemo` and `useState` Hooks:** Inside any `.tsx` file, you will see blocks of logic wrapped in `useMemo(...)` or `useState(...)`. These calculate the data for the graphs, maps, and UI state (like sorting monthly totals or pseudo-random color assignments). Editing the logic inside these blocks can corrupt the data displayed.
 3.  **Map Coordinate Logic (`Map.tsx`):** Do not alter the bounding box math, the `heatmapGeoJSON` object generator, or the `useEffect` blocks that trigger the `flyTo` camera panning animations.
 4.  **Core Configuration Files:** Files like `next.config.ts`, `package.json`, and `tsconfig.json` handle the build environment. Modifying these can prevent the site from compiling entirely.
+## 3. Hosting on Render
+
+This application is built as a static Next.js site, making it incredibly easy and free to host on a platform like [Render](https://render.com/).
+
+### Steps to Host:
+1. **Create a GitHub Repository**: Upload this entire project folder (including your data in `observation-data`) to a repository on your GitHub account.
+2. **Sign up for Render**: Go to Render.com and connect your GitHub account.
+3. **Create a New Static Site**:
+   - In the Render dashboard, click "New" and select **Static Site**.
+   - Select your newly created repository from the list.
+4. **Configure the Build Settings**:
+   - **Name**: Choose any name for your site (e.g., `my-ornithology-report`).
+   - **Branch**: `main` (or whatever your default branch is).
+   - **Root Directory**: Leave blank.
+   - **Build Command**: `cd web && npm install && npm run build`
+   - **Publish Directory**: `web/out`
+5. **Deploy**: Click **Create Static Site**. Render will now automatically build and publish your site online!
+
+Whenever you add new `.csv` data files to your repository, Render will automatically detect the changes and rebuild your site with the latest data.
+
+## 4. Customizing Your Site Options
+
+You can easily customize various aspects of the site (like the title, primary data file, and colors) without touching any code.
+
+All you need to do is edit the `options.csv` file located at the root directory of the project: `public/options.csv`.
+
+### Example `public/options.csv` file:
+```csv
+item,value
+title,Hark Ornithology Report
+secondary color hex,#58508d
+data file name,ebird-data-latest.csv
+```
+
+### Available Options:
+*   **`title`**: The main title displayed at the top of the dashboard and in the browser tab.
+*   **`secondary color hex`**: A 6-character hex color code (e.g., `#58508d`) that will be used for some visualizations on the site.
+*   **`data file name`**: The specific filename (e.g., `ebird-data-latest.csv`) inside the `observation-data/` folder that the site should read.

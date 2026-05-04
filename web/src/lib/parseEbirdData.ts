@@ -31,9 +31,12 @@ export interface EbirdObservation {
 
 let cache: { data: EbirdObservation[], lastUpdated: string | null, mtime: number } | null = null;
 
+import { getSiteOptions } from './parseOptions';
+
 export function getLatestEbirdData(): { data: EbirdObservation[], lastUpdated: string | null } {
+  const options = getSiteOptions();
   const dataDir = path.join(process.cwd(), '../observation-data');
-  const latestFile = 'ebird-data-latest.csv';
+  const latestFile = options.dataFileName || 'ebird-data-latest.csv';
   const filePath = path.join(dataDir, latestFile);
 
   if (!fs.existsSync(filePath)) {
