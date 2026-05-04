@@ -1,4 +1,6 @@
 item,value
-title,Hark Ornithology Report
-secondary color hex,#58508d
+title,Harker Ornithology Report
+header, Harker Ornithology Report
+location color hex,#58508d
+link color hex,#58508d
 data file name,ebird-data-latest.csv
