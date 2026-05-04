@@ -32,6 +32,7 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
   const searchParams = useSearchParams();
   const initialLocationId = searchParams.get('locationId');
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(initialLocationId);
+  const [viewMode, setViewMode] = useState<'locations' | 'checklists'>('locations');
   const listRef = useRef<HTMLDivElement>(null);
   const locationRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
@@ -185,6 +186,26 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
     });
   }, [locationData]);
 
+  const allChecklists = useMemo(() => {
+    const checklistsMap: Record<string, { submissionId: string, date: string, time: string, location: string }> = {};
+    for (const obs of data) {
+      if (obs.SubmissionID && !checklistsMap[obs.SubmissionID]) {
+        checklistsMap[obs.SubmissionID] = {
+          submissionId: obs.SubmissionID,
+          date: obs.Date,
+          time: obs.Time,
+          location: obs.Location,
+        };
+      }
+    }
+
+    return Object.values(checklistsMap).sort((a, b) => {
+      const dateComparison = b.date.localeCompare(a.date);
+      if (dateComparison !== 0) return dateComparison;
+      return b.time.localeCompare(a.time);
+    });
+  }, [data]);
+
   // Scroll to selected item when it changes
   useEffect(() => {
     if (selectedLocationId && locationRefs.current[selectedLocationId]) {
@@ -215,20 +236,30 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
       {/* Bottom Section: Locations List */}
       <div className="w-full flex flex-col bg-white">
         <div className="mb-4">
-          <button
-            onClick={() => {
-              setSelectedLocationId(null);
-              window.history.pushState({}, '', window.location.pathname);
-            }}
-            className={`w-full md:w-auto text-left p-3 border border-black font-mono text-sm transition-colors hover:bg-gray-100 ${!selectedLocationId ? 'bg-gray-100' : 'bg-white text-black'}`}
-          >
-            Clear Selection
-          </button>
+          {selectedLocationId ? (
+            <button
+              onClick={() => {
+                setSelectedLocationId(null);
+                window.history.pushState({}, '', window.location.pathname);
+              }}
+              className="w-full md:w-auto text-left p-3 border border-black font-mono text-sm transition-colors hover:bg-gray-100 bg-white text-black"
+            >
+              Clear Selection
+            </button>
+          ) : (
+            <button
+              onClick={() => setViewMode(viewMode === 'locations' ? 'checklists' : 'locations')}
+              className="w-full md:w-auto text-left p-3 border border-black font-mono text-sm transition-colors hover:bg-gray-100 bg-gray-100 text-black"
+            >
+              {viewMode === 'locations' ? 'Checklist View' : 'List View'}
+            </button>
+          )}
         </div>
 
-        <div ref={listRef} className="flex-1 space-y-4">
-          {locations.map((loc) => {
-            const isSelected = selectedLocationId === loc.id;
+        {viewMode === 'locations' || selectedLocationId ? (
+          <div ref={listRef} className="flex-1 space-y-4">
+            {locations.map((loc) => {
+              const isSelected = selectedLocationId === loc.id;
 
             let textColorClass = 'text-black';
             let bgColorClass = 'bg-white';
@@ -338,10 +369,28 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
 
                   </div>
                 )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="flex-1 space-y-4">
+            {allChecklists.map((checklist) => (
+              <div key={checklist.submissionId} className="border border-black">
+                <Link
+                  href={`/checklist/${checklist.submissionId}`}
+                  className="block w-full text-left p-4 font-mono text-sm transition-colors bg-white hover:bg-gray-100"
+                  style={{ color: secondaryColor }}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-base md:text-lg">{checklist.location}</span>
+                    <span className="text-black">{checklist.date}</span>
+                  </div>
+                </Link>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
