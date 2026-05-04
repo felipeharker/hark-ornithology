@@ -18,11 +18,16 @@ import {
 
 interface LocationDashboardProps {
   data: EbirdObservation[];
+  options: {
+    title: string;
+    secondaryColorHex: string;
+    dataFileName: string;
+  };
 }
 
-const CHART_COLORS = ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'];
-
-function LocationDashboardInner({ data }: LocationDashboardProps) {
+function LocationDashboardInner({ data, options }: LocationDashboardProps) {
+  const secondaryColor = options.secondaryColorHex || '#58508d';
+  const CHART_COLORS = ['#003f5c', secondaryColor, '#bc5090', '#ff6361', '#ffa600'];
   const searchParams = useSearchParams();
   const initialLocationId = searchParams.get('locationId');
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(initialLocationId);
@@ -339,10 +344,10 @@ function LocationDashboardInner({ data }: LocationDashboardProps) {
   );
 }
 
-export default function LocationDashboard({ data }: LocationDashboardProps) {
+export default function LocationDashboard({ data, options }: LocationDashboardProps) {
   return (
     <Suspense fallback={<div className="font-mono">Loading data...</div>}>
-      <LocationDashboardInner data={data} />
+      <LocationDashboardInner data={data} options={options} />
     </Suspense>
   );
 }

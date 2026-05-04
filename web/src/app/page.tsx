@@ -1,10 +1,12 @@
 import { getLatestEbirdData } from '@/lib/parseEbirdData';
 import LocationDashboard from '@/components/LocationDashboard';
 import { Suspense } from 'react';
+import { getSiteOptions } from '@/lib/parseOptions';
 
 // Wrap search param usage in a component to let Next.js stream it or handle it cleanly
 export default function Home() {
   const { data } = getLatestEbirdData();
+  const options = getSiteOptions();
   const uniqueSpecies = new Set(data.map(obs => obs.CommonName).filter(Boolean));
 
   // Find the date of the latest checklist
@@ -37,7 +39,7 @@ export default function Home() {
     <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black">
       <div className="max-w-7xl mx-auto space-y-8 md:space-y-12">
         <header className="border-b border-black pb-4 mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Ornithological Report</h1>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">{options.title}</h1>
           <div className="mt-2 flex flex-col sm:flex-row sm:justify-between text-sm md:text-base text-gray-600 font-mono">
             <p>Latest Checklist: {latestChecklistDate}</p>
             <p>Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
@@ -51,7 +53,7 @@ export default function Home() {
                  <h2 className="text-xl md:text-2xl font-bold tracking-wider">Fig. 1: Observation Data and Distribution</h2>
               </div>
               <Suspense fallback={<div className="font-mono">Loading data...</div>}>
-                <LocationDashboard data={data} />
+                <LocationDashboard data={data} options={options} />
               </Suspense>
             </div>
           ) : (

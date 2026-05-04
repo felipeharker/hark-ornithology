@@ -6,10 +6,15 @@ const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const ptSerif = PT_Serif({ weight: ['400', '700'], subsets: ["latin"], variable: '--font-serif' });
 const robotoMono = Roboto_Mono({ subsets: ["latin"], variable: '--font-mono' });
 
-export const metadata: Metadata = {
-  title: "Hark Ornithology Report",
-  description: "Personal birding project visualizing eBird data",
-};
+import { getSiteOptions } from "@/lib/parseOptions";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const options = getSiteOptions();
+  return {
+    title: options.title,
+    description: "Personal birding project visualizing eBird data",
+  };
+}
 
 export default function RootLayout({
   children,
