@@ -91,12 +91,12 @@ All you need to do is edit the `options.csv` file located at the root directory 
 ### Example `public/options.csv` file:
 ```csv
 item,value
-title,Hark Ornithology Report
-secondary color hex,#58508d
+title,Harker Ornithology Report
+secondary color hex,#ff6361
 data file name,ebird-data-latest.csv
 ```
 
 ### Available Options:
 *   **`title`**: The main title displayed at the top of the dashboard and in the browser tab.
-*   **`secondary color hex`**: A 6-character hex color code (e.g., `#58508d`) that will be used for some visualizations on the site.
+*   **`secondary color hex`**: A hex color code (e.g., `#ff6361`) that defines the primary accent color across the site. This color is applied to unselected map markers, unselected location items in the sidebar list, clickable links (like the "View Checklist" buttons), and some chart visualizations.
 *   **`data file name`**: The specific filename (e.g., `ebird-data-latest.csv`) inside the `observation-data/` folder that the site should read.

@@ -4,11 +4,13 @@ import { useMemo, useRef, useEffect } from 'react';
 import Map, { Marker, MapRef } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { EbirdObservation } from '../lib/parseEbirdData';
+import { SiteOptions } from '../lib/parseOptions';
 
 interface MapViewProps {
   data: EbirdObservation[];
   selectedLocationId: string | null;
   onLocationSelect: (id: string | null) => void;
+  options: SiteOptions;
 }
 
 interface LocationGroup {
@@ -22,7 +24,7 @@ interface LocationGroup {
   observations: EbirdObservation[];
 }
 
-export default function MapView({ data, selectedLocationId, onLocationSelect }: MapViewProps) {
+export default function MapView({ data, selectedLocationId, onLocationSelect, options }: MapViewProps) {
   const mapRef = useRef<MapRef>(null);
 
   const locationGroups = useMemo(() => {
@@ -82,11 +84,15 @@ export default function MapView({ data, selectedLocationId, onLocationSelect }: 
         {locationGroups.map((group) => {
           const isSelected = selectedLocation?.id === group.id;
 
-          let markerColorClass = 'text-blue-500 hover:text-blue-700'; // Default personal
+          let markerColorClass = '';
+          let inlineStyle = {};
+
           if (isSelected) {
              markerColorClass = 'text-black hover:text-gray-800 z-10 relative scale-125';
-          } else if (group.isHotspot) {
-             markerColorClass = 'text-red-500 hover:text-red-700';
+          } else {
+             inlineStyle = { color: options.secondaryColorHex };
+             // Use opacity on hover for non-selected items to give a visual cue
+             markerColorClass = 'hover:opacity-80';
           }
 
           return (
@@ -100,7 +106,7 @@ export default function MapView({ data, selectedLocationId, onLocationSelect }: 
                 onLocationSelect(group.id);
               }}
             >
-              <div className={`cursor-pointer transition-colors ${markerColorClass}`}>
+              <div className={`cursor-pointer transition-colors ${markerColorClass}`} style={inlineStyle}>
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                   <circle cx="12" cy="9" r="3" fill="white" />

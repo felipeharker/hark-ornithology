@@ -10,7 +10,7 @@ export interface SiteOptions {
 
 const DEFAULT_OPTIONS: SiteOptions = {
   title: 'Ornithological Report',
-  secondaryColorHex: '#58508d',
+  secondaryColorHex: '#ff6361',
   dataFileName: 'ebird-data-latest.csv',
 };
 
@@ -43,9 +43,9 @@ export function getSiteOptions(): SiteOptions {
 
       if (!item || !value) return;
 
-      if (item === 'title') {
+      if (item === 'title' || item === 'header') {
         options.title = value;
-      } else if (item === 'secondary color hex') {
+      } else if (item === 'secondary color hex' || item === 'location color hex' || item === 'link color hex') {
         options.secondaryColorHex = value;
       } else if (item === 'data file name') {
         options.dataFileName = value;
