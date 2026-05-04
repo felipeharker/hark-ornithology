@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef, Suspense } from 'react';
 import { EbirdObservation } from '@/lib/parseEbirdData';
 import MapView from './Map';
-import WorldMapGraphic from './WorldMapGraphic';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 import {
   LineChart,
@@ -13,9 +14,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
 } from 'recharts';
 
 interface LocationDashboardProps {
@@ -24,53 +22,39 @@ interface LocationDashboardProps {
 
 const CHART_COLORS = ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'];
 
-export default function LocationDashboard({ data }: LocationDashboardProps) {
-  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
-  const [resetTrigger, setResetTrigger] = useState(0);
-
-  // We need an array of stable colors mapped to the locations to avoid re-rendering
-  const randomColors = useMemo(() => {
-    const palette = ['#003f5c', '#58508d', '#bc5090', '#ff6361', '#ffa600'];
-    const colors: string[] = [];
-    let lastColorIndex = -1;
-
-    // A simple pseudo-random number generator to replace Math.random() in render
-    // Use an object to hold the seed so it can be mutated without react-hooks/immutability complaining
-    const seedState = { value: 12345 };
-    const pseudoRandom = () => {
-      seedState.value = (seedState.value * 9301 + 49297) % 233280;
-      return seedState.value / 233280;
-    };
-
-    // Create an array large enough for any number of locations
-    for (let i = 0; i < 1000; i++) {
-      let nextColorIndex;
-      do {
-        nextColorIndex = Math.floor(pseudoRandom() * palette.length);
-      } while (nextColorIndex === lastColorIndex && palette.length > 1);
-
-      colors.push(palette[nextColorIndex]);
-      lastColorIndex = nextColorIndex;
-    }
-    return colors;
-  }, []);
+function LocationDashboardInner({ data }: LocationDashboardProps) {
+  const searchParams = useSearchParams();
+  const initialLocationId = searchParams.get('locationId');
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(initialLocationId);
+  const listRef = useRef<HTMLDivElement>(null);
+  const locationRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const locations = useMemo(() => {
-    const locMap = new Map<string, { id: string; name: string; count: number }>();
+    const locMap = new Map<string, { id: string; name: string; count: number, isHotspot: boolean }>();
     data.forEach((obs) => {
       if (obs.LocationID) {
         if (!locMap.has(obs.LocationID)) {
-          locMap.set(obs.LocationID, { id: obs.LocationID, name: obs.Location, count: 0 });
+          locMap.set(obs.LocationID, {
+            id: obs.LocationID,
+            name: obs.Location,
+            count: 0,
+            isHotspot: obs.LocationID.startsWith('L')
+          });
         }
         const entry = locMap.get(obs.LocationID)!;
         entry.count += 1;
       }
     });
     return Array.from(locMap.values()).sort((a, b) => {
+      // Prioritize the selected location to always be at the top
+      if (selectedLocationId) {
+        if (a.id === selectedLocationId) return -1;
+        if (b.id === selectedLocationId) return 1;
+      }
       if (b.count !== a.count) return b.count - a.count;
       return a.name.localeCompare(b.name);
     });
-  }, [data]);
+  }, [data, selectedLocationId]);
 
   const locationData = useMemo(() => {
     if (!selectedLocationId) return [];
@@ -80,23 +64,19 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
   const barChartData = useMemo(() => {
     if (!locationData.length || !data.length) return [];
 
-    // Helper to extract YYYY-MM from date string
     const getYearMonth = (dateStr?: string) => {
       if (!dateStr) return null;
       const parts = dateStr.split(/[-/]/);
       if (parts.length >= 3) {
         if (parts[0].length === 4) {
-          // YYYY-MM-DD
           return `${parts[0]}-${parts[1].padStart(2, '0')}`;
         } else {
-          // MM/DD/YYYY
           return `${parts[2]}-${parts[0].padStart(2, '0')}`;
         }
       }
       return null;
     };
 
-    // Find the global min and max dates across the entire dataset
     let minDateStr: string | null = null;
     let maxDateStr: string | null = null;
     data.forEach((obs) => {
@@ -109,11 +89,9 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
 
     if (!minDateStr || !maxDateStr) return [];
 
-    // TypeScript narrowing
     const minDate: string = minDateStr;
     const maxDate: string = maxDateStr;
 
-    // Generate all months between minDateStr and maxDateStr
     const allMonths: string[] = [];
     let [currYear, currMonth] = minDate.split('-').map(Number);
     const [maxYear, maxMonth] = maxDate.split('-').map(Number);
@@ -127,11 +105,9 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
       }
     }
 
-    // Initialize all months with 0
     const monthlyCounts = new Map<string, number>();
     allMonths.forEach(m => monthlyCounts.set(m, 0));
 
-    // Populate with actual data for the selected location
     locationData.forEach((obs) => {
       const ym = getYearMonth(obs.Date);
       if (ym && monthlyCounts.has(ym)) {
@@ -144,171 +120,229 @@ export default function LocationDashboard({ data }: LocationDashboardProps) {
       .sort((a, b) => a.date.localeCompare(b.date));
   }, [locationData, data]);
 
-  const pieChartData = useMemo(() => {
+  const overallTotals = useMemo(() => {
     if (!locationData.length) return [];
 
-    const speciesCounts = new Map<string, number>();
-    locationData.forEach((obs) => {
-      const name = obs.CommonName || 'Unknown';
-      speciesCounts.set(name, (speciesCounts.get(name) || 0) + 1);
-    });
+    const speciesMap = new Map<string, { sci: string, total: number, hasNumeric: boolean }>();
+    for (const obs of locationData) {
+      const name = obs.CommonName;
+      const sci = obs.ScientificName;
+      const countStr = obs.Count;
 
-    return Array.from(speciesCounts.entries())
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value); // Sort descending by count
+      if (!speciesMap.has(name)) {
+        speciesMap.set(name, { sci, total: 0, hasNumeric: false });
+      }
+      const entry = speciesMap.get(name)!;
+
+      if (countStr !== 'X' && countStr !== '') {
+        const num = parseInt(countStr, 10);
+        if (!isNaN(num)) {
+          entry.total += num;
+          entry.hasNumeric = true;
+        }
+      }
+    }
+
+    const totals = Array.from(speciesMap.entries()).map(([name, data]) => ({
+      commonName: name,
+      scientificName: data.sci,
+      total: data.total,
+      onlyX: !data.hasNumeric
+    }));
+
+    return totals.sort((a, b) => {
+      if (a.onlyX && !b.onlyX) return 1;
+      if (!a.onlyX && b.onlyX) return -1;
+      if (!a.onlyX && !b.onlyX) return b.total - a.total;
+      return a.commonName.localeCompare(b.commonName);
+    });
   }, [locationData]);
 
-  const selectedLocationData = useMemo(() => {
-    return locations.find(l => l.id === selectedLocationId);
-  }, [locations, selectedLocationId]);
+  const locationChecklists = useMemo(() => {
+    if (!locationData.length) return [];
 
-  const selectedLocationName = selectedLocationData?.name;
+    const checklistsMap: Record<string, { submissionId: string, date: string, time: string }> = {};
+    for (const obs of locationData) {
+      if (obs.SubmissionID && !checklistsMap[obs.SubmissionID]) {
+        checklistsMap[obs.SubmissionID] = {
+          submissionId: obs.SubmissionID,
+          date: obs.Date,
+          time: obs.Time,
+        };
+      }
+    }
 
-  // Calculate coordinates for the selected location indicator
-  const selectedLocationCoords = useMemo(() => {
-    if (!selectedLocationData) return null;
-    const obs = data.find(o => o.LocationID === selectedLocationId);
-    if (!obs || obs.Latitude === undefined || obs.Longitude === undefined) return null;
-    return { latitude: obs.Latitude, longitude: obs.Longitude };
-  }, [selectedLocationData, selectedLocationId, data]);
+    return Object.values(checklistsMap).sort((a, b) => {
+      const dateComparison = b.date.localeCompare(a.date);
+      if (dateComparison !== 0) return dateComparison;
+      return b.time.localeCompare(a.time);
+    });
+  }, [locationData]);
 
-  const selectedLocationColor = useMemo(() => {
-    if (!selectedLocationData) return undefined;
-    const idx = locations.findIndex(l => l.id === selectedLocationId);
-    if (idx === -1) return undefined;
-    return randomColors[idx % randomColors.length];
-  }, [selectedLocationData, selectedLocationId, locations, randomColors]);
+  // Scroll to selected item when it changes
+  useEffect(() => {
+    if (selectedLocationId && locationRefs.current[selectedLocationId]) {
+      // setTimeout to allow render before scrolling
+      setTimeout(() => {
+         locationRefs.current[selectedLocationId]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [selectedLocationId]);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-[600px] bg-white">
-      {/* Left Column: Locations List */}
-      <div className="w-full md:w-72 flex flex-col bg-white">
-        <div className="p-4 border border-black mb-4">
+    <div className="flex flex-col bg-white">
+      {/* Top Section: Map */}
+      <div className="w-full relative h-[500px] lg:h-[600px] mb-8">
+        <MapView
+          data={data}
+          selectedLocationId={selectedLocationId}
+          onLocationSelect={(id) => {
+            setSelectedLocationId(id);
+            // Update URL to match state
+            const newUrl = id ? `?locationId=${id}` : window.location.pathname;
+            window.history.pushState({}, '', newUrl);
+          }}
+        />
+      </div>
+
+      {/* Bottom Section: Locations List */}
+      <div className="w-full flex flex-col bg-white">
+        <div className="mb-4">
           <button
             onClick={() => {
               setSelectedLocationId(null);
-              setResetTrigger(r => r + 1);
+              window.history.pushState({}, '', window.location.pathname);
             }}
-            className={`w-full text-left p-2 border border-black font-mono text-sm transition-colors hover:bg-black hover:text-white ${!selectedLocationId ? 'bg-black text-white' : 'bg-white text-black'}`}
+            className={`w-full md:w-auto text-left p-3 border border-black font-mono text-sm transition-colors hover:bg-gray-100 ${!selectedLocationId ? 'bg-gray-100' : 'bg-white text-black'}`}
           >
-            All Locations / View Map
+            Clear Selection
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto max-h-[300px] md:max-h-[600px] p-4 border border-black space-y-2">
-          {locations.map((loc, idx) => {
+
+        <div ref={listRef} className="flex-1 space-y-4">
+          {locations.map((loc) => {
             const isSelected = selectedLocationId === loc.id;
-            const baseColor = randomColors[idx % randomColors.length];
-            // Convert hex to rgb to create a less saturated/lighter version for hover
-            const hex2rgb = (hex: string) => {
-              const r = parseInt(hex.slice(1, 3), 16);
-              const g = parseInt(hex.slice(3, 5), 16);
-              const b = parseInt(hex.slice(5, 7), 16);
-              return `${r}, ${g}, ${b}`;
-            };
-            const rgbColor = hex2rgb(baseColor);
+
+            let textColorClass = 'text-black';
+            let bgColorClass = 'bg-white';
+
+            if (isSelected) {
+              bgColorClass = 'bg-black';
+              textColorClass = 'text-white';
+            } else if (loc.isHotspot) {
+              textColorClass = 'text-red-600';
+            } else {
+              textColorClass = 'text-blue-600';
+            }
 
             return (
-              <button
+              <div
                 key={loc.id}
-                onClick={() => setSelectedLocationId(loc.id)}
-                className="w-full text-left p-2 border border-black font-mono text-sm transition-colors"
-                style={{
-                  backgroundColor: isSelected ? baseColor : 'white',
-                  color: isSelected ? 'white' : 'black',
-                  // Using CSS custom properties for hover effect is tricky with inline styles,
-                  // so we'll use a data attribute and global CSS or onMouseEnter/Leave
-                  // But simpler: just add a CSS class that changes background color slightly when not selected
+                ref={(el) => {
+                  locationRefs.current[loc.id] = el;
                 }}
-                onMouseEnter={(e) => {
-                  if (!isSelected) {
-                    e.currentTarget.style.backgroundColor = `rgba(${rgbColor}, 0.2)`;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isSelected) {
-                    e.currentTarget.style.backgroundColor = 'white';
-                  }
-                }}
+                className={`border border-black ${isSelected ? 'border-2' : ''}`}
               >
-                <div className="flex justify-between items-center">
-                  <span className="truncate mr-2">{loc.name}</span>
-                  <span className="text-xs">{loc.count} obs</span>
-                </div>
-              </button>
+                <button
+                  onClick={() => {
+                    const newId = isSelected ? null : loc.id;
+                    setSelectedLocationId(newId);
+                    const newUrl = newId ? `?locationId=${newId}` : window.location.pathname;
+                    window.history.pushState({}, '', newUrl);
+                  }}
+                  className={`w-full text-left p-4 font-mono text-sm transition-colors ${bgColorClass} ${textColorClass}`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-base md:text-lg">{loc.name}</span>
+                    <span>{loc.count} obs</span>
+                  </div>
+                </button>
+
+                {/* Expanded Details */}
+                {isSelected && (
+                  <div className="p-4 md:p-8 border-t border-black bg-white text-black">
+
+                    {/* Checklists */}
+                    <div className="mb-12">
+                      <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Checklists</h3>
+                      {locationChecklists.length > 0 ? (
+                        <div className="space-y-2">
+                           {locationChecklists.map(checklist => (
+                             <div key={checklist.submissionId} className="flex flex-row items-center border border-gray-300 p-3 hover:bg-gray-50 transition-colors">
+                               <div className="font-mono text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
+                               <Link
+                                 href={`/checklist/${checklist.submissionId}?locationId=${loc.id}`}
+                                 className="font-mono text-sm text-blue-600 hover:text-blue-800 underline"
+                               >
+                                 View Checklist
+                               </Link>
+                             </div>
+                           ))}
+                        </div>
+                      ) : (
+                        <p className="font-mono text-gray-500 italic">No checklists available.</p>
+                      )}
+                    </div>
+
+                    {/* Species Total Table */}
+                    <div className="mb-12">
+                      <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Species Totals</h3>
+                      <div className="overflow-x-auto border-t border-b border-black">
+                        <table className="min-w-full divide-y divide-black text-sm font-mono">
+                          <thead>
+                            <tr>
+                              <th className="px-2 py-3 text-left font-bold">Species</th>
+                              <th className="px-2 py-3 text-right font-bold">Count</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-300">
+                            {overallTotals.map(item => (
+                              <tr key={item.commonName}>
+                                <td className="px-2 py-2 whitespace-nowrap">
+                                  <div className="font-bold">{item.commonName}</div>
+                                  <div className="text-xs italic text-gray-600">{item.scientificName}</div>
+                                </td>
+                                <td className="px-2 py-2 whitespace-nowrap text-right font-bold">
+                                  {item.onlyX ? 'X' : item.total}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* Line Chart */}
+                    <div>
+                      <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Observations over Time (Month/Year)</h3>
+                      <div className="h-[400px] md:h-[500px] border border-black p-4">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={barChartData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                            <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
+                            <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
+                            <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
+                            <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
-
-        {/* Simple Map Outline */}
-        {selectedLocationId && (
-          <div className="mt-4 border border-black p-4 bg-white flex justify-center items-center">
-            <WorldMapGraphic
-              latitude={selectedLocationCoords?.latitude}
-              longitude={selectedLocationCoords?.longitude}
-              dotColor={selectedLocationColor}
-            />
-          </div>
-        )}
-      </div>
-
-      {/* Right Column: Content Area */}
-      <div className="flex-1 flex flex-col relative min-h-[500px] md:ml-8 lg:ml-12">
-        {!selectedLocationId ? (
-          <div className="absolute inset-0">
-             <MapView data={data} resetTrigger={resetTrigger} />
-          </div>
-        ) : (
-          <div className="p-6 md:p-8 flex-1 overflow-y-auto bg-white text-black border border-black">
-            <h2 className="text-2xl font-bold mb-8 border-b border-black pb-2">{selectedLocationName} - Analysis</h2>
-
-            <div className="space-y-12">
-              {/* Line Chart */}
-              <div>
-                <h3 className="text-lg font-bold mb-4 font-serif">Observations over Time (Month/Year)</h3>
-                <div className="h-[500px] md:h-[800px] border border-black p-4">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={barChartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                      <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
-                      <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
-                      <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
-                      <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              {/* Pie Chart */}
-              <div>
-                <h3 className="text-lg font-bold mb-4 font-serif">Species Composition (All-time Observations)</h3>
-                <div className="h-[500px] md:h-[800px] border border-black p-4 flex items-center justify-center">
-                  {pieChartData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={pieChartData}
-                          cx="50%"
-                          cy="50%"
-                          outerRadius="75%"
-                          dataKey="value"
-                          isAnimationActive={false}
-                        >
-                          {pieChartData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} formatter={(value, name) => [`${value} obs`, name]} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <p className="font-mono text-gray-500">No species data available.</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
+  );
+}
+
+export default function LocationDashboard({ data }: LocationDashboardProps) {
+  return (
+    <Suspense fallback={<div className="font-mono">Loading data...</div>}>
+      <LocationDashboardInner data={data} />
+    </Suspense>
   );
 }
