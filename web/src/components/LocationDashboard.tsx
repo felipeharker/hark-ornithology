@@ -26,8 +26,9 @@ interface LocationDashboardProps {
 }
 
 function LocationDashboardInner({ data, options }: LocationDashboardProps) {
-  const secondaryColor = options.secondaryColorHex || '#58508d';
-  const CHART_COLORS = ['#003f5c', secondaryColor, '#bc5090', '#ff6361', '#ffa600'];
+  const secondaryColor = options.secondaryColorHex || '#ff6361';
+  // Avoid duplicating colors if secondary is the same as the default chart color
+  const CHART_COLORS = ['#003f5c', secondaryColor, '#bc5090', '#ffa600', '#58508d'];
   const searchParams = useSearchParams();
   const initialLocationId = searchParams.get('locationId');
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(initialLocationId);
@@ -201,6 +202,7 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
         <MapView
           data={data}
           selectedLocationId={selectedLocationId}
+          options={options}
           onLocationSelect={(id) => {
             setSelectedLocationId(id);
             // Update URL to match state
@@ -230,14 +232,13 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
 
             let textColorClass = 'text-black';
             let bgColorClass = 'bg-white';
+            let inlineStyle = {};
 
             if (isSelected) {
               bgColorClass = 'bg-black';
               textColorClass = 'text-white';
-            } else if (loc.isHotspot) {
-              textColorClass = 'text-red-600';
             } else {
-              textColorClass = 'text-blue-600';
+              inlineStyle = { color: secondaryColor };
             }
 
             return (
@@ -256,6 +257,7 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
                     window.history.pushState({}, '', newUrl);
                   }}
                   className={`w-full text-left p-4 font-mono text-sm transition-colors ${bgColorClass} ${textColorClass}`}
+                  style={inlineStyle}
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-base md:text-lg">{loc.name}</span>
@@ -277,7 +279,8 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
                                <div className="font-mono text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
                                <Link
                                  href={`/checklist/${checklist.submissionId}?locationId=${loc.id}`}
-                                 className="font-mono text-sm text-blue-600 hover:text-blue-800 underline"
+                                 className="font-mono text-sm hover:opacity-80 underline"
+                                 style={{ color: secondaryColor }}
                                >
                                  View Checklist
                                </Link>
