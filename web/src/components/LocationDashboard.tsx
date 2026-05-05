@@ -251,7 +251,7 @@ function LocationDashboardInner({ data, options }: LocationDashboardProps) {
               onClick={() => setViewMode(viewMode === 'locations' ? 'checklists' : 'locations')}
               className="w-full md:w-auto text-left p-3 border border-black font-mono text-sm transition-colors hover:bg-gray-100 bg-gray-100 text-black"
             >
-              {viewMode === 'locations' ? 'Checklist View' : 'List View'}
+              {viewMode === 'locations' ? 'Checklist View' : 'Location View'}
             </button>
           )}
         </div>
