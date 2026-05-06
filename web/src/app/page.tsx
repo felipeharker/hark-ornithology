@@ -1,4 +1,5 @@
 import { getLatestEbirdData } from '@/lib/parseEbirdData';
+import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
 import LocationDashboard from '@/components/LocationDashboard';
 import { Suspense } from 'react';
 import { getSiteOptions } from '@/lib/parseOptions';
@@ -6,6 +7,7 @@ import { getSiteOptions } from '@/lib/parseOptions';
 // Wrap search param usage in a component to let Next.js stream it or handle it cleanly
 export default function Home() {
   const { data } = getLatestEbirdData();
+  const { data: mediaData } = getLatestEbirdMediaData();
   const options = getSiteOptions();
   const uniqueSpecies = new Set(data.map(obs => obs.CommonName).filter(Boolean));
 
@@ -53,7 +55,7 @@ export default function Home() {
                  <h2 className="text-xl md:text-2xl font-bold tracking-wider">Fig. 1: Observation Data and Distribution</h2>
               </div>
               <Suspense fallback={<div className="font-mono">Loading data...</div>}>
-                <LocationDashboard data={data} options={options} />
+                <LocationDashboard data={data} mediaData={mediaData} options={options} />
               </Suspense>
             </div>
           ) : (
