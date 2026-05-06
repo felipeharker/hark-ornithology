@@ -45,7 +45,7 @@ export default function About() {
                 eBird Account
               </a>
               <p>
-                All checklists, locations, observstions, and more can also be seen on eBird.
+                All checklists, locations, observations, and more can also be seen on eBird.
               </p>
             </li>
             <li>
