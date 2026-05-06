@@ -1,12 +1,12 @@
 Submission ID,Common Name,Scientific Name,Taxonomic Order,Count,State/Province,County,Location ID,Location,Latitude,Longitude,Date,Time,Protocol,Duration (Min),All Obs Reported,Distance Traveled (km),Area Covered (ha),Number of Observers,Breeding Code,Observation Details,Checklist Comments,ML Catalog Numbers
 S329523506,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-29,01:31 PM,eBird - Casual Observation,,0,,,1,,,Outside office
 S281346134,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,3,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-25,05:06 PM,eBird - Traveling Count,24,0,.906,,2
+S326808768,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,20,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731355 656731382 656731383 656731384 656731385 656731387 656731389 656731483
 S314159734,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
 S289207764,Trumpeter Swan,Cygnus buccinator,382,25,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
-S326808768,Egyptian Goose,Alopochen aegyptiaca,417,5,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
+S326808768,Egyptian Goose,Alopochen aegyptiaca,417,5,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731475
 S296601317,Muscovy Duck (Domestic type),Cairina moschata (Domestic type),446,1,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,Historical,30,0,0.,,2
 S314516825,Wood Duck,Aix sponsa,455,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
-S326808768,Wood Duck,Aix sponsa,455,20,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
 S312570745,Blue-winged Teal,Spatula discors,485,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-23,06:35 PM,eBird - Traveling Count,60,0,1.609,,1
 S289207764,Mallard,Anas platyrhynchos,545,12,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
 S296601317,Mallard,Anas platyrhynchos,545,6,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,Historical,30,0,0.,,2
@@ -16,7 +16,6 @@ S331399158,Eurasian Collared-Dove,Streptopelia decaocto,2031,1,US-TX,Harris,L647
 S321692354,Inca Dove,Columbina inca,2242,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S321692354,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S300057008,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
-S321697386,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
 S281346134,White-winged Dove,Zenaida asiatica,2389,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-25,05:06 PM,eBird - Traveling Count,24,0,.906,,2
 S281477423,White-winged Dove,Zenaida asiatica,2389,2,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-26,09:24 AM,eBird - Traveling Count,51,0,1.767,,2
 S312570745,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-23,06:35 PM,eBird - Traveling Count,60,0,1.609,,1
@@ -25,9 +24,10 @@ S318119395,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Harris,L51937682,Fall
 S318119348,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-31,05:40 PM,eBird - Traveling Count,90,0,2.414,,1
 S318119330,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
 S321697639,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-07,07:50 PM,eBird - Traveling Count,10,0,.612,,1
-S328558759,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-26,06:27 PM,eBird - Traveling Count,35,1,.894,,1
+S328558759,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-26,06:27 PM,eBird - Traveling Count,35,1,.894,,1,,,,656731799
 S272316146,White-winged Dove,Zenaida asiatica,2389,4,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2025-09-08,06:18 PM,eBird - Stationary Count,1,0,,,1,T Territorial Defense
 S333500962,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
+S321697386,Mourning Dove,Zenaida macroura,2412,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1,,,,656730771
 S292237383,Mourning Dove,Zenaida macroura,2412,6,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-01-03,04:19 PM,eBird - Traveling Count,44,0,1.492,,2
 S269094797,Mourning Dove,Zenaida macroura,2412,7,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-08-23,06:22 PM,eBird - Traveling Count,27,0,.74,,2
 S279245275,Mourning Dove,Zenaida macroura,2412,3,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-13,06:30 PM,eBird - Traveling Count,24,0,.942,,1,,,New spot by the creek. Maybe visit earlier.
@@ -43,11 +43,12 @@ S328558759,Mourning Dove,Zenaida macroura,2412,2,US-TX,Harris,L51937682,Fall Cre
 S268666709,Mourning Dove,Zenaida macroura,2412,3,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2025-08-21,06:35 PM,eBird - Stationary Count,7,0,,,1,,Hanging out with blue jays. They have done this for multiple days now.
 S272316146,Mourning Dove,Zenaida macroura,2412,4,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2025-09-08,06:18 PM,eBird - Stationary Count,1,0,,,1,T Territorial Defense
 S273078629,Mourning Dove,Zenaida macroura,2412,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2025-09-13,07:32 AM,eBird - Stationary Count,5,0,,,1
+S333655255,Mourning Dove,Zenaida macroura,2412,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-04-22,06:30 PM,eBird - Stationary Count,5,0,,,1,,,,656731732 656731733
 S326808672,Mourning Dove,Zenaida macroura,2412,X,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-04-24,07:21 PM,eBird - Stationary Count,30,1,,,1
 S330666807,Mourning Dove,Zenaida macroura,2412,2,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-05-01,06:05 PM,eBird - Casual Observation,,0,,,1
 S309883569,Mourning Dove,Zenaida macroura,2412,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-15,11:22 AM,eBird - Traveling Count,21,0,.491,,2
 S311655274,Mourning Dove,Zenaida macroura,2412,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-21,10:38 AM,eBird - Traveling Count,68,0,1.664,,2
-S333500962,Mourning Dove,Zenaida macroura,2412,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
+S333500962,Mourning Dove,Zenaida macroura,2412,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1,,,,656732878 656732880
 S272084069,Mourning Dove,Zenaida macroura,2412,3,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2025-09-07,12:43 PM,eBird - Traveling Count,72,0,2.239,,2
 S313767068,Mourning Dove,Zenaida macroura,2412,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S314516825,Mourning Dove,Zenaida macroura,2412,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
@@ -56,7 +57,7 @@ S331465970,Common Nighthawk,Chordeiles minor,3492,1,US-TX,Harris,L64744388,Truck
 S321697386,Chimney Swift,Chaetura pelagica,3896,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
 S328558759,Ruby-throated Hummingbird,Archilochus colubris,4802,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-26,06:27 PM,eBird - Traveling Count,35,1,.894,,1
 S326808672,Ruby-throated Hummingbird,Archilochus colubris,4802,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-04-24,07:21 PM,eBird - Stationary Count,30,1,,,1,,"Feeder, suet"
-S321692354,Black-chinned Hummingbird,Archilochus alexandri,4803,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
+S321692354,Black-chinned Hummingbird,Archilochus alexandri,4803,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2,,,,656731274 656731276 656731277 656731278 656731279
 S296601317,American Coot,Fulica americana,5500,24,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,Historical,30,0,0.,,2
 S327404344,Laughing Gull,Leucophaeus atricilla,6490,1,US-TX,Harris,L63941960,"4602 Davenport St, Houston, TX 77051",29.666342,-95.358695,2026-04-25,05:34 PM,eBird - Casual Observation,,0,,,1
 S296601317,Double-crested Cormorant,Nannopterum auritum,7424,24,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,Historical,30,0,0.,,2
@@ -68,7 +69,7 @@ S269003690,Green Heron,Butorides virescens,7704,1,US-TX,Harris,L128996,Jesse H. 
 S318119330,Western Cattle-Egret,Ardea ibis,7724,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
 S314516825,Western Cattle-Egret,Ardea ibis,7724,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S296601317,Great Egret,Ardea alba,7729,24,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,Historical,30,0,0.,,2
-S326808768,Great Egret,Ardea alba,7729,3,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
+S326808768,Great Egret,Ardea alba,7729,3,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731471 656731472
 S321692354,Great Blue Heron,Ardea herodias,7753,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S321697386,Great Blue Heron,Ardea herodias,7753,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
 S289207764,Great Blue Heron,Ardea herodias,7753,2,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
@@ -79,7 +80,7 @@ S272084069,Great Blue Heron,Ardea herodias,7753,1,US-TX,Montgomery,L1425418,San 
 S326808768,Great Blue Heron,Ardea herodias,7753,3,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
 S314159734,Great Blue Heron,Ardea herodias,7753,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
 S296601317,American White Pelican,Pelecanus erythrorhynchos,7791,1,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,Historical,30,0,0.,,2
-S321692354,Black Vulture,Coragyps atratus,7811,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
+S321692354,Black Vulture,Coragyps atratus,7811,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2,,,,656731290 656731291 656731292 656731293
 S281477423,Black Vulture,Coragyps atratus,7811,15,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-26,09:24 AM,eBird - Traveling Count,51,0,1.767,,2
 S298682402,Black Vulture,Coragyps atratus,7811,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-02-07,12:05 PM,eBird - Traveling Count,66,0,3.567,,2
 S318119363,Black Vulture,Coragyps atratus,7811,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-30,06:41 PM,eBird - Traveling Count,31,0,1.579,,1
@@ -94,8 +95,8 @@ S292237383,Red-shouldered Hawk,Buteo lineatus,8487,1,US-TX,Harris,L54503706,Fall
 S298682402,Red-shouldered Hawk,Buteo lineatus,8487,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-02-07,12:05 PM,eBird - Traveling Count,66,0,3.567,,2
 S312854498,Red-shouldered Hawk,Buteo lineatus,8487,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-24,06:13 PM,eBird - Traveling Count,65,0,2.38,,1
 S331271897,Red-shouldered Hawk,Buteo lineatus,8487,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-05-02,01:55 PM,eBird - Casual Observation,,0,,,2,,"Heard outside front yard, very clear"
-S333500962,Red-shouldered Hawk,Buteo lineatus,8487,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
 S314159734,Red-shouldered Hawk,Buteo lineatus,8487,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
+S333500962,Red-tailed Hawk,Buteo jamaicensis,8506,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1,,,,656732044
 S314158536,Barred Owl,Strix varia,9219,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-28,08:42 PM,eBird - Casual Observation,,0,,,2
 S286423340,Belted Kingfisher,Megaceryle alcyon,10306,1,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2025-11-27,03:00 PM,eBird - Stationary Count,60,0,,,2
 S286423340,Yellow-bellied Sapsucker,Sphyrapicus varius,11126,1,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2025-11-27,03:00 PM,eBird - Stationary Count,60,0,,,2
@@ -109,7 +110,7 @@ S318119395,Red-bellied Woodpecker,Melanerpes carolinus,11199,X,US-TX,Harris,L519
 S318119348,Red-bellied Woodpecker,Melanerpes carolinus,11199,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-31,05:40 PM,eBird - Traveling Count,90,0,2.414,,1
 S318119330,Red-bellied Woodpecker,Melanerpes carolinus,11199,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
 S309883569,Red-bellied Woodpecker,Melanerpes carolinus,11199,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-15,11:22 AM,eBird - Traveling Count,21,0,.491,,2
-S333500962,Red-bellied Woodpecker,Melanerpes carolinus,11199,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
+S333500962,Red-bellied Woodpecker,Melanerpes carolinus,11199,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1,,,,656732035 656732036
 S326808768,Red-bellied Woodpecker,Melanerpes carolinus,11199,1,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
 S312570745,Downy Woodpecker,Dryobates pubescens,11400,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-23,06:35 PM,eBird - Traveling Count,60,0,1.609,,1
 S332172882,Downy Woodpecker,Dryobates pubescens,11400,2,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-05-03,12:06 PM,eBird - Casual Observation,,0,,,1,T Territorial Defense
@@ -120,7 +121,7 @@ S314159734,Downy Woodpecker,Dryobates pubescens,11400,X,US-TX,Montgomery,L129118
 S269003690,Pileated Woodpecker,Dryocopus pileatus,11762,1,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2025-08-23,10:07 AM,eBird - Traveling Count,41,0,.964,,2
 S314516825,Pileated Woodpecker,Dryocopus pileatus,11762,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S314159734,Pileated Woodpecker,Dryocopus pileatus,11762,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
-S333500962,Eastern Wood-Pewee,Contopus virens,16924,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
+S333500962,Eastern Wood-Pewee,Contopus virens,16924,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1,,,,656732215 656732216 656732217
 S286423340,Eastern Phoebe,Sayornis phoebe,17007,2,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2025-11-27,03:00 PM,eBird - Stationary Count,60,0,,,2
 S321692354,Eastern Phoebe,Sayornis phoebe,17007,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S292237383,Eastern Phoebe,Sayornis phoebe,17007,1,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-01-03,04:19 PM,eBird - Traveling Count,44,0,1.492,,2
@@ -179,7 +180,7 @@ S326808672,Carolina Chickadee,Poecile carolinensis,22060,2,US-TX,Harris,L5184075
 S330666807,Carolina Chickadee,Poecile carolinensis,22060,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-05-01,06:05 PM,eBird - Casual Observation,,0,,,1,,"Feeder, suet"
 S309883569,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-15,11:22 AM,eBird - Traveling Count,21,0,.491,,2
 S311655274,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-21,10:38 AM,eBird - Traveling Count,68,0,1.664,,2
-S333500962,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
+S333500962,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1,,,,656732245 656732405
 S313767068,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S314516825,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S292237383,Tufted Titmouse,Baeolophus bicolor,22160,6,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-01-03,04:19 PM,eBird - Traveling Count,44,0,1.492,,2
@@ -233,19 +234,19 @@ S311655274,Carolina Wren,Thryothorus ludovicianus,27348,X,US-TX,Harris,L128996,J
 S333500962,Carolina Wren,Thryothorus ludovicianus,27348,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
 S313767068,Carolina Wren,Thryothorus ludovicianus,27348,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S314516825,Carolina Wren,Thryothorus ludovicianus,27348,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
-S326808768,Carolina Wren,Thryothorus ludovicianus,27348,4,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
+S326808768,Carolina Wren,Thryothorus ludovicianus,27348,4,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731538
 S314159734,Carolina Wren,Thryothorus ludovicianus,27348,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
 S300057008,European Starling,Sturnus vulgaris,27813,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
-S321697386,European Starling,Sturnus vulgaris,27813,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
+S321697386,European Starling,Sturnus vulgaris,27813,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1,,,,656730701 656730702
 S292777369,European Starling,Sturnus vulgaris,27813,1,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-01-06,09:22 AM,eBird - Casual Observation,,0,,,1
 S322120044,European Starling,Sturnus vulgaris,27813,2,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-15,12:33 PM,eBird - Casual Observation,,0,,,1,,,Outside the office/warehouse at lunchtime
 S314516825,European Starling,Sturnus vulgaris,27813,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
-S326808768,European Starling,Sturnus vulgaris,27813,25,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
+S326808768,European Starling,Sturnus vulgaris,27813,25,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731347
 S314159734,Gray Catbird,Dumetella carolinensis,28000,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
 S314159734,Brown Thrasher,Toxostoma rufum,28037,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
 S321692354,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S300057008,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
-S321697386,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
+S321697386,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1,,,,656730595 656730596 656730597 656730598 656730920 656730921
 S292777369,Northern Mockingbird,Mimus polyglottos,28114,1,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-01-06,09:22 AM,eBird - Casual Observation,,0,,,1
 S322120044,Northern Mockingbird,Mimus polyglottos,28114,1,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-15,12:33 PM,eBird - Casual Observation,,0,,,1,,,Outside the office/warehouse at lunchtime
 S329523506,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-29,01:31 PM,eBird - Casual Observation,,0,,,1,,,Outside office
@@ -266,7 +267,7 @@ S318119363,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L51937682
 S318119348,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-31,05:40 PM,eBird - Traveling Count,90,0,2.414,,1
 S318119330,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
 S321697639,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-07,07:50 PM,eBird - Traveling Count,10,0,.612,,1
-S328558759,Northern Mockingbird,Mimus polyglottos,28114,2,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-26,06:27 PM,eBird - Traveling Count,35,1,.894,,1
+S328558759,Northern Mockingbird,Mimus polyglottos,28114,2,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-26,06:27 PM,eBird - Traveling Count,35,1,.894,,1,,,,656731813 656731840 656731842 656731843 656731844
 S332172882,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-05-03,12:06 PM,eBird - Casual Observation,,0,,,1
 S269003690,Northern Mockingbird,Mimus polyglottos,28114,2,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2025-08-23,10:07 AM,eBird - Traveling Count,41,0,.964,,2
 S309883569,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-15,11:22 AM,eBird - Traveling Count,21,0,.491,,2
@@ -274,13 +275,13 @@ S311655274,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L128996,J
 S272084069,Northern Mockingbird,Mimus polyglottos,28114,7,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2025-09-07,12:43 PM,eBird - Traveling Count,72,0,2.239,,2
 S313767068,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S314516825,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
-S326808768,Northern Mockingbird,Mimus polyglottos,28114,3,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
+S326808768,Northern Mockingbird,Mimus polyglottos,28114,3,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731510 656731533
 S314159734,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
 S292237383,Eastern Bluebird,Sialia sialis,28126,16,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-01-03,04:19 PM,eBird - Traveling Count,44,0,1.492,,2
 S277300427,Eastern Bluebird,Sialia sialis,28126,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-04,06:12 PM,eBird - Casual Observation,,0,,,2
 S281477423,Eastern Bluebird,Sialia sialis,28126,7,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-26,09:24 AM,eBird - Traveling Count,51,0,1.767,,2
 S313767068,Eastern Bluebird,Sialia sialis,28126,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
-S326808768,Eastern Bluebird,Sialia sialis,28126,12,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
+S326808768,Eastern Bluebird,Sialia sialis,28126,12,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731335 656731336 656731337 656731531
 S313767068,Hermit Thrush,Catharus guttatus,28333,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S333500962,Wood Thrush,Hylocichla mustelina,28347,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
 S300057008,American Robin,Turdus migratorius,28633,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
@@ -296,7 +297,7 @@ S328558759,American Robin,Turdus migratorius,28633,X,US-TX,Harris,L51937682,Fall
 S333500962,American Robin,Turdus migratorius,28633,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
 S313767068,American Robin,Turdus migratorius,28633,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S314516825,American Robin,Turdus migratorius,28633,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
-S326808768,American Robin,Turdus migratorius,28633,4,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
+S326808768,American Robin,Turdus migratorius,28633,4,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731327 656731523
 S312570745,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-23,06:35 PM,eBird - Traveling Count,60,0,1.609,,1
 S312854498,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-24,06:13 PM,eBird - Traveling Count,65,0,2.38,,1
 S318119395,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-30,06:00 PM,eBird - Traveling Count,41,0,1.261,,1
@@ -305,11 +306,11 @@ S318119348,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Harris,L51937682,Fall
 S318119330,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
 S328558759,Cedar Waxwing,Bombycilla cedrorum,29888,50,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-26,06:27 PM,eBird - Traveling Count,35,1,.894,,1
 S326808672,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-04-24,07:21 PM,eBird - Stationary Count,30,1,,,1
-S333500962,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
+S333500962,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1,,,,656732152
 S313767068,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
-S326808768,Cedar Waxwing,Bombycilla cedrorum,29888,25,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
+S326808768,Cedar Waxwing,Bombycilla cedrorum,29888,25,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731517
 S300057008,House Sparrow,Passer domesticus,31534,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
-S321697386,House Sparrow,Passer domesticus,31534,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
+S321697386,House Sparrow,Passer domesticus,31534,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1,,,,656730667 656730668 656730890
 S289207764,House Sparrow,Passer domesticus,31534,12,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
 S281346134,House Sparrow,Passer domesticus,31534,8,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-25,05:06 PM,eBird - Traveling Count,24,0,.906,,2
 S281477423,House Sparrow,Passer domesticus,31534,8,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-26,09:24 AM,eBird - Traveling Count,51,0,1.767,,2
@@ -353,7 +354,7 @@ S321697386,Brown-headed Cowbird,Molothrus ater,33833,X,US-TX,Bexar,L614722,San P
 S307364174,Brown-headed Cowbird,Molothrus ater,33833,X,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-03-08,02:34 PM,eBird - Traveling Count,10,0,.172,,2
 S292398274,Brown-headed Cowbird,Molothrus ater,33833,6,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-01-04,10:49 AM,eBird - Traveling Count,1,0,.056,,2
 S318119330,Brown-headed Cowbird,Molothrus ater,33833,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
-S333500962,Brown-headed Cowbird,Molothrus ater,33833,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
+S333500962,Brown-headed Cowbird,Molothrus ater,33833,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1,,,,656732281 656732282
 S298682402,Brewer's Blackbird,Euphagus cyanocephalus,33851,3,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-02-07,12:05 PM,eBird - Traveling Count,66,0,3.567,,2
 S296606238,Brewer's Blackbird,Euphagus cyanocephalus,33851,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-01-26,03:25 PM,Historical,5,0,0.,,1
 S300057008,Great-tailed Grackle,Quiscalus mexicanus,33864,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
@@ -402,11 +403,12 @@ S328558759,Northern Cardinal,Cardinalis cardinalis,34515,1,US-TX,Harris,L5193768
 S268680428,Northern Cardinal,Cardinalis cardinalis,34515,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2025-08-21,08:58 PM,Historical,0,0,0.,0.0000,1,,"Male, very bright"
 S269757715,Northern Cardinal,Cardinalis cardinalis,34515,2,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2025-08-26,07:52 PM,eBird - Casual Observation,,0,,,1,FY Feeding Young,,Adult female feeding juvenile male cardinal
 S273078629,Northern Cardinal,Cardinalis cardinalis,34515,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2025-09-13,07:32 AM,eBird - Stationary Count,5,0,,,1
+S333655255,Northern Cardinal,Cardinalis cardinalis,34515,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-04-22,06:30 PM,eBird - Stationary Count,5,0,,,1,,,,656731755 656731756 656731757
 S329779313,Northern Cardinal,Cardinalis cardinalis,34515,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-04-30,06:51 AM,eBird - Casual Observation,,0,,,1
 S333272305,Northern Cardinal,Cardinalis cardinalis,34515,2,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-05-05,06:15 PM,eBird - Casual Observation,,0,,,1
 S309883569,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-15,11:22 AM,eBird - Traveling Count,21,0,.491,,2
 S311655274,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-21,10:38 AM,eBird - Traveling Count,68,0,1.664,,2
-S333500962,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
+S333500962,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1,,,,656731930 656731932 656731933 656732181 656732389 656732390 656732391 656732497 656732499 656732502 656732503 656732504 656732507 656732509 656732936 656732937 656732938
 S313767068,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S314516825,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S326808768,Northern Cardinal,Cardinalis cardinalis,34515,12,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
