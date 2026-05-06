@@ -1,8 +1,11 @@
 import { getLatestEbirdData } from '@/lib/parseEbirdData';
+import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
+import ChecklistClientView from '@/components/ChecklistClientView';
 import Link from 'next/link';
 
 export async function generateStaticParams() {
   const { data } = getLatestEbirdData();
+  const { data: allMediaData } = getLatestEbirdMediaData();
   const submissionIds = new Set(data.map((obs) => obs.SubmissionID).filter(Boolean));
   return Array.from(submissionIds).map((id) => ({
     id: id as string,
@@ -19,9 +22,11 @@ export default async function ChecklistPage({
   const submissionId = resolvedParams.id;
 
   const { data } = getLatestEbirdData();
+  const { data: allMediaData } = getLatestEbirdMediaData();
 
   // Find all observations for this checklist
   const checklistData = data.filter(obs => obs.SubmissionID === submissionId);
+  const checklistMedia = allMediaData.filter(m => m.eBirdChecklistID === submissionId);
 
   if (checklistData.length === 0) {
     return (
@@ -145,42 +150,8 @@ export default async function ChecklistPage({
           </div>
         </div>
 
-        {/* Species List */}
-        <div className="bg-white border border-black">
-          <div className="p-4 border-b border-black flex justify-between items-center">
-            <h3 className="text-xl font-bold">{checklistData.length} Species</h3>
-          </div>
-
-          <div className="divide-y divide-gray-200">
-            {checklistData.map((obs, idx) => {
-              // Ensure we display 'X' if count is missing/empty, otherwise the number
-              const displayCount = obs.Count && obs.Count !== '' ? obs.Count : 'X';
-
-              return (
-                <div key={idx} className="flex">
-                  <div className="w-16 p-4 border-r border-gray-200 flex items-center justify-center font-mono font-bold text-gray-600 flex-shrink-0">
-                    {displayCount}
-                  </div>
-                  <div className="p-4 flex-1 space-y-1">
-                    <div className="font-bold">{obs.CommonName}</div>
-
-                    {obs.ObservationDetails && (
-                      <div className="text-sm font-mono text-gray-600 mt-2 p-2 bg-gray-50 border-l-2 border-gray-300">
-                        {obs.ObservationDetails}
-                      </div>
-                    )}
-
-                    {obs.BreedingCode && (
-                      <div className="text-xs font-mono inline-block px-2 py-1 bg-green-100 text-green-800 mt-2">
-                        Breeding Code: {obs.BreedingCode}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        {/* Species List & Media */}
+        <ChecklistClientView checklistData={checklistData} mediaData={checklistMedia} />
       </div>
     </main>
   );
