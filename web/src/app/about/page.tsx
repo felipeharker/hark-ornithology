@@ -31,7 +31,7 @@ export default function About() {
                 Github Repository
               </a>
               <p>
-                See underlying project codebase, contribue your own ideas, and host this site locally.
+                See underlying project codebase, contribute your own ideas, and host this site locally.
               </p>
             </li>
             <li>
