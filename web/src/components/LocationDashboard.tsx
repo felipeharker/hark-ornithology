@@ -170,6 +170,31 @@ function LocationDashboardInner({ data, mediaData = [], options }: LocationDashb
     });
   }, [locationData]);
 
+
+  const locationChecklists = useMemo(() => {
+    if (!locationData.length) return [];
+
+    const checklistsMap: Record<string, { submissionId: string, date: string, time: string, hasMedia: boolean }> = {};
+    for (const obs of locationData) {
+      if (obs.SubmissionID && !checklistsMap[obs.SubmissionID]) {
+        // Check if there's any media for this checklist
+        const hasMedia = mediaData.some(m => m.eBirdChecklistID === obs.SubmissionID);
+        checklistsMap[obs.SubmissionID] = {
+          submissionId: obs.SubmissionID,
+          date: obs.Date,
+          time: obs.Time,
+          hasMedia
+        };
+      }
+    }
+
+    return Object.values(checklistsMap).sort((a, b) => {
+      const dateComparison = b.date.localeCompare(a.date);
+      if (dateComparison !== 0) return dateComparison;
+      return b.time.localeCompare(a.time);
+    });
+  }, [locationData, mediaData]);
+
   const locationMedia = useMemo(() => {
     if (!selectedLocationId || !mediaData.length) return [];
     // Media associated with selected location
@@ -253,8 +278,8 @@ function LocationDashboardInner({ data, mediaData = [], options }: LocationDashb
 
       {/* Bottom Section: Locations List */}
       <div className="w-full flex flex-col bg-white">
-        <div className="mb-4">
-          {selectedLocationId ? (
+        <div className="mb-4 flex flex-col md:flex-row gap-4">
+          {selectedLocationId && (
             <button
               onClick={() => {
                 setSelectedLocationId(null);
@@ -264,14 +289,13 @@ function LocationDashboardInner({ data, mediaData = [], options }: LocationDashb
             >
               Clear Selection
             </button>
-          ) : (
-            <button
-              onClick={() => setViewMode(viewMode === 'locations' ? 'media' : 'locations')}
-              className="w-full md:w-auto text-left p-3 border border-black font-mono text-sm transition-colors hover:bg-gray-100 bg-gray-100 text-black"
-            >
-              {viewMode === 'locations' ? 'Media View' : 'List View'}
-            </button>
           )}
+          <button
+            onClick={() => setViewMode(viewMode === 'locations' ? 'media' : 'locations')}
+            className="w-full md:w-auto text-left p-3 border border-black font-mono text-sm transition-colors hover:bg-gray-100 bg-gray-100 text-black"
+          >
+            {viewMode === 'locations' ? 'Media View' : 'List View'}
+          </button>
         </div>
 
         {viewMode === 'locations' || selectedLocationId ? (
@@ -317,98 +341,28 @@ function LocationDashboardInner({ data, mediaData = [], options }: LocationDashb
                 {/* Expanded Details */}
                 {isSelected && (
                   <div className="p-4 md:p-8 border-t border-black bg-white text-black">
-
-                    {/* Media from Location */}
+                    {viewMode === 'locations' ? (
+                      <>
+                    {/* Checklists */}
                     <div className="mb-12">
-                      <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Media</h3>
-                      {locationMedia.length > 0 ? (
-                        <div className="space-y-8">
-                           {locationMedia.map(group => (
-                             <div key={group.checklistId} className="border border-gray-300 p-4">
-                               <div className="flex flex-row items-center justify-between mb-4 border-b border-gray-200 pb-2">
-                                 <div className="font-mono text-sm font-bold">{group.date} {group.time}</div>
-                                 <Link
-                                   href={`/checklist/${group.checklistId}?locationId=${loc.id}`}
-                                   className="font-mono text-sm hover:opacity-80 underline"
-                                   style={{ color: secondaryColor }}
-                                 >
-                                   View Checklist
-                                 </Link>
-                               </div>
-                               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                 {group.items.map((m, idx) => (
-                                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-gray-200 hover:border-black transition-colors"
-                                      onClick={() => {
-                                        setCurrentMediaList(group.items);
-                                        setLightboxIndex(idx);
-                                      }}
-                                    >
-                                       <div className="aspect-square bg-gray-100 overflow-hidden relative">
-                                         <img
-                                           src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
-                                           alt={m.CommonName}
-                                           className="object-cover w-full h-full"
-                                           loading="lazy"
-                                         />
-                                       </div>
-                                       <div className="p-2 text-xs font-mono bg-white text-black truncate">
-                                          {m.CommonName}
-                                       </div>
-                                    </div>
-                                 ))}
-                               </div>
+                      <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Checklists</h3>
+                      {locationChecklists.length > 0 ? (
+                        <div className="space-y-2">
+                           {locationChecklists.map(checklist => (
+                             <div key={checklist.submissionId} className="flex flex-row items-center border border-gray-300 p-3 hover:bg-gray-50 transition-colors">
+                               <div className="font-mono text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
+                               <Link
+                                 href={`/checklist/${checklist.submissionId}?locationId=${loc.id}`}
+                                 className="font-mono text-sm hover:opacity-80 underline"
+                                 style={{ color: secondaryColor }}
+                               >
+                                 {checklist.hasMedia ? "View Checklist and Media" : "View Checklist"}
+                               </Link>
                              </div>
                            ))}
                         </div>
                       ) : (
-                        <p className="font-mono text-gray-500 italic">No media available for this location.</p>
-                      )}
-                    </div>
-
-                    {/* Media from Location */}
-                    <div className="mb-12">
-                      <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Media</h3>
-                      {locationMedia.length > 0 ? (
-                        <div className="space-y-8">
-                           {locationMedia.map(group => (
-                             <div key={group.checklistId} className="border border-gray-300 p-4">
-                               <div className="flex flex-row items-center justify-between mb-4 border-b border-gray-200 pb-2">
-                                 <div className="font-mono text-sm font-bold">{group.date} {group.time}</div>
-                                 <Link
-                                   href={`/checklist/${group.checklistId}?locationId=${loc.id}`}
-                                   className="font-mono text-sm hover:opacity-80 underline"
-                                   style={{ color: secondaryColor }}
-                                 >
-                                   View Checklist
-                                 </Link>
-                               </div>
-                               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                 {group.items.map((m, idx) => (
-                                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-gray-200 hover:border-black transition-colors"
-                                      onClick={() => {
-                                        setCurrentMediaList(group.items);
-                                        setLightboxIndex(idx);
-                                      }}
-                                    >
-                                       <div className="aspect-square bg-gray-100 overflow-hidden relative">
-                                         <img
-                                           src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
-                                           alt={m.CommonName}
-                                           className="object-cover w-full h-full"
-                                           loading="lazy"
-                                         />
-                                       </div>
-                                       <div className="p-2 text-xs font-mono bg-white text-black truncate">
-                                          {m.CommonName}
-                                       </div>
-                                    </div>
-                                 ))}
-                               </div>
-                             </div>
-                           ))}
-                        </div>
-                      ) : (
-                        <p className="font-mono text-gray-500 italic">No media available for this location.</p>
+                        <p className="font-mono text-gray-500 italic">No checklists available.</p>
                       )}
                     </div>
 
@@ -439,6 +393,56 @@ function LocationDashboardInner({ data, mediaData = [], options }: LocationDashb
                         </table>
                       </div>
                     </div>
+
+                      </>
+                    ) : (
+                    <div className="mb-12">
+                      {/* Media from Location */}
+                      <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Media</h3>
+                      {locationMedia.length > 0 ? (
+                        <div className="space-y-8">
+                           {locationMedia.map(group => (
+                             <div key={group.checklistId} className="border border-gray-300 p-4">
+                               <div className="flex flex-row items-center justify-between mb-4 border-b border-gray-200 pb-2">
+                                 <div className="font-mono text-sm font-bold">{group.date} {group.time}</div>
+                                 <Link
+                                   href={`/checklist/${group.checklistId}?locationId=${loc.id}`}
+                                   className="font-mono text-sm hover:opacity-80 underline"
+                                   style={{ color: secondaryColor }}
+                                 >
+                                   View Checklist
+                                 </Link>
+                               </div>
+                               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                 {group.items.map((m, idx) => (
+                                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-gray-200 hover:border-black transition-colors"
+                                      onClick={() => {
+                                        setCurrentMediaList(group.items);
+                                        setLightboxIndex(idx);
+                                      }}
+                                    >
+                                       <div className="aspect-square bg-gray-100 overflow-hidden relative">
+                                         <img
+                                           src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
+                                           alt={m.CommonName}
+                                           className="object-cover w-full h-full"
+                                           loading="lazy"
+                                         />
+                                       </div>
+                                       <div className="p-2 text-xs font-mono bg-white text-black truncate">
+                                          {m.CommonName}
+                                       </div>
+                                    </div>
+                                 ))}
+                               </div>
+                             </div>
+                           ))}
+                        </div>
+                      ) : (
+                        <p className="font-mono text-gray-500 italic">No media available for this location.</p>
+                      )}
+                    </div>
+                    )}
 
                     {/* Line Chart */}
                     <div>
