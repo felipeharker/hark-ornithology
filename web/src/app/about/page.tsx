@@ -16,7 +16,7 @@ export default function About() {
 
         <section className="space-y-6 text-lg font-serif">
           <p>
-            This project is built and maintained by Felipe. Resources and additional information are available at:
+            This project is built and maintained by Felipe. Resources and additional information are available below. Thank you.
           </p>
 
           <ul className="list-disc list-inside space-y-4 ml-4">
@@ -30,6 +30,9 @@ export default function About() {
               >
                 Github Repository
               </a>
+              <p>
+                See underlying project codebase, contribue your own ideas, and host this site locally.
+              </p>
             </li>
             <li>
               <a
@@ -41,6 +44,9 @@ export default function About() {
               >
                 eBird Account
               </a>
+              <p>
+                All checklists, locations, observstions, and more can also be seen on eBird.
+              </p>
             </li>
             <li>
               <a
@@ -53,6 +59,9 @@ export default function About() {
                 Macaulay Library
               </a>
             </li>
+              <p>
+                Media such as images, audio, and video recordings are cataloged on Macaulay Library.
+              </p>
             <li>
               <a
                 href="https://merlin.allaboutbirds.org/"
@@ -63,6 +72,9 @@ export default function About() {
               >
                 Merlin Bird ID
               </a>
+              <p>
+                State-of-the-art visual and audio bird identification mobile app. Invaluable resource for any birder.
+              </p>
             </li>
           </ul>
         </section>
