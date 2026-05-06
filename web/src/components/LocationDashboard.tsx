@@ -365,6 +365,53 @@ function LocationDashboardInner({ data, mediaData = [], options }: LocationDashb
                       )}
                     </div>
 
+                    {/* Media from Location */}
+                    <div className="mb-12">
+                      <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Media</h3>
+                      {locationMedia.length > 0 ? (
+                        <div className="space-y-8">
+                           {locationMedia.map(group => (
+                             <div key={group.checklistId} className="border border-gray-300 p-4">
+                               <div className="flex flex-row items-center justify-between mb-4 border-b border-gray-200 pb-2">
+                                 <div className="font-mono text-sm font-bold">{group.date} {group.time}</div>
+                                 <Link
+                                   href={`/checklist/${group.checklistId}?locationId=${loc.id}`}
+                                   className="font-mono text-sm hover:opacity-80 underline"
+                                   style={{ color: secondaryColor }}
+                                 >
+                                   View Checklist
+                                 </Link>
+                               </div>
+                               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                 {group.items.map((m, idx) => (
+                                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-gray-200 hover:border-black transition-colors"
+                                      onClick={() => {
+                                        setCurrentMediaList(group.items);
+                                        setLightboxIndex(idx);
+                                      }}
+                                    >
+                                       <div className="aspect-square bg-gray-100 overflow-hidden relative">
+                                         <img
+                                           src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
+                                           alt={m.CommonName}
+                                           className="object-cover w-full h-full"
+                                           loading="lazy"
+                                         />
+                                       </div>
+                                       <div className="p-2 text-xs font-mono bg-white text-black truncate">
+                                          {m.CommonName}
+                                       </div>
+                                    </div>
+                                 ))}
+                               </div>
+                             </div>
+                           ))}
+                        </div>
+                      ) : (
+                        <p className="font-mono text-gray-500 italic">No media available for this location.</p>
+                      )}
+                    </div>
+
                     {/* Species Total Table */}
                     <div className="mb-12">
                       <h3 className="text-xl font-bold mb-4 font-serif border-b border-black pb-2">Species Totals</h3>
