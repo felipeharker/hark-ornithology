@@ -3,6 +3,7 @@ import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
 import LocationDashboard from '@/components/LocationDashboard';
 import { Suspense } from 'react';
 import { getSiteOptions } from '@/lib/parseOptions';
+import Link from 'next/link';
 
 // Wrap search param usage in a component to let Next.js stream it or handle it cleanly
 export default function Home() {
@@ -43,7 +44,10 @@ export default function Home() {
         <header className="border-b border-black pb-4 mb-8">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">{options.title}</h1>
           <div className="mt-2 flex flex-col sm:flex-row sm:justify-between text-sm md:text-base text-gray-600 font-mono">
-            <p>Latest Checklist: {latestChecklistDate}</p>
+            <div>
+              <p>Latest Checklist: {latestChecklistDate}</p>
+              <Link href="/about" style={{ color: options.secondaryColorHex }} className="hover:underline mt-1 inline-block">About the Project</Link>
+            </div>
             <p>Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
           </div>
         </header>
