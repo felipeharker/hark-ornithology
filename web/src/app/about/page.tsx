@@ -58,10 +58,10 @@ export default function About() {
               >
                 Macaulay Library
               </a>
+                <p>
+                  Media such as images, audio, and video recordings are cataloged on Macaulay Library.
+                </p>
             </li>
-              <p>
-                Media such as images, audio, and video recordings are cataloged on Macaulay Library.
-              </p>
             <li>
               <a
                 href="https://merlin.allaboutbirds.org/"
