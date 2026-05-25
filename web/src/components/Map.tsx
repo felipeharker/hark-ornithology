@@ -77,7 +77,7 @@ export default function MapView({ data, selectedLocationId, onLocationSelect, op
         initialViewState={{
           longitude: -95.0,
           latitude: 38.0,
-          zoom: 3
+          zoom: 1
         }}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
       >
