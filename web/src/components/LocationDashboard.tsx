@@ -742,11 +742,20 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
           <div className="flex-1 space-y-4">
             {fieldNotes.length > 0 ? fieldNotes.map((note) => {
               const isSelected = selectedNoteId === note.id;
-              // If another note is selected, hide the non-selected ones
-              if (selectedNoteId !== null && !isSelected) return null;
+
+              let textColorClass = 'text-black';
+              let bgColorClass = 'bg-white';
+              let inlineStyle = {};
+
+              if (isSelected) {
+                bgColorClass = 'bg-black';
+                textColorClass = 'text-white';
+              } else {
+                inlineStyle = { color: secondaryColor };
+              }
 
               return (
-                <div key={note.id} className="border border-black bg-white text-black">
+                <div key={note.id} className={`border border-black ${isSelected ? 'border-2' : ''}`}>
                   <button
                     onClick={() => {
                       if (isSelected) {
@@ -758,20 +767,17 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                         }, 50);
                       }
                     }}
-                    className={`w-full text-left p-4 md:p-6 transition-colors ${isSelected ? 'bg-black' : 'hover:bg-gray-100'} outline-none`}
+                    className={`w-full text-left p-4 font-mono text-sm transition-colors ${bgColorClass} ${textColorClass}`}
+                    style={inlineStyle}
                   >
-                     <div className="flex flex-col md:flex-row md:items-center justify-between">
-                       <h2 className={`text-xl md:text-2xl font-bold font-serif ${isSelected ? 'text-white' : 'text-black'}`}>
-                         {note.title}
-                       </h2>
-                       <div className={`font-mono text-sm mt-2 md:mt-0 ${isSelected ? 'text-gray-300' : 'text-gray-600'}`}>
-                         {note.date} {note.location && `• ${note.location}`}
-                       </div>
-                     </div>
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-base md:text-lg">{note.title}</span>
+                      <span>{note.date}</span>
+                    </div>
                   </button>
 
                   {isSelected && (
-                    <div className="p-4 md:p-8 border-t border-black bg-white">
+                    <div className="p-4 md:p-8 border-t border-black bg-white text-black">
                       {/* Meta Information */}
                       <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-sm border-b border-black pb-4">
                         <div>
