@@ -298,34 +298,34 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
   return (
     <div className="flex flex-col bg-white" ref={sectionTopRef}>
       {/* Tabs */}
-      <div className="flex flex-col md:flex-row mb-8 w-fit divide-y md:divide-y-0 md:divide-x divide-gray-300">
+      <div className="flex flex-row mb-8 w-full md:w-fit divide-x divide-gray-300">
         <button
           onClick={() => handleTabClick('map')}
-          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'map' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'map' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-[10px] sm:text-xs md:text-base`}
         >
           {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map View'}
         </button>
         <button
           onClick={() => handleTabClick('list')}
-          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'list' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'list' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-[10px] sm:text-xs md:text-base`}
         >
           {activeTab === 'list' && selectedLocationId ? 'Return' : 'List View'}
         </button>
         <button
           onClick={() => handleTabClick('media')}
-          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'media' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'media' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-[10px] sm:text-xs md:text-base`}
         >
           Media View
         </button>
         <button
           onClick={() => handleTabClick('field-notes')}
-          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'field-notes' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'field-notes' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-[10px] sm:text-xs md:text-base`}
         >
           {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Field Notes'}
         </button>
         <button
           onClick={() => handleTabClick('about')}
-          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'about' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'about' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-[10px] sm:text-xs md:text-base`}
         >
           About
         </button>
