@@ -48,7 +48,6 @@ export default function Home() {
           <div className="mt-2 flex flex-col sm:flex-row sm:justify-between text-sm md:text-base text-gray-600 font-mono">
             <div>
               <p>Latest Checklist: {latestChecklistDate}</p>
-              <Link href="/about" style={{ color: options.secondaryColorHex }} className="hover:underline mt-1 inline-block">About the Project</Link>
             </div>
             <p>Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
           </div>

@@ -32,7 +32,7 @@ interface LocationDashboardProps {
   };
 }
 
-type TabView = 'map' | 'list' | 'media' | 'field-notes';
+type TabView = 'map' | 'list' | 'media' | 'field-notes' | 'about';
 
 function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options }: LocationDashboardProps) {
   const secondaryColor = options.secondaryColorHex || '#ff6361';
@@ -322,6 +322,12 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
           className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'field-notes' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
         >
           {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Field Notes'}
+        </button>
+        <button
+          onClick={() => handleTabClick('about')}
+          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'about' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+        >
+          About
         </button>
       </div>
 
@@ -812,6 +818,77 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                 No field notes available. Create markdown files in the field-notes directory.
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'about' && (
+        <div className="flex flex-col w-full min-h-[500px]">
+          <div className="border border-black bg-white p-4 md:p-8">
+            <section className="space-y-6 text-lg font-serif">
+              <p>
+                This project is built and maintained by Felipe. Resources and additional information are available below. Thank you.
+              </p>
+
+              <ul className="list-disc list-inside space-y-4 ml-4">
+                <li>
+                  <a
+                    href="https://github.com/felipeharker/hark-ornithology"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: secondaryColor }}
+                    className="hover:underline font-mono"
+                  >
+                    Github Repository
+                  </a>
+                  <p className="mt-1">
+                    See underlying project codebase, contribute your own ideas, and host this site locally.
+                  </p>
+                </li>
+                <li>
+                  <a
+                    href="https://ebird.org/profile/ODE0ODA5NQ/world"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: secondaryColor }}
+                    className="hover:underline font-mono"
+                  >
+                    eBird Account
+                  </a>
+                  <p className="mt-1">
+                    All checklists, locations, observations, and more can also be seen on eBird.
+                  </p>
+                </li>
+                <li>
+                  <a
+                    href="https://media.ebird.org/catalog?unconfirmed=incl&mediaType=photo&userId=USER8148095"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: secondaryColor }}
+                    className="hover:underline font-mono"
+                  >
+                    Macaulay Library
+                  </a>
+                    <p className="mt-1">
+                      Media such as images, audio, and video recordings are cataloged on Macaulay Library.
+                    </p>
+                </li>
+                <li>
+                  <a
+                    href="https://merlin.allaboutbirds.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: secondaryColor }}
+                    className="hover:underline font-mono"
+                  >
+                    Merlin Bird ID
+                  </a>
+                  <p className="mt-1">
+                    State-of-the-art visual and audio bird identification mobile app. Invaluable resource for any birder.
+                  </p>
+                </li>
+              </ul>
+            </section>
           </div>
         </div>
       )}
