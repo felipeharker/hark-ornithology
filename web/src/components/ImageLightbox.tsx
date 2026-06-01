@@ -12,6 +12,14 @@ interface ImageLightboxProps {
 export default function ImageLightbox({ mediaList, initialIndex, onClose }: ImageLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
+  const nextImage = () => {
+    setCurrentIndex((prev) => (prev + 1) % mediaList.length);
+  };
+
+  const prevImage = () => {
+    setCurrentIndex((prev) => (prev - 1 + mediaList.length) % mediaList.length);
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -20,15 +28,7 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, mediaList.length]);
-
-  const nextImage = () => {
-    setCurrentIndex((prev) => (prev + 1) % mediaList.length);
-  };
-
-  const prevImage = () => {
-    setCurrentIndex((prev) => (prev - 1 + mediaList.length) % mediaList.length);
-  };
+  }, [currentIndex, mediaList.length, onClose]);
 
   const currentMedia = mediaList[currentIndex];
   if (!currentMedia) return null;
