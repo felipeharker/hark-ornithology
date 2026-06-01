@@ -298,28 +298,28 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
   return (
     <div className="flex flex-col bg-white" ref={sectionTopRef}>
       {/* Tabs */}
-      <div className="flex flex-col md:flex-row border-b border-black mb-8">
+      <div className="flex flex-col md:flex-row mb-8 w-fit divide-y md:divide-y-0 md:divide-x divide-gray-300">
         <button
           onClick={() => handleTabClick('map')}
-          className={`flex-1 text-center font-bold tracking-wider py-4 border-r border-t border-l md:border-l-0 md:border-t-0 border-black transition-colors ${activeTab === 'map' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base md:first:border-l`}
+          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'map' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
         >
           {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map View'}
         </button>
         <button
           onClick={() => handleTabClick('list')}
-          className={`flex-1 text-center font-bold tracking-wider py-4 border-r border-t md:border-t-0 border-l md:border-l-0 border-black transition-colors ${activeTab === 'list' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'list' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
         >
           {activeTab === 'list' && selectedLocationId ? 'Return' : 'List View'}
         </button>
         <button
           onClick={() => handleTabClick('media')}
-          className={`flex-1 text-center font-bold tracking-wider py-4 border-r border-t md:border-t-0 border-l md:border-l-0 border-black transition-colors ${activeTab === 'media' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'media' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
         >
           Media View
         </button>
         <button
           onClick={() => handleTabClick('field-notes')}
-          className={`flex-1 text-center font-bold tracking-wider py-4 border-t md:border-t-0 border-l md:border-l-0 border-r md:border-r border-black transition-colors ${activeTab === 'field-notes' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
+          className={`w-full md:w-36 lg:w-40 text-center font-bold tracking-wider py-4 transition-colors ${activeTab === 'field-notes' ? 'bg-black text-white' : 'bg-gray-100 text-black hover:bg-gray-200'} font-mono text-sm md:text-base`}
         >
           {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Field Notes'}
         </button>
@@ -328,7 +328,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       {activeTab === 'map' && (
         <div className="flex flex-col w-full">
           {/* Top Section: Map */}
-          <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-black">
+          <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-gray-300">
             <MapView
               data={data}
               selectedLocationId={selectedLocationId}
