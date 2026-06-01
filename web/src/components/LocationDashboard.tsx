@@ -779,7 +779,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                   {isSelected && (
                     <div className="p-4 md:p-8 border-t border-black bg-white text-black">
                       {/* Meta Information */}
-                      <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-sm border-b border-black pb-4">
+                      <div className="mb-8 flex flex-col gap-4 font-mono text-sm border-b border-black pb-4">
                         <div>
                            <span className="font-bold">Date:</span> {note.date}
                         </div>
@@ -794,7 +794,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                           </div>
                         )}
                         {note.links && note.links.length > 0 && (
-                          <div className="md:col-span-2">
+                          <div>
                             <span className="font-bold">Links:</span>
                             <ul className="list-disc list-inside mt-1">
                               {note.links.map((link, i) => (
