@@ -1,8 +1,8 @@
 ---
-title: "Template Field Note"
+title: "Rio de Janeiro [WIP]"
 date: "2024-06-02"
 location: "Rio de Janeiro, RJ, Brazil"
-conditions: "Late fall, mostly sunny and hot"
+conditions: "Late fall, mostly sunny, hot"
 links:
 [Rio Trip Report](https://ebird.org/tripreport/528364)
 ---
