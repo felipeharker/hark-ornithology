@@ -43,9 +43,9 @@ export default function Home() {
   return (
     <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black">
       <div className="max-w-7xl mx-auto space-y-8 md:space-y-12">
-        <header className="border-b border-black pb-4 mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">{options.title}</h1>
-          <div className="mt-2 flex flex-col sm:flex-row sm:justify-between text-sm md:text-base text-gray-600 font-mono">
+        <header className="border-b border-black pb-6 mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold font-serif">{options.title}</h1>
+          <div className="mt-4 flex flex-col sm:flex-row sm:justify-between text-sm md:text-base text-gray-600 font-mono">
             <div>
               <p>Latest Checklist: {latestChecklistDate}</p>
             </div>
