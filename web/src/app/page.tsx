@@ -1,5 +1,6 @@
 import { getLatestEbirdData } from '@/lib/parseEbirdData';
 import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
+import { getFieldNotes } from '@/lib/parseFieldNotes';
 import LocationDashboard from '@/components/LocationDashboard';
 import { Suspense } from 'react';
 import { getSiteOptions } from '@/lib/parseOptions';
@@ -9,6 +10,7 @@ import Link from 'next/link';
 export default function Home() {
   const { data } = getLatestEbirdData();
   const { data: mediaData } = getLatestEbirdMediaData();
+  const fieldNotes = getFieldNotes();
   const options = getSiteOptions();
   const uniqueSpecies = new Set(data.map(obs => obs.CommonName).filter(Boolean));
 
@@ -46,7 +48,6 @@ export default function Home() {
           <div className="mt-2 flex flex-col sm:flex-row sm:justify-between text-sm md:text-base text-gray-600 font-mono">
             <div>
               <p>Latest Checklist: {latestChecklistDate}</p>
-              <Link href="/about" style={{ color: options.secondaryColorHex }} className="hover:underline mt-1 inline-block">About the Project</Link>
             </div>
             <p>Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
           </div>
@@ -55,11 +56,8 @@ export default function Home() {
         <section>
           {data.length > 0 ? (
             <div className="bg-white">
-              <div className="mb-4 border-b border-black pb-2">
-                 <h2 className="text-xl md:text-2xl font-bold tracking-wider">Fig. 1: Observation Data and Distribution</h2>
-              </div>
               <Suspense fallback={<div className="font-mono">Loading data...</div>}>
-                <LocationDashboard data={data} mediaData={mediaData} options={options} />
+                <LocationDashboard data={data} mediaData={mediaData} fieldNotes={fieldNotes} options={options} />
               </Suspense>
             </div>
           ) : (
