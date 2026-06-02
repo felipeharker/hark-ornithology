@@ -74,14 +74,14 @@ export default async function ChecklistPage({
   const officialGeographicalName = [meta.County, meta.StateProvince].filter(Boolean).join(', ');
 
   return (
-    <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-[#f9fafb] text-black">
+    <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black">
       <div className="max-w-3xl mx-auto space-y-6">
 
         {/* Navigation */}
-        <div className="flex justify-between items-center bg-white p-4 border border-black">
+        <div className="flex justify-between items-center bg-white p-4 border border-black hover:bg-gray-50 transition-colors">
           <Link
             href={`/?locationId=${meta.LocationID}`}
-            className="flex items-center text-black hover:text-gray-600 font-mono text-sm transition-colors"
+            className="flex items-center text-black font-mono text-sm w-full"
           >
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
               <polyline points="15 18 9 12 15 6"></polyline>
@@ -99,7 +99,7 @@ export default async function ChecklistPage({
           </div>
 
           <div className="space-y-1">
-            <h2 className="text-xl md:text-2xl font-bold">{meta.Location}</h2>
+            <h2 className="text-2xl md:text-3xl font-bold font-serif">{meta.Location}</h2>
             {officialGeographicalName && (
               <p className="text-gray-600 font-mono text-sm">{officialGeographicalName}</p>
             )}
