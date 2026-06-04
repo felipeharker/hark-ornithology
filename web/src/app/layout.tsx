@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, PT_Serif, Roboto_Mono } from "next/font/google";
+import { Inter, EB_Garamond, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
-const ptSerif = PT_Serif({ weight: ['400', '700'], subsets: ["latin"], variable: '--font-serif' });
+const garamond = EB_Garamond({ subsets: ["latin"], variable: '--font-serif' });
 const robotoMono = Roboto_Mono({ subsets: ["latin"], variable: '--font-mono' });
 
 import { getSiteOptions } from "@/lib/parseOptions";
@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${ptSerif.variable} ${robotoMono.variable} font-sans antialiased`}>{children}</body>
+      <body className={`${inter.variable} ${garamond.variable} ${robotoMono.variable} font-serif antialiased`}>{children}</body>
     </html>
   );
 }

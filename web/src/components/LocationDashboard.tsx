@@ -300,17 +300,17 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
   const sharedContainerClass = "border border-black bg-white";
 
   return (
-    <div className="flex flex-col bg-white" ref={sectionTopRef}>
+    <div className="flex flex-col space-y-4 bg-white" ref={sectionTopRef}>
       {/* Map Accordion */}
-      <div className="w-full border-t border-black">
+      <div className="w-full">
         <button
           onClick={() => handleTabClick('map')}
-          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}
         </button>
         {activeTab === 'map' && (
-          <div className="flex flex-col w-full py-4 border-t border-black">
+          <div className="flex flex-col w-full py-4">
           {/* Top Section: Map */}
           <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-gray-300">
             <MapView
@@ -499,15 +499,15 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       </div>
 
       {/* Lists Accordion */}
-      <div className="w-full border-t border-black">
+      <div className="w-full">
         <button
           onClick={() => handleTabClick('list')}
-          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           {activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}
         </button>
         {activeTab === 'list' && (
-          <div className="w-full flex flex-col bg-white py-4 border-t border-black">
+          <div className="w-full flex flex-col bg-white py-4">
           <div ref={listRef} className="flex-1 space-y-4">
             {locations.map((loc) => {
               const isSelected = selectedLocationId === loc.id;
@@ -675,15 +675,15 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       </div>
 
       {/* Media Accordion */}
-      <div className="w-full border-t border-black">
+      <div className="w-full">
         <button
           onClick={() => handleTabClick('media')}
-          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           Media
         </button>
         {activeTab === 'media' && (
-          <div className="flex flex-col w-full min-h-[500px] py-4 border-t border-black">
+          <div className="flex flex-col w-full min-h-[500px] py-4">
           <div className="flex-1 space-y-8">
             {allMedia.map((group) => (
               <div key={group.checklistId} className={sharedContainerClass + " p-4 md:p-6"}>
@@ -735,15 +735,15 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       </div>
 
       {/* Notes Accordion */}
-      <div className="w-full border-t border-black">
+      <div className="w-full">
         <button
           onClick={() => handleTabClick('field-notes')}
-          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}
         </button>
         {activeTab === 'field-notes' && (
-          <div className="flex flex-col w-full min-h-[500px] py-4 border-t border-black">
+          <div className="flex flex-col w-full min-h-[500px] py-4">
           <div className="flex-1 space-y-4">
             {fieldNotes.length > 0 ? fieldNotes.map((note) => {
               const isSelected = selectedNoteId === note.id;
@@ -835,15 +835,15 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       </div>
 
       {/* About Accordion */}
-      <div className="w-full border-t border-b border-black">
+      <div className="w-full">
         <button
           onClick={() => handleTabClick('about')}
-          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           About
         </button>
         {activeTab === 'about' && (
-          <div className="flex flex-col w-full min-h-[500px] py-4 border-t border-black">
+          <div className="flex flex-col w-full min-h-[500px] py-4">
             <div className="border border-black bg-white p-4 md:p-8">
               <section className="space-y-6 text-lg font-serif">
                 <p>
