@@ -42,7 +42,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
   const initialLocationId = searchParams.get('locationId');
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(initialLocationId);
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<TabView>(initialLocationId ? 'list' : 'map');
+  const [activeTab, setActiveTab] = useState<TabView | null>(initialLocationId ? 'list' : null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [currentMediaList, setCurrentMediaList] = useState<EbirdMediaObservation[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
@@ -242,21 +242,22 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
   const handleTabClick = (tab: TabView) => {
     if (activeTab === tab) {
       // If clicking the currently active tab (which says "Return" if something is selected),
-      // we reset the selection and scroll up.
+      // we reset the selection. If nothing is selected, we close the accordion tab.
       if (tab === 'map' && selectedLocationId) {
         setSelectedLocationId(null);
         window.history.pushState({}, '', window.location.pathname);
-        scrollToTop();
       } else if (tab === 'list' && selectedLocationId) {
         setSelectedLocationId(null);
         window.history.pushState({}, '', window.location.pathname);
-        scrollToTop();
       } else if (tab === 'field-notes' && selectedNoteId !== null) {
         setSelectedNoteId(null);
-        scrollToTop();
+      } else {
+        // Close the tab entirely if nothing inside was selected
+        setActiveTab(null);
       }
+      scrollToTop();
     } else {
-      // Changing tabs
+      // Changing tabs (open accordion)
       setActiveTab(tab);
     }
   };
@@ -300,42 +301,16 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
 
   return (
     <div className="flex flex-col bg-white" ref={sectionTopRef}>
-      {/* Tabs */}
-      <div className="flex flex-row mb-8 w-full md:w-fit border border-black divide-x divide-black">
+      {/* Map Accordion */}
+      <div className="w-full border-t border-black">
         <button
           onClick={() => handleTabClick('map')}
-          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'map' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'} font-mono text-[10px] sm:text-xs md:text-base`}
+          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map View'}
+          {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}
         </button>
-        <button
-          onClick={() => handleTabClick('list')}
-          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'list' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'} font-mono text-[10px] sm:text-xs md:text-base`}
-        >
-          {activeTab === 'list' && selectedLocationId ? 'Return' : 'List View'}
-        </button>
-        <button
-          onClick={() => handleTabClick('media')}
-          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'media' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'} font-mono text-[10px] sm:text-xs md:text-base`}
-        >
-          Media View
-        </button>
-        <button
-          onClick={() => handleTabClick('field-notes')}
-          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'field-notes' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'} font-mono text-[10px] sm:text-xs md:text-base`}
-        >
-          {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Field Notes'}
-        </button>
-        <button
-          onClick={() => handleTabClick('about')}
-          className={`flex-1 md:flex-none w-full md:w-36 lg:w-40 text-center font-bold tracking-tighter md:tracking-wider py-2 md:py-4 px-1 md:px-0 whitespace-nowrap transition-colors ${activeTab === 'about' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'} font-mono text-[10px] sm:text-xs md:text-base`}
-        >
-          About
-        </button>
-      </div>
-
-      {activeTab === 'map' && (
-        <div className="flex flex-col w-full">
+        {activeTab === 'map' && (
+          <div className="flex flex-col w-full py-4 border-t border-black">
           {/* Top Section: Map */}
           <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-gray-300">
             <MapView
@@ -519,11 +494,20 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
               })}
             </div>
           )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
-      {activeTab === 'list' && (
-        <div className="w-full flex flex-col bg-white">
+      {/* Lists Accordion */}
+      <div className="w-full border-t border-black">
+        <button
+          onClick={() => handleTabClick('list')}
+          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          {activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}
+        </button>
+        {activeTab === 'list' && (
+          <div className="w-full flex flex-col bg-white py-4 border-t border-black">
           <div ref={listRef} className="flex-1 space-y-4">
             {locations.map((loc) => {
               const isSelected = selectedLocationId === loc.id;
@@ -686,11 +670,20 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
               );
             })}
           </div>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
-      {activeTab === 'media' && (
-        <div className="flex flex-col w-full min-h-[500px]">
+      {/* Media Accordion */}
+      <div className="w-full border-t border-black">
+        <button
+          onClick={() => handleTabClick('media')}
+          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          Media
+        </button>
+        {activeTab === 'media' && (
+          <div className="flex flex-col w-full min-h-[500px] py-4 border-t border-black">
           <div className="flex-1 space-y-8">
             {allMedia.map((group) => (
               <div key={group.checklistId} className={sharedContainerClass + " p-4 md:p-6"}>
@@ -737,11 +730,20 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                 </div>
             )}
           </div>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
-      {activeTab === 'field-notes' && (
-        <div className="flex flex-col w-full min-h-[500px]">
+      {/* Notes Accordion */}
+      <div className="w-full border-t border-black">
+        <button
+          onClick={() => handleTabClick('field-notes')}
+          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}
+        </button>
+        {activeTab === 'field-notes' && (
+          <div className="flex flex-col w-full min-h-[500px] py-4 border-t border-black">
           <div className="flex-1 space-y-4">
             {fieldNotes.length > 0 ? fieldNotes.map((note) => {
               const isSelected = selectedNoteId === note.id;
@@ -828,79 +830,89 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
               </div>
             )}
           </div>
-        </div>
-      )}
-
-      {activeTab === 'about' && (
-        <div className="flex flex-col w-full min-h-[500px]">
-          <div className="border border-black bg-white p-4 md:p-8">
-            <section className="space-y-6 text-lg font-serif">
-              <p>
-                This project is built and maintained by Felipe. Resources and additional information are available below. Thank you.
-              </p>
-
-              <ul className="list-disc list-inside space-y-4 ml-4">
-                <li>
-                  <a
-                    href="https://github.com/felipeharker/hark-ornithology"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: secondaryColor }}
-                    className="hover:underline font-mono"
-                  >
-                    Github Repository
-                  </a>
-                  <p className="mt-1">
-                    See underlying project codebase, contribute your own ideas, and host this site locally.
-                  </p>
-                </li>
-                <li>
-                  <a
-                    href="https://ebird.org/profile/ODE0ODA5NQ/world"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: secondaryColor }}
-                    className="hover:underline font-mono"
-                  >
-                    eBird Account
-                  </a>
-                  <p className="mt-1">
-                    All checklists, locations, observations, and more can also be seen on eBird.
-                  </p>
-                </li>
-                <li>
-                  <a
-                    href="https://media.ebird.org/catalog?unconfirmed=incl&mediaType=photo&userId=USER8148095"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: secondaryColor }}
-                    className="hover:underline font-mono"
-                  >
-                    Macaulay Library
-                  </a>
-                    <p className="mt-1">
-                      Media such as images, audio, and video recordings are cataloged on Macaulay Library.
-                    </p>
-                </li>
-                <li>
-                  <a
-                    href="https://merlin.allaboutbirds.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: secondaryColor }}
-                    className="hover:underline font-mono"
-                  >
-                    Merlin Bird ID
-                  </a>
-                  <p className="mt-1">
-                    State-of-the-art visual and audio bird identification mobile app. Invaluable resource for any birder.
-                  </p>
-                </li>
-              </ul>
-            </section>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+      {/* About Accordion */}
+      <div className="w-full border-t border-b border-black">
+        <button
+          onClick={() => handleTabClick('about')}
+          className="w-full text-left py-2 font-bold font-serif text-xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          About
+        </button>
+        {activeTab === 'about' && (
+          <div className="flex flex-col w-full min-h-[500px] py-4 border-t border-black">
+            <div className="border border-black bg-white p-4 md:p-8">
+              <section className="space-y-6 text-lg font-serif">
+                <p>
+                  This project is built and maintained by Felipe. Resources and additional information are available below. Thank you.
+                </p>
+
+                <ul className="list-disc list-inside space-y-4 ml-4">
+                  <li>
+                    <a
+                      href="https://github.com/felipeharker/hark-ornithology"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: secondaryColor }}
+                      className="hover:underline font-mono"
+                    >
+                      Github Repository
+                    </a>
+                    <p className="mt-1">
+                      See underlying project codebase, contribute your own ideas, and host this site locally.
+                    </p>
+                  </li>
+                  <li>
+                    <a
+                      href="https://ebird.org/profile/ODE0ODA5NQ/world"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: secondaryColor }}
+                      className="hover:underline font-mono"
+                    >
+                      eBird Account
+                    </a>
+                    <p className="mt-1">
+                      All checklists, locations, observations, and more can also be seen on eBird.
+                    </p>
+                  </li>
+                  <li>
+                    <a
+                      href="https://media.ebird.org/catalog?unconfirmed=incl&mediaType=photo&userId=USER8148095"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: secondaryColor }}
+                      className="hover:underline font-mono"
+                    >
+                      Macaulay Library
+                    </a>
+                      <p className="mt-1">
+                        Media such as images, audio, and video recordings are cataloged on Macaulay Library.
+                      </p>
+                  </li>
+                  <li>
+                    <a
+                      href="https://merlin.allaboutbirds.org/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: secondaryColor }}
+                      className="hover:underline font-mono"
+                    >
+                      Merlin Bird ID
+                    </a>
+                    <p className="mt-1">
+                      State-of-the-art visual and audio bird identification mobile app. Invaluable resource for any birder.
+                    </p>
+                  </li>
+                </ul>
+              </section>
+            </div>
+          </div>
+        )}
+      </div>
 
       {lightboxIndex !== null && (
          <ImageLightbox

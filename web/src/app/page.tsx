@@ -43,13 +43,11 @@ export default function Home() {
   return (
     <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black">
       <div className="max-w-7xl mx-auto space-y-8 md:space-y-12">
-        <header className="border-b border-black pb-6 mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold font-serif">{options.title}</h1>
-          <div className="mt-4 flex flex-col sm:flex-row sm:justify-between text-sm md:text-base text-gray-600 font-mono">
-            <div>
-              <p>Latest Checklist: {latestChecklistDate}</p>
-            </div>
-            <p>Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
+        <header className="pb-6 mb-8 flex flex-col space-y-4">
+          <h1 className="text-4xl md:text-5xl font-bold font-serif whitespace-nowrap">{options.title}</h1>
+          <div className="flex flex-col text-sm md:text-base text-gray-600 font-mono space-y-2">
+            <p className="whitespace-nowrap">Latest Checklist: {latestChecklistDate}</p>
+            <p className="whitespace-nowrap">Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
           </div>
         </header>
 
