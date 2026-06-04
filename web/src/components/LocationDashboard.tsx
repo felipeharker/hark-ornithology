@@ -305,9 +305,10 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('map')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}
+          <span>{activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'map' ? 'rotate-180' : ''}`}>▼</span>
         </button>
         {activeTab === 'map' && (
           <div className="flex flex-col w-full py-4">
@@ -502,9 +503,10 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('list')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          {activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}
+          <span>{activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'list' ? 'rotate-180' : ''}`}>▼</span>
         </button>
         {activeTab === 'list' && (
           <div className="w-full flex flex-col bg-white py-4">
@@ -678,9 +680,10 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('media')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          Media
+          <span>Media</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'media' ? 'rotate-180' : ''}`}>▼</span>
         </button>
         {activeTab === 'media' && (
           <div className="flex flex-col w-full min-h-[500px] py-4">
@@ -738,9 +741,10 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('field-notes')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}
+          <span>{activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'field-notes' ? 'rotate-180' : ''}`}>▼</span>
         </button>
         {activeTab === 'field-notes' && (
           <div className="flex flex-col w-full min-h-[500px] py-4">
@@ -838,9 +842,10 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('about')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          About
+          <span>About</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'about' ? 'rotate-180' : ''}`}>▼</span>
         </button>
         {activeTab === 'about' && (
           <div className="flex flex-col w-full min-h-[500px] py-4">
