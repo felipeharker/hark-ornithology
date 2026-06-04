@@ -6,16 +6,18 @@ S336423761,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,X,US-TX,Montg
 S326808768,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,20,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731355 656731382 656731383 656731384 656731385 656731387 656731389 656731483
 S336433698,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
 S314159734,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
+S345797347,Black Swan,Cygnus atratus,379,1,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,Nesting on bank of small pond.
 S289207764,Trumpeter Swan,Cygnus buccinator,382,25,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
 S326808768,Egyptian Goose,Alopochen aegyptiaca,417,5,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731475
 S345737602,Muscovy Duck,Cairina moschata,445,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
-S345797347,Muscovy Duck,Cairina moschata,445,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
+S345797347,Muscovy Duck,Cairina moschata,445,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659025745 659025746 659025747 659025748 659025818 659026831
 S296601317,Muscovy Duck (Domestic type),Cairina moschata (Domestic type),446,1,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,eBird - Stationary Count,30,1,,,2
 S314516825,Wood Duck,Aix sponsa,455,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S312570745,Blue-winged Teal,Spatula discors,485,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-23,06:35 PM,eBird - Traveling Count,60,0,1.609,,1
 S289207764,Mallard,Anas platyrhynchos,545,12,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
 S296601317,Mallard,Anas platyrhynchos,545,6,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,eBird - Stationary Count,30,1,,,2
-S345804797,Rusty-margined Guan,Penelope superciliaris,888,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345797347,Mallard,Anas platyrhynchos,545,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,Seen at a small pond,,659026056 659026057 659026058 659026059 659026060
+S345804797,Rusty-margined Guan,Penelope superciliaris,888,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967714
 S314516825,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S345796329,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L67605826,General Osorio,-22.983045,-43.196387,2026-05-22,12:34 PM,eBird - Traveling Count,15,1,.966,,2
 S342799943,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
@@ -24,7 +26,7 @@ S341867254,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,6,BR-RJ,
 S342802355,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L66786659,Largo do Machado,-22.930838,-43.177671,2026-05-19,10:15 AM,eBird - Stationary Count,25,1,,,2
 S345766711,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L67598567,Maracana Stadium,-22.912991,-43.231055,2026-05-20,11:40 AM,eBird - Casual Observation,,0,,,2
 S345737602,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
-S345797347,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
+S345797347,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659026962 659026963 659026964
 S345673323,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L4736564,Praia do Flamengo,-22.9276827,-43.1728363,2026-05-23,08:37 AM,eBird - Traveling Count,75,1,2.414,,2
 S345673323,Picazuro Pigeon,Patagioenas picazuro,1949,1,BR-RJ,Rio de Janeiro,L4736564,Praia do Flamengo,-22.9276827,-43.1728363,2026-05-23,08:37 AM,eBird - Traveling Count,75,1,2.414,,2
 S321697386,Eurasian Collared-Dove,Streptopelia decaocto,2031,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
@@ -36,7 +38,7 @@ S342800778,Ruddy Ground Dove,Columbina talpacoti,2268,X,BR-RJ,Rio de Janeiro,L66
 S341867254,Ruddy Ground Dove,Columbina talpacoti,2268,6,BR-RJ,Rio de Janeiro,L66786659,Largo do Machado,-22.930838,-43.177671,2026-05-18,03:19 PM,eBird - Casual Observation,,0,,,2
 S342802355,Ruddy Ground Dove,Columbina talpacoti,2268,X,BR-RJ,Rio de Janeiro,L66786659,Largo do Machado,-22.930838,-43.177671,2026-05-19,10:15 AM,eBird - Stationary Count,25,1,,,2
 S345766711,Ruddy Ground Dove,Columbina talpacoti,2268,X,BR-RJ,Rio de Janeiro,L67598567,Maracana Stadium,-22.912991,-43.231055,2026-05-20,11:40 AM,eBird - Casual Observation,,0,,,2
-S345797347,Ruddy Ground Dove,Columbina talpacoti,2268,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
+S345797347,Ruddy Ground Dove,Columbina talpacoti,2268,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659026976 659026978
 S345673323,Ruddy Ground Dove,Columbina talpacoti,2268,X,BR-RJ,Rio de Janeiro,L4736564,Praia do Flamengo,-22.9276827,-43.1728363,2026-05-23,08:37 AM,eBird - Traveling Count,75,1,2.414,,2
 S321692354,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S300057008,White-winged Dove,Zenaida asiatica,2389,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
@@ -85,7 +87,7 @@ S313767068,Mourning Dove,Zenaida macroura,2412,X,US-TX,Montgomery,L1425418,San J
 S314516825,Mourning Dove,Zenaida macroura,2412,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S336433698,Mourning Dove,Zenaida macroura,2412,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
 S314159734,Mourning Dove,Zenaida macroura,2412,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
-S345804797,Common Squirrel-Cuckoo,Piaya cayana,3218,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345804797,Common Squirrel-Cuckoo,Piaya cayana,3218,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967591 658967592 658967593
 S331465970,Common Nighthawk,Chordeiles minor,3492,1,US-TX,Harris,L64744388,Truckyard,29.749712,-95.356001,2026-05-02,09:33 PM,eBird - Casual Observation,,0,,,1
 S342075931,Band-winged Nightjar,Systellura longirostris,3549,1,BR-RJ,Rio de Janeiro,L66786659,Largo do Machado,-22.930838,-43.177671,2026-05-18,11:09 PM,eBird - Casual Observation,,0,,,2
 S321697386,Chimney Swift,Chaetura pelagica,3896,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
@@ -96,7 +98,7 @@ S336433698,Chimney Swift,Chaetura pelagica,3896,X,US-TX,Montgomery,L1425418,San 
 S328558759,Ruby-throated Hummingbird,Archilochus colubris,4802,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-26,06:27 PM,eBird - Traveling Count,35,1,.894,,1
 S326808672,Ruby-throated Hummingbird,Archilochus colubris,4802,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2026-04-24,07:21 PM,eBird - Stationary Count,30,1,,,1,,"Feeder, suet"
 S321692354,Black-chinned Hummingbird,Archilochus alexandri,4803,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2,,,,656731274 656731276 656731277 656731278 656731279
-S345804797,Violet-capped Woodnymph,Thalurania glaucopis,4974,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345804797,Violet-capped Woodnymph,Thalurania glaucopis,4974,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967116 658967330
 S342800778,Swallow-tailed Hummingbird,Eupetomena macroura,5032,X,BR-RJ,Rio de Janeiro,L66969241,Largo da Carioca,-22.90651,-43.177205,2026-05-17,04:28 PM,eBird - Casual Observation,,0,,,2
 S296601317,American Coot,Fulica americana,5500,24,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,eBird - Stationary Count,30,1,,,2
 S336423761,Killdeer,Charadrius vociferus,5827,X,US-TX,Montgomery,L65424399,"508 Greenleaf Cir, Conroe TX 77302",30.256693,-95.436197,2026-05-10,08:54 AM,eBird - Traveling Count,65,1,1.7,,2
@@ -104,6 +106,7 @@ S345673323,Southern Lapwing,Vanellus chilensis,5896,2,BR-RJ,Rio de Janeiro,L4736
 S327404344,Laughing Gull,Leucophaeus atricilla,6490,1,US-TX,Harris,L63941960,"4602 Davenport St, Houston, TX 77051",29.666342,-95.358695,2026-04-25,05:34 PM,eBird - Casual Observation,,0,,,1
 S342799943,Kelp Gull,Larus dominicanus,6533,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
 S342799943,Magnificent Frigatebird,Fregata magnificens,7315,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
+S352017523,Magnificent Frigatebird,Fregata magnificens,7315,X,BR-RJ,Rio de Janeiro,L66786659,Largo do Machado,-22.930838,-43.177671,2026-05-20,05:17 PM,eBird - Casual Observation,,0,,,2,,,,659024054
 S342078667,Brown Booby,Sula leucogaster,7342,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-16,03:45 PM,eBird - Casual Observation,,0,,,2
 S296601317,Double-crested Cormorant,Nannopterum auritum,7424,24,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,eBird - Stationary Count,30,1,,,2
 S298917800,White Ibis,Eudocimus albus,7462,5,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-02-08,10:30 AM,eBird - Stationary Count,1,0,,,2
@@ -155,7 +158,7 @@ S333500962,Red-tailed Hawk,Buteo jamaicensis,8506,X,US-TX,Harris,L128996,Jesse H
 S314158536,Barred Owl,Strix varia,9219,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-28,08:42 PM,eBird - Casual Observation,,0,,,2
 S345804797,Ringed Kingfisher,Megaceryle torquata,10301,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
 S286423340,Belted Kingfisher,Megaceryle alcyon,10306,1,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2025-11-27,03:00 PM,eBird - Stationary Count,60,0,,,2
-S345804797,Channel-billed Toucan,Ramphastos vitellinus,10940,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345804797,Channel-billed Toucan,Ramphastos vitellinus,10940,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967521 658967522 658967524 658967525 658967526 658967527 658967529 658967530 658967531 658967532 658967533 658967534 658967536 658967537 658967540
 S345793986,White-barred Piculet,Picumnus cirratus,11058,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-21,01:52 PM,eBird - Traveling Count,45,1,1.609,,2
 S286423340,Yellow-bellied Sapsucker,Sphyrapicus varius,11126,1,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2025-11-27,03:00 PM,eBird - Stationary Count,60,0,,,2
 S282851268,Yellow-bellied Sapsucker,Sphyrapicus varius,11126,1,US-TX,Harris,L51840759,Home (private),29.932839,-95.277147,2025-11-04,08:10 AM,eBird - Casual Observation,,0,,,1
@@ -203,23 +206,26 @@ S336433698,Eastern Wood-Pewee,Contopus virens,16924,X,US-TX,Montgomery,L1425418,
 S286423340,Eastern Phoebe,Sayornis phoebe,17007,2,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2025-11-27,03:00 PM,eBird - Stationary Count,60,0,,,2
 S321692354,Eastern Phoebe,Sayornis phoebe,17007,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S292237383,Eastern Phoebe,Sayornis phoebe,17007,1,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-01-03,04:19 PM,eBird - Traveling Count,44,0,1.492,,2
-S345804797,Masked Water-Tyrant,Fluvicola nengeta,17162,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345804797,Masked Water-Tyrant,Fluvicola nengeta,17162,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967892 658967893 658967896 658967897 658967898 658967899 658967900
 S342802355,Masked Water-Tyrant,Fluvicola nengeta,17162,X,BR-RJ,Rio de Janeiro,L66786659,Largo do Machado,-22.930838,-43.177671,2026-05-19,10:15 AM,eBird - Stationary Count,25,1,,,2
 S345737602,Masked Water-Tyrant,Fluvicola nengeta,17162,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
+S345797347,Masked Water-Tyrant,Fluvicola nengeta,17162,1,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659027005
 S345673323,Masked Water-Tyrant,Fluvicola nengeta,17162,X,BR-RJ,Rio de Janeiro,L4736564,Praia do Flamengo,-22.9276827,-43.1728363,2026-05-23,08:37 AM,eBird - Traveling Count,75,1,2.414,,2
 S333500962,Great Crested Flycatcher,Myiarchus crinitus,17334,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
 S336433698,Great Crested Flycatcher,Myiarchus crinitus,17334,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
 S342799943,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
 S345793986,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-21,01:52 PM,eBird - Traveling Count,45,1,1.609,,2
-S345804797,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345804797,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967416 658967491 658967492 658967493 658968166 658968168 658968169 658968170 658968171 658968172
 S342800778,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L66969241,Largo da Carioca,-22.90651,-43.177205,2026-05-17,04:28 PM,eBird - Casual Observation,,0,,,2
 S345766711,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L67598567,Maracana Stadium,-22.912991,-43.231055,2026-05-20,11:40 AM,eBird - Casual Observation,,0,,,2
 S345737602,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
 S345797347,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
+S345797347,Boat-billed Flycatcher,Megarynchus pitangua,17379,1,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659027072 659027073 659027074 659027075
 S345804797,Rusty-margined Flycatcher,Myiozetetes cayanensis,17387,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
-S345804797,Social Flycatcher,Myiozetetes similis,17392,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345804797,Social Flycatcher,Myiozetetes similis,17392,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967860 658967861 658967862 658967863 658967973
 S345737602,Social Flycatcher,Myiozetetes similis,17392,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
 S345797347,Social Flycatcher,Myiozetetes similis,17392,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
+S345804797,Tropical Kingbird,Tyrannus melancholicus,17452,1,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967245 658967262 658967660
 S345737602,Tropical Kingbird,Tyrannus melancholicus,17452,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
 S321697386,Couch's Kingbird,Tyrannus couchii,17459,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
 S321697386,Scissor-tailed Flycatcher,Tyrannus forficatus,17489,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
@@ -466,7 +472,7 @@ S336423761,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Montgomery,L65424399,
 S313767068,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S326808768,Cedar Waxwing,Bombycilla cedrorum,29888,25,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731517
 S336433698,Cedar Waxwing,Bombycilla cedrorum,29888,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
-S345797347,Common Waxbill,Estrilda astrild,31298,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
+S345797347,Common Waxbill,Estrilda astrild,31298,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659027028 659027029 659027030
 S300057008,House Sparrow,Passer domesticus,31534,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
 S321697386,House Sparrow,Passer domesticus,31534,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1,,,,656730667 656730668 656730890
 S289207764,House Sparrow,Passer domesticus,31534,12,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
@@ -483,7 +489,7 @@ S333756698,House Sparrow,Passer domesticus,31534,X,US-TX,Harris,L51937682,Fall C
 S314516825,House Sparrow,Passer domesticus,31534,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S326808768,House Sparrow,Passer domesticus,31534,4,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
 S342799943,House Sparrow,Passer domesticus,31534,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
-S345797347,Violaceous Euphonia,Euphonia violacea,32026,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
+S345797347,Violaceous Euphonia,Euphonia violacea,32026,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659027052 659027053 659027054
 S300057008,House Finch,Haemorhous mexicanus,32310,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
 S321697386,House Finch,Haemorhous mexicanus,32310,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
 S269511440,House Finch,Haemorhous mexicanus,32310,2,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2025-08-25,12:53 PM,eBird - Casual Observation,,0,,,1
@@ -506,7 +512,7 @@ S314516825,Chipping Sparrow,Spizella passerina,32990,X,US-TX,Montgomery,L1425418
 S321692354,Field Sparrow,Spizella pusilla,33002,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S313767068,Field Sparrow,Spizella pusilla,33002,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S292237383,Dark-eyed Junco,Junco hyemalis,33124,2,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-01-03,04:19 PM,eBird - Traveling Count,44,0,1.492,,2
-S345804797,Rufous-collared Sparrow,Zonotrichia capensis,33158,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345804797,Rufous-collared Sparrow,Zonotrichia capensis,33158,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658966961 658966963 658966964
 S309883569,White-throated Sparrow,Zonotrichia albicollis,33201,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-15,11:22 AM,eBird - Traveling Count,21,0,.491,,2
 S313767068,White-throated Sparrow,Zonotrichia albicollis,33201,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S289207764,Spotted Towhee,Pipilo maculatus,33386,3,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
@@ -601,7 +607,7 @@ S269003690,Northern Cardinal (Common),Cardinalis cardinalis [cardinalis Group],3
 S272084069,Northern Cardinal (Common),Cardinalis cardinalis [cardinalis Group],34516,7,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2025-09-07,12:43 PM,eBird - Traveling Count,72,0,2.239,,2
 S345796329,Red-cowled Cardinal,Paroaria dominicana,34631,X,BR-RJ,Rio de Janeiro,L67605826,General Osorio,-22.983045,-43.196387,2026-05-22,12:34 PM,eBird - Traveling Count,15,1,.966,,2
 S345793986,Red-cowled Cardinal,Paroaria dominicana,34631,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-21,01:52 PM,eBird - Traveling Count,45,1,1.609,,2
-S345804797,Flame-crested Tanager,Loriotus cristatus,34751,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
+S345804797,Flame-crested Tanager,Loriotus cristatus,34751,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967795 658967796
 S345793986,Sayaca Tanager,Thraupis sayaca,34949,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-21,01:52 PM,eBird - Traveling Count,45,1,1.609,,2
 S345804797,Sayaca Tanager,Thraupis sayaca,34949,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
 S342799943,Palm Tanager,Thraupis palmarum,34957,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
