@@ -300,12 +300,12 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
   const sharedContainerClass = "border border-black bg-white";
 
   return (
-    <div className="flex flex-col space-y-4 bg-white" ref={sectionTopRef}>
+    <div className="flex flex-col space-y-8 bg-white" ref={sectionTopRef}>
       {/* Map Accordion */}
       <div className="w-full">
         <button
           onClick={() => handleTabClick('map')}
-          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}
         </button>
@@ -434,7 +434,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                                    className="font-mono text-sm hover:underline"
                                    style={{ color: secondaryColor }}
                                  >
-                                   {checklist.hasMedia ? "View Checklist and Media" : "View Checklist"}
+                                   {checklist.hasMedia ? "Checklist and Media" : "Checklist"}
                                  </Link>
                                </div>
                              ))}
@@ -502,7 +502,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('list')}
-          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           {activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}
         </button>
@@ -543,7 +543,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-base md:text-lg">{loc.name}</span>
-                    <span>{loc.count} obs</span>
+
                   </div>
                 </button>
 
@@ -563,7 +563,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                                  className="font-mono text-sm hover:underline"
                                  style={{ color: secondaryColor }}
                                >
-                                 {checklist.hasMedia ? "View Checklist and Media" : "View Checklist"}
+                                 {checklist.hasMedia ? "Checklist and Media" : "Checklist"}
                                </Link>
                              </div>
                            ))}
@@ -615,7 +615,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                                    className="font-mono text-sm hover:underline"
                                    style={{ color: secondaryColor }}
                                  >
-                                   View Checklist
+                                   Checklist
                                  </Link>
                                </div>
                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -678,7 +678,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('media')}
-          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           Media
         </button>
@@ -696,7 +696,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       className="hover:underline"
                       style={{ color: secondaryColor }}
                     >
-                      View Checklist
+                      Checklist
                     </Link>
                   </div>
                 </div>
@@ -738,7 +738,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('field-notes')}
-          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}
         </button>
@@ -838,7 +838,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('about')}
-          className="w-full text-left font-bold font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
           About
         </button>
