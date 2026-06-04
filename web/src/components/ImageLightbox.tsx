@@ -37,7 +37,7 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-white text-3xl font-mono hover:text-gray-300 z-50"
+        className="absolute top-4 right-4 text-white text-3xl font-sans hover:text-gray-300 z-50"
       >
         &times;
       </button>
@@ -46,13 +46,13 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
         <>
           <button
             onClick={prevImage}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl p-2 hover:text-gray-300 z-50 font-mono"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl p-2 hover:text-gray-300 z-50 font-sans"
           >
             &#8592;
           </button>
           <button
             onClick={nextImage}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl p-2 hover:text-gray-300 z-50 font-mono"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl p-2 hover:text-gray-300 z-50 font-sans"
           >
             &#8594;
           </button>
@@ -65,7 +65,7 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
           alt={currentMedia.CommonName}
           className="max-w-full max-h-[80vh] object-contain shadow-lg"
         />
-        <div className="mt-4 text-white text-center font-mono w-full max-w-3xl">
+        <div className="mt-4 text-white text-center font-sans w-full max-w-3xl">
           <p className="text-xl font-bold">{currentMedia.CommonName} <span className="text-gray-400 italic text-lg">{currentMedia.ScientificName}</span></p>
           <p className="text-sm mt-1 text-gray-300">
             {currentMedia.Locality && `${currentMedia.Locality} • `}
