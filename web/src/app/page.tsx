@@ -44,7 +44,7 @@ export default function Home() {
     <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black">
       <div className="max-w-7xl mx-auto">
         <header className="flex flex-col space-y-4">
-          <h1 className="text-[clamp(1.5rem,5vw,3rem)] md:text-5xl font-bold font-serif whitespace-nowrap overflow-hidden text-ellipsis">{options.title}</h1>
+          <h1 className="text-[clamp(1.5rem,5vw,3rem)] md:text-5xl font-bold font-serif">{options.title}</h1>
           <div className="flex flex-col text-sm md:text-base text-gray-600 font-sans space-y-1">
             <p className="whitespace-nowrap">Latest Checklist: {latestChecklistDate}</p>
             <p className="whitespace-nowrap">Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
