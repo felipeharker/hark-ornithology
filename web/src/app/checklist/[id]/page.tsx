@@ -30,13 +30,13 @@ export default async function ChecklistPage({
 
   if (checklistData.length === 0) {
     return (
-      <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black font-mono">
-        <div className="max-w-3xl mx-auto border border-black p-8 text-center">
+      <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black font-sans">
+        <div className="max-w-3xl mx-auto border border-[#808080] p-8 text-center">
           <h1 className="text-2xl font-bold mb-4">Checklist Not Found</h1>
           <p className="mb-8 text-gray-600">The checklist ID {submissionId} could not be found in the dataset.</p>
           <Link
             href="/"
-            className="px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors"
+            className="px-4 py-2 bg-[#808080] text-white hover:opacity-80 transition-colors"
           >
             Return to Homepage
           </Link>
@@ -78,10 +78,10 @@ export default async function ChecklistPage({
       <div className="max-w-3xl mx-auto space-y-6">
 
         {/* Navigation */}
-        <div className="flex justify-between items-center bg-white p-4 border border-black hover:bg-gray-50 transition-colors">
+        <div className="flex justify-between items-center bg-white p-4 border border-[#808080] hover:bg-gray-50 transition-colors">
           <Link
             href={`/?locationId=${meta.LocationID}`}
-            className="flex items-center text-black font-mono text-sm w-full"
+            className="flex items-center text-black font-sans text-sm w-full"
           >
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
               <polyline points="15 18 9 12 15 6"></polyline>
@@ -91,7 +91,7 @@ export default async function ChecklistPage({
         </div>
 
         {/* Header / Meta */}
-        <div className="bg-white p-6 md:p-8 border border-black space-y-6">
+        <div className="bg-white p-6 md:p-8 border border-[#808080] space-y-6">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold font-serif">
               {formattedDate} <span className="text-gray-500 font-normal">{meta.Time}</span>
@@ -101,11 +101,11 @@ export default async function ChecklistPage({
           <div className="space-y-1">
             <h2 className="text-2xl md:text-3xl font-bold font-serif">{meta.Location}</h2>
             {officialGeographicalName && (
-              <p className="text-gray-600 font-mono text-sm">{officialGeographicalName}</p>
+              <p className="text-gray-600 font-sans text-sm">{officialGeographicalName}</p>
             )}
           </div>
 
-          <div className="border-t border-gray-200 pt-6 space-y-4 font-mono text-sm">
+          <div className="border-t border-[#808080] pt-6 space-y-4 font-sans text-sm">
             {meta.NumberOfObservers && (
               <div className="flex items-start">
                 <div className="w-8 text-gray-500 flex-shrink-0">

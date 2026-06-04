@@ -54,12 +54,12 @@ export default function Home() {
         <section className="mt-16 md:mt-24">
           {data.length > 0 ? (
             <div className="bg-white">
-              <Suspense fallback={<div className="font-mono">Loading data...</div>}>
+              <Suspense fallback={<div className="font-sans">Loading data...</div>}>
                 <LocationDashboard data={data} mediaData={mediaData} fieldNotes={fieldNotes} options={options} />
               </Suspense>
             </div>
           ) : (
-            <div className="p-8 md:p-12 border border-dashed border-black text-center font-mono text-gray-500">
+            <div className="p-8 md:p-12 border border-dashed border-[#808080] text-center font-sans text-gray-500">
               No observation data found. Please add ebird CSV data to the observation-data directory.
             </div>
           )}
