@@ -32,7 +32,7 @@ interface LocationDashboardProps {
   };
 }
 
-
+type TabView = 'map' | 'list' | 'media' | 'field-notes' | 'about';
 
 function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options }: LocationDashboardProps) {
   const secondaryColor = options.secondaryColorHex || '#ff6361';
@@ -42,13 +42,9 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
   const initialLocationId = searchParams.get('locationId');
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(initialLocationId);
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
-  // activeTab state removed
+  const [activeTab, setActiveTab] = useState<TabView | null>(initialLocationId ? 'list' : null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [currentMediaList, setCurrentMediaList] = useState<EbirdMediaObservation[]>([]);
-  const [showAllLists, setShowAllLists] = useState(false);
-  const [showAllMediaSets, setShowAllMediaSets] = useState(false);
-  const [expandedMediaGroups, setExpandedMediaGroups] = useState<Record<string, boolean>>({});
-  const [showAllNotes, setShowAllNotes] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const locationRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const sectionTopRef = useRef<HTMLDivElement>(null);
@@ -243,6 +239,29 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
     }
   };
 
+  const handleTabClick = (tab: TabView) => {
+    if (activeTab === tab) {
+      // If clicking the currently active tab (which says "Return" if something is selected),
+      // we reset the selection. If nothing is selected, we close the accordion tab.
+      if (tab === 'map' && selectedLocationId) {
+        setSelectedLocationId(null);
+        window.history.pushState({}, '', window.location.pathname);
+      } else if (tab === 'list' && selectedLocationId) {
+        setSelectedLocationId(null);
+        window.history.pushState({}, '', window.location.pathname);
+      } else if (tab === 'field-notes' && selectedNoteId !== null) {
+        setSelectedNoteId(null);
+      } else {
+        // Close the tab entirely if nothing inside was selected
+        setActiveTab(null);
+      }
+      scrollToTop();
+    } else {
+      // Changing tabs (open accordion)
+      setActiveTab(tab);
+    }
+  };
+
   const allMedia = useMemo(() => {
     if (!mediaData.length) return [];
 
@@ -284,21 +303,15 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
     <div className="flex flex-col space-y-8 bg-white" ref={sectionTopRef}>
       {/* Map Accordion */}
       <div className="w-full">
-        <div className="flex justify-between items-center w-full">
-          <h2 className="font-serif text-2xl">Map</h2>
-          {selectedLocationId && (
-            <button
-              onClick={() => {
-                setSelectedLocationId(null);
-                window.history.pushState({}, '', window.location.pathname);
-              }}
-              className="font-sans text-sm hover:underline"
-            >
-              Return to all locations
-            </button>
-          )}
-        </div>
-        <div className="flex flex-col w-full py-4">
+        <button
+          onClick={() => handleTabClick('map')}
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          <span>{activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'map' ? 'rotate-180' : ''}`}>▼</span>
+        </button>
+        {activeTab === 'map' && (
+          <div className="flex flex-col w-full py-4">
           {/* Top Section: Map */}
           <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-[#808080]">
             <MapView
@@ -483,27 +496,22 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
             </div>
           )}
           </div>
+        )}
       </div>
 
       {/* Lists Accordion */}
       <div className="w-full">
-        <div className="flex justify-between items-center w-full">
-          <h2 className="font-serif text-2xl">Lists</h2>
-          {selectedLocationId && (
-            <button
-              onClick={() => {
-                setSelectedLocationId(null);
-                window.history.pushState({}, '', window.location.pathname);
-              }}
-              className="font-sans text-sm hover:underline"
-            >
-              Return to all locations
-            </button>
-          )}
-        </div>
-        <div className="w-full flex flex-col bg-white py-4">
+        <button
+          onClick={() => handleTabClick('list')}
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          <span>{activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'list' ? 'rotate-180' : ''}`}>▼</span>
+        </button>
+        {activeTab === 'list' && (
+          <div className="w-full flex flex-col bg-white py-4">
           <div ref={listRef} className="flex-1 space-y-4">
-            {(showAllLists || selectedLocationId ? locations : locations.slice(0, 3)).map((loc) => {
+            {locations.map((loc) => {
               const isSelected = selectedLocationId === loc.id;
 
             let textColorClass = 'text-black';
@@ -664,28 +672,23 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
               );
             })}
           </div>
-          {!selectedLocationId && locations.length > 3 && (
-            <div className="mt-4 flex">
-              <button
-                onClick={() => setShowAllLists(!showAllLists)}
-                className="font-sans text-sm hover:underline"
-              >
-                {showAllLists ? 'See less' : 'See more'}
-              </button>
-            </div>
-          )}
           </div>
+        )}
       </div>
 
       {/* Media Accordion */}
       <div className="w-full">
-        <div className="flex justify-between items-center w-full">
-          <h2 className="font-serif text-2xl">Media</h2>
-        </div>
-        <div className="flex flex-col w-full py-4">
+        <button
+          onClick={() => handleTabClick('media')}
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          <span>Media</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'media' ? 'rotate-180' : ''}`}>▼</span>
+        </button>
+        {activeTab === 'media' && (
+          <div className="flex flex-col w-full min-h-[500px] py-4">
           <div className="flex-1 space-y-8">
-            {(showAllMediaSets ? allMedia : allMedia.slice(0, 3)).map((group) => {
-              return (
+            {allMedia.map((group) => (
               <div key={group.checklistId} className={sharedContainerClass + " p-4 md:p-6"}>
                 <div className="flex flex-row items-center justify-between mb-4 border-b border-[#808080] pb-2">
                   <div className="font-bold text-base md:text-lg font-serif">{group.location}</div>
@@ -701,7 +704,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                   </div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {(expandedMediaGroups[group.checklistId] ? group.items : group.items.slice(0, 10)).map((m, idx) => (
+                  {group.items.map((m, idx) => (
                     <div key={m.MLCatalogNumber} className="cursor-pointer border border-[#808080] hover:border-[#808080] transition-colors"
                       onClick={() => {
                         setCurrentMediaList(group.items);
@@ -722,56 +725,31 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                     </div>
                   ))}
                 </div>
-                {group.items.length > 10 && (
-                  <div className="mt-4 flex">
-                    <button
-                      onClick={() => setExpandedMediaGroups(prev => ({ ...prev, [group.checklistId]: !prev[group.checklistId] }))}
-                      className="font-sans text-sm hover:underline"
-                    >
-                      {expandedMediaGroups[group.checklistId] ? 'See less' : 'See more'}
-                    </button>
-                  </div>
-                )}
               </div>
-              );
-            })}
+            ))}
             {allMedia.length === 0 && (
                 <div className="p-8 border border-[#808080] text-center font-sans text-gray-500">
                     No media available.
                 </div>
             )}
-            {allMedia.length > 3 && (
-              <div className="mt-4 flex">
-                <button
-                  onClick={() => setShowAllMediaSets(!showAllMediaSets)}
-                  className="font-sans text-sm hover:underline"
-                >
-                  {showAllMediaSets ? 'See less' : 'See more'}
-                </button>
-              </div>
-            )}
           </div>
           </div>
+        )}
       </div>
 
       {/* Notes Accordion */}
       <div className="w-full">
-        <div className="flex justify-between items-center w-full">
-          <h2 className="font-serif text-2xl">Notes</h2>
-          {selectedNoteId !== null && (
-            <button
-              onClick={() => {
-                setSelectedNoteId(null);
-              }}
-              className="font-sans text-sm hover:underline"
-            >
-              Return to all notes
-            </button>
-          )}
-        </div>
-        <div className="flex flex-col w-full py-4">
+        <button
+          onClick={() => handleTabClick('field-notes')}
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          <span>{activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'field-notes' ? 'rotate-180' : ''}`}>▼</span>
+        </button>
+        {activeTab === 'field-notes' && (
+          <div className="flex flex-col w-full min-h-[500px] py-4">
           <div className="flex-1 space-y-4">
-            {fieldNotes.length > 0 ? (showAllNotes || selectedNoteId !== null ? fieldNotes : fieldNotes.slice(0, 3)).map((note) => {
+            {fieldNotes.length > 0 ? fieldNotes.map((note) => {
               const isSelected = selectedNoteId === note.id;
 
               let textColorClass = 'text-black';
@@ -856,25 +834,21 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
               </div>
             )}
           </div>
-          {fieldNotes.length > 3 && selectedNoteId === null && (
-            <div className="mt-4 flex">
-              <button
-                onClick={() => setShowAllNotes(!showAllNotes)}
-                className="font-sans text-sm hover:underline"
-              >
-                {showAllNotes ? 'See less' : 'See more'}
-              </button>
-            </div>
-          )}
           </div>
+        )}
       </div>
 
       {/* About Accordion */}
       <div className="w-full">
-        <div className="flex justify-between items-center w-full">
-          <h2 className="font-serif text-2xl">About</h2>
-        </div>
-        <div className="flex flex-col w-full py-4">
+        <button
+          onClick={() => handleTabClick('about')}
+          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+        >
+          <span>About</span>
+          <span className={`text-sm transition-transform duration-300 ${activeTab === 'about' ? 'rotate-180' : ''}`}>▼</span>
+        </button>
+        {activeTab === 'about' && (
+          <div className="flex flex-col w-full min-h-[500px] py-4">
             <div className="border border-[#808080] bg-white p-4 md:p-8">
               <section className="space-y-6 text-lg font-serif">
                 <p>
@@ -942,6 +916,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
               </section>
             </div>
           </div>
+        )}
       </div>
 
       {lightboxIndex !== null && (
