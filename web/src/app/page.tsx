@@ -44,7 +44,7 @@ export default function Home() {
     <main className="min-h-screen p-4 md:p-8 lg:p-12 bg-white text-black">
       <div className="max-w-7xl mx-auto">
         <header className="flex flex-col space-y-4">
-          <h1 className="text-[clamp(1.5rem,5vw,3rem)] md:text-5xl font-bold font-serif">{options.title}</h1>
+          <h1 className="text-[clamp(1.5rem,5vw,3rem)] md:text-5xl font-bold font-serif whitespace-nowrap overflow-hidden text-ellipsis">{options.title}</h1>
           <div className="flex flex-col text-sm md:text-base text-gray-600 font-sans space-y-1">
             <p className="whitespace-nowrap">Latest Checklist: {latestChecklistDate}</p>
             <p className="whitespace-nowrap">Life List: {data.length > 0 ? uniqueSpecies.size : 'None'}</p>
@@ -54,12 +54,12 @@ export default function Home() {
         <section className="mt-16 md:mt-24">
           {data.length > 0 ? (
             <div className="bg-white">
-              <Suspense fallback={<div className="font-sans">Loading data...</div>}>
+              <Suspense fallback={<div className="font-mono">Loading data...</div>}>
                 <LocationDashboard data={data} mediaData={mediaData} fieldNotes={fieldNotes} options={options} />
               </Suspense>
             </div>
           ) : (
-            <div className="p-8 md:p-12 border border-dashed border-[#808080] text-center font-sans text-gray-500">
+            <div className="p-8 md:p-12 border border-dashed border-black text-center font-mono text-gray-500">
               No observation data found. Please add ebird CSV data to the observation-data directory.
             </div>
           )}

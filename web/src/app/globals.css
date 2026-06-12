@@ -11,6 +11,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-serif), serif;
+  --font-mono: var(--font-mono), monospace;
 }
 
 body {
@@ -30,6 +31,6 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
 }
 
-code, pre {
-  font-family: var(--font-sans);
+code, pre, .font-mono {
+  font-family: var(--font-mono);
 }

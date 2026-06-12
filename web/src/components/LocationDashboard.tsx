@@ -296,8 +296,8 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
     }
   }, [selectedLocationId]);
 
-  const sharedH3Class = "text-xl font-bold font-serif border-b border-[#808080] pb-2 mb-4";
-  const sharedContainerClass = "border border-[#808080] bg-white";
+  const sharedH3Class = "text-xl font-bold font-serif border-b border-black pb-2 mb-4";
+  const sharedContainerClass = "border border-black bg-white";
 
   return (
     <div className="flex flex-col space-y-8 bg-white" ref={sectionTopRef}>
@@ -305,15 +305,14 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('map')}
-          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          <span>{activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}</span>
-          <span className={`text-sm transition-transform duration-300 ${activeTab === 'map' ? 'rotate-180' : ''}`}>▼</span>
+          {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}
         </button>
         {activeTab === 'map' && (
           <div className="flex flex-col w-full py-4">
           {/* Top Section: Map */}
-          <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-[#808080]">
+          <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-gray-300">
             <MapView
               data={data}
               selectedLocationId={selectedLocationId}
@@ -404,16 +403,16 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                   <div
                     key={loc.id}
                     ref={(el) => { locationRefs.current[loc.id] = el; }}
-                    className="border border-[#808080] bg-white"
+                    className="border border-black bg-white"
                   >
                     {/* Header */}
-                    <div className={`p-4 md:p-6 transition-colors border-b border-[#808080]`}>
+                    <div className={`p-4 md:p-6 transition-colors border-b border-black`}>
                       <div className="flex flex-row items-center justify-between">
                         <div className="flex-1">
                           <h2 className={`text-xl md:text-2xl font-bold font-serif ${textColorClass}`}>
                             {loc.name}
                           </h2>
-                          <div className={`font-sans text-sm mt-1 opacity-80 ${textColorClass}`}>
+                          <div className={`font-mono text-sm mt-1 opacity-80 ${textColorClass}`}>
                             {loc.count} {loc.count === 1 ? 'Observation' : 'Observations'}
                             {loc.isHotspot && ' • Hotspot'}
                           </div>
@@ -422,18 +421,18 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                     </div>
 
                     {/* Expanded Details */}
-                    <div className="p-4 md:p-8 bg-white text-black border-t border-[#808080]">
+                    <div className="p-4 md:p-8 bg-white text-black border-t border-black">
                       <div className="mb-8">
                         <h3 className={sharedH3Class}>Checklists</h3>
                         {locationChecklistsList.length > 0 ? (
-                          <div className="space-y-0 border-t border-[#808080]">
+                          <div className="space-y-0 border-t border-gray-200">
                              {locationChecklistsList.map(checklist => (
-                               <div key={checklist.submissionId} className="flex flex-row items-center border-b border-[#808080] p-3 hover:bg-gray-50 transition-colors">
-                                 <div className="font-sans text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
+                               <div key={checklist.submissionId} className="flex flex-row items-center border-b border-gray-200 p-3 hover:bg-gray-50 transition-colors">
+                                 <div className="font-mono text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
                                  <Link
                                    href={`/checklist/${checklist.submissionId}?locationId=${loc.id}`}
-                                   className="font-sans text-sm hover:underline"
-                                   style={{ color: 'black' }}
+                                   className="font-mono text-sm hover:underline"
+                                   style={{ color: secondaryColor }}
                                  >
                                    {checklist.hasMedia ? "Checklist and Media" : "Checklist"}
                                  </Link>
@@ -441,22 +440,22 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                              ))}
                           </div>
                         ) : (
-                          <p className="font-sans text-gray-500 italic">No checklists available.</p>
+                          <p className="font-mono text-gray-500 italic">No checklists available.</p>
                         )}
                       </div>
 
                       {/* Species Total Table */}
                       <div className="mb-8">
                         <h3 className={sharedH3Class}>Species Totals</h3>
-                        <div className="overflow-x-auto border-t border-b border-[#808080]">
-                          <table className="min-w-full divide-y divide-[#808080] text-sm font-sans">
+                        <div className="overflow-x-auto border-t border-b border-black">
+                          <table className="min-w-full divide-y divide-gray-300 text-sm font-mono">
                             <thead>
                               <tr>
                                 <th className="px-2 py-3 text-left font-bold">Species</th>
                                 <th className="px-2 py-3 text-right font-bold">Count</th>
                               </tr>
                             </thead>
-                            <tbody className="divide-y divide-[#808080]">
+                            <tbody className="divide-y divide-gray-300">
                               {overallTotalsList.map(item => (
                                 <tr key={item.commonName}>
                                   <td className="px-2 py-2 whitespace-nowrap">
@@ -476,13 +475,13 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       {/* Line Chart */}
                       <div>
                         <h3 className={sharedH3Class}>Observations over Time (Month/Year)</h3>
-                        <div className="h-[400px] md:h-[500px] border border-[#808080] p-4">
+                        <div className="h-[400px] md:h-[500px] border border-black p-4">
                           <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={barChartData}>
                               <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                              <XAxis dataKey="date" tick={{fontFamily: 'inherit', fontSize: 12}} />
-                              <YAxis allowDecimals={false} tick={{fontFamily: 'inherit', fontSize: 12}} />
-                              <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid #808080', fontFamily: 'inherit' }} />
+                              <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
+                              <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
+                              <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
                               <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
                             </LineChart>
                           </ResponsiveContainer>
@@ -503,10 +502,9 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('list')}
-          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          <span>{activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}</span>
-          <span className={`text-sm transition-transform duration-300 ${activeTab === 'list' ? 'rotate-180' : ''}`}>▼</span>
+          {activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}
         </button>
         {activeTab === 'list' && (
           <div className="w-full flex flex-col bg-white py-4">
@@ -516,13 +514,13 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
 
             let textColorClass = 'text-black';
             let bgColorClass = 'bg-white';
-            const inlineStyle = {};
+            let inlineStyle = {};
 
             if (isSelected) {
-              bgColorClass = 'bg-[#808080]';
+              bgColorClass = 'bg-black';
               textColorClass = 'text-white';
             } else {
-
+              inlineStyle = { color: secondaryColor };
             }
 
             return (
@@ -531,7 +529,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                 ref={(el) => {
                   locationRefs.current[loc.id] = el;
                 }}
-                className={`border border-[#808080] ${isSelected ? '' : ''}`}
+                className={`border border-black ${isSelected ? 'border-2' : ''}`}
               >
                 <button
                   onClick={() => {
@@ -540,7 +538,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                     const newUrl = newId ? `?locationId=${newId}` : window.location.pathname;
                     window.history.pushState({}, '', newUrl);
                   }}
-                  className={`w-full text-left p-4 font-sans text-sm transition-colors ${bgColorClass} ${textColorClass}`}
+                  className={`w-full text-left p-4 font-mono text-sm transition-colors ${bgColorClass} ${textColorClass}`}
                   style={inlineStyle}
                 >
                   <div className="flex justify-between items-center">
@@ -551,19 +549,19 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
 
                 {/* Expanded Details */}
                 {isSelected && (
-                  <div className="p-4 md:p-8 border-t border-[#808080] bg-white text-black">
+                  <div className="p-4 md:p-8 border-t border-black bg-white text-black">
                     {/* Checklists */}
                     <div className="mb-8">
                       <h3 className={sharedH3Class}>Checklists</h3>
                       {locationChecklists.length > 0 ? (
-                        <div className="space-y-0 border-t border-[#808080]">
+                        <div className="space-y-0 border-t border-gray-200">
                            {locationChecklists.map(checklist => (
-                             <div key={checklist.submissionId} className="flex flex-row items-center border-b border-[#808080] p-3 hover:bg-gray-50 transition-colors">
-                               <div className="font-sans text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
+                             <div key={checklist.submissionId} className="flex flex-row items-center border-b border-gray-200 p-3 hover:bg-gray-50 transition-colors">
+                               <div className="font-mono text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
                                <Link
                                  href={`/checklist/${checklist.submissionId}?locationId=${loc.id}`}
-                                 className="font-sans text-sm hover:underline"
-                                 style={{ color: 'black' }}
+                                 className="font-mono text-sm hover:underline"
+                                 style={{ color: secondaryColor }}
                                >
                                  {checklist.hasMedia ? "Checklist and Media" : "Checklist"}
                                </Link>
@@ -571,22 +569,22 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                            ))}
                         </div>
                       ) : (
-                        <p className="font-sans text-gray-500 italic">No checklists available.</p>
+                        <p className="font-mono text-gray-500 italic">No checklists available.</p>
                       )}
                     </div>
 
                     {/* Species Total Table */}
                     <div className="mb-8">
                       <h3 className={sharedH3Class}>Species Totals</h3>
-                      <div className="overflow-x-auto border-t border-b border-[#808080]">
-                        <table className="min-w-full divide-y divide-[#808080] text-sm font-sans">
+                      <div className="overflow-x-auto border-t border-b border-black">
+                        <table className="min-w-full divide-y divide-gray-300 text-sm font-mono">
                           <thead>
                             <tr>
                               <th className="px-2 py-3 text-left font-bold">Species</th>
                               <th className="px-2 py-3 text-right font-bold">Count</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-[#808080]">
+                          <tbody className="divide-y divide-gray-300">
                             {overallTotals.map(item => (
                               <tr key={item.commonName}>
                                 <td className="px-2 py-2 whitespace-nowrap">
@@ -609,20 +607,20 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       {locationMedia.length > 0 ? (
                         <div className="space-y-8">
                            {locationMedia.map(group => (
-                             <div key={group.checklistId} className="border border-[#808080] p-4 bg-white">
-                               <div className="flex flex-row items-center justify-between mb-4 border-b border-[#808080] pb-2">
-                                 <div className="font-sans text-sm font-bold">{group.date} {group.time}</div>
+                             <div key={group.checklistId} className="border border-black p-4 bg-white">
+                               <div className="flex flex-row items-center justify-between mb-4 border-b border-black pb-2">
+                                 <div className="font-mono text-sm font-bold">{group.date} {group.time}</div>
                                  <Link
                                    href={`/checklist/${group.checklistId}?locationId=${loc.id}`}
-                                   className="font-sans text-sm hover:underline"
-                                   style={{ color: 'black' }}
+                                   className="font-mono text-sm hover:underline"
+                                   style={{ color: secondaryColor }}
                                  >
                                    Checklist
                                  </Link>
                                </div>
                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                  {group.items.map((m, idx) => (
-                                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-[#808080] hover:border-[#808080] transition-colors"
+                                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-gray-200 hover:border-black transition-colors"
                                       onClick={() => {
                                         setCurrentMediaList(group.items);
                                         setLightboxIndex(idx);
@@ -636,7 +634,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                                            loading="lazy"
                                          />
                                        </div>
-                                       <div className="p-2 text-xs font-sans bg-white text-black truncate">
+                                       <div className="p-2 text-xs font-mono bg-white text-black truncate">
                                           {m.CommonName}
                                        </div>
                                     </div>
@@ -646,20 +644,20 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                            ))}
                         </div>
                       ) : (
-                        <p className="font-sans text-gray-500 italic">No media available for this location.</p>
+                        <p className="font-mono text-gray-500 italic">No media available for this location.</p>
                       )}
                     </div>
 
                     {/* Line Chart */}
                     <div>
                       <h3 className={sharedH3Class}>Observations over Time (Month/Year)</h3>
-                      <div className="h-[400px] md:h-[500px] border border-[#808080] p-4">
+                      <div className="h-[400px] md:h-[500px] border border-black p-4">
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={barChartData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                            <XAxis dataKey="date" tick={{fontFamily: 'inherit', fontSize: 12}} />
-                            <YAxis allowDecimals={false} tick={{fontFamily: 'inherit', fontSize: 12}} />
-                            <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid #808080', fontFamily: 'inherit' }} />
+                            <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
+                            <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
+                            <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
                             <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
                           </LineChart>
                         </ResponsiveContainer>
@@ -680,24 +678,23 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('media')}
-          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          <span>Media</span>
-          <span className={`text-sm transition-transform duration-300 ${activeTab === 'media' ? 'rotate-180' : ''}`}>▼</span>
+          Media
         </button>
         {activeTab === 'media' && (
           <div className="flex flex-col w-full min-h-[500px] py-4">
           <div className="flex-1 space-y-8">
             {allMedia.map((group) => (
               <div key={group.checklistId} className={sharedContainerClass + " p-4 md:p-6"}>
-                <div className="flex flex-row items-center justify-between mb-4 border-b border-[#808080] pb-2">
+                <div className="flex flex-row items-center justify-between mb-4 border-b border-black pb-2">
                   <div className="font-bold text-base md:text-lg font-serif">{group.location}</div>
-                  <div className="font-sans text-sm flex items-center space-x-4">
+                  <div className="font-mono text-sm flex items-center space-x-4">
                     <span>{group.date} {group.time}</span>
                     <Link
                       href={`/checklist/${group.checklistId}`}
-                      className="font-sans text-sm hover:underline"
-                      style={{ color: 'black' }}
+                      className="hover:underline"
+                      style={{ color: secondaryColor }}
                     >
                       Checklist
                     </Link>
@@ -705,7 +702,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   {group.items.map((m, idx) => (
-                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-[#808080] hover:border-[#808080] transition-colors"
+                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-gray-200 hover:border-black transition-colors"
                       onClick={() => {
                         setCurrentMediaList(group.items);
                         setLightboxIndex(idx);
@@ -719,7 +716,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                             loading="lazy"
                           />
                         </div>
-                        <div className="p-2 text-xs font-sans bg-white text-black truncate">
+                        <div className="p-2 text-xs font-mono bg-white text-black truncate">
                           {m.CommonName}
                         </div>
                     </div>
@@ -728,7 +725,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
               </div>
             ))}
             {allMedia.length === 0 && (
-                <div className="p-8 border border-[#808080] text-center font-sans text-gray-500">
+                <div className="p-8 border border-black text-center font-mono text-gray-500">
                     No media available.
                 </div>
             )}
@@ -741,10 +738,9 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('field-notes')}
-          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          <span>{activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}</span>
-          <span className={`text-sm transition-transform duration-300 ${activeTab === 'field-notes' ? 'rotate-180' : ''}`}>▼</span>
+          {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}
         </button>
         {activeTab === 'field-notes' && (
           <div className="flex flex-col w-full min-h-[500px] py-4">
@@ -754,17 +750,17 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
 
               let textColorClass = 'text-black';
               let bgColorClass = 'bg-white';
-              const inlineStyle = {};
+              let inlineStyle = {};
 
               if (isSelected) {
-                bgColorClass = 'bg-[#808080]';
+                bgColorClass = 'bg-black';
                 textColorClass = 'text-white';
               } else {
-
+                inlineStyle = { color: secondaryColor };
               }
 
               return (
-                <div key={note.id} className={`border border-[#808080] ${isSelected ? '' : ''}`}>
+                <div key={note.id} className={`border border-black ${isSelected ? 'border-2' : ''}`}>
                   <button
                     onClick={() => {
                       if (isSelected) {
@@ -776,7 +772,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                         }, 50);
                       }
                     }}
-                    className={`w-full text-left p-4 font-sans text-sm transition-colors ${bgColorClass} ${textColorClass}`}
+                    className={`w-full text-left p-4 font-mono text-sm transition-colors ${bgColorClass} ${textColorClass}`}
                     style={inlineStyle}
                   >
                     <div className="flex justify-between items-center">
@@ -786,9 +782,9 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                   </button>
 
                   {isSelected && (
-                    <div className="p-4 md:p-8 border-t border-[#808080] bg-white text-black">
+                    <div className="p-4 md:p-8 border-t border-black bg-white text-black">
                       {/* Meta Information */}
-                      <div className="mb-8 flex flex-col gap-4 font-sans text-sm border-b border-[#808080] pb-4">
+                      <div className="mb-8 flex flex-col gap-4 font-mono text-sm border-b border-black pb-4">
                         <div>
                            <span className="font-bold">Date:</span> {note.date}
                         </div>
@@ -808,7 +804,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                             <ul className="list-disc list-inside mt-1">
                               {note.links.map((link, i) => (
                                 <li key={i}>
-                                  <a href={link} target="_blank" rel="noopener noreferrer" className="font-sans hover:underline break-all" style={{ color: 'black' }}>
+                                  <a href={link} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 underline" style={{ color: secondaryColor }}>
                                     {link}
                                   </a>
                                 </li>
@@ -819,7 +815,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       </div>
 
                       {/* Content */}
-                      <div className="prose prose-p:font-serif prose-headings:font-serif  max-w-none">
+                      <div className="prose prose-p:font-serif prose-headings:font-serif prose-a:text-[#ff6361] max-w-none">
                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
                            {note.content}
                          </ReactMarkdown>
@@ -829,7 +825,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                 </div>
               );
             }) : (
-              <div className="p-8 border border-[#808080] text-center font-sans text-gray-500">
+              <div className="p-8 border border-black text-center font-mono text-gray-500">
                 No field notes available. Create markdown files in the field-notes directory.
               </div>
             )}
@@ -842,14 +838,13 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       <div className="w-full">
         <button
           onClick={() => handleTabClick('about')}
-          className="w-full flex justify-between items-center text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
+          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
-          <span>About</span>
-          <span className={`text-sm transition-transform duration-300 ${activeTab === 'about' ? 'rotate-180' : ''}`}>▼</span>
+          About
         </button>
         {activeTab === 'about' && (
           <div className="flex flex-col w-full min-h-[500px] py-4">
-            <div className="border border-[#808080] bg-white p-4 md:p-8">
+            <div className="border border-black bg-white p-4 md:p-8">
               <section className="space-y-6 text-lg font-serif">
                 <p>
                   This project is built and maintained by Felipe. Resources and additional information are available below. Thank you.
@@ -861,8 +856,8 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       href="https://github.com/felipeharker/hark-ornithology"
                       target="_blank"
                       rel="noopener noreferrer"
-                       style={{ color: 'black' }}
-                      className="hover:underline font-sans"
+                      style={{ color: secondaryColor }}
+                      className="hover:underline font-mono"
                     >
                       Github Repository
                     </a>
@@ -875,8 +870,8 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       href="https://ebird.org/profile/ODE0ODA5NQ/world"
                       target="_blank"
                       rel="noopener noreferrer"
-                       style={{ color: 'black' }}
-                      className="hover:underline font-sans"
+                      style={{ color: secondaryColor }}
+                      className="hover:underline font-mono"
                     >
                       eBird Account
                     </a>
@@ -889,8 +884,8 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       href="https://media.ebird.org/catalog?unconfirmed=incl&mediaType=photo&userId=USER8148095"
                       target="_blank"
                       rel="noopener noreferrer"
-                       style={{ color: 'black' }}
-                      className="hover:underline font-sans"
+                      style={{ color: secondaryColor }}
+                      className="hover:underline font-mono"
                     >
                       Macaulay Library
                     </a>
@@ -903,8 +898,8 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       href="https://merlin.allaboutbirds.org/"
                       target="_blank"
                       rel="noopener noreferrer"
-                       style={{ color: 'black' }}
-                      className="hover:underline font-sans"
+                      style={{ color: secondaryColor }}
+                      className="hover:underline font-mono"
                     >
                       Merlin Bird ID
                     </a>
@@ -932,7 +927,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
 
 export default function LocationDashboard({ data, mediaData = [], fieldNotes = [], options }: LocationDashboardProps) {
   return (
-    <Suspense fallback={<div className="font-sans">Loading data...</div>}>
+    <Suspense fallback={<div className="font-mono">Loading data...</div>}>
       <LocationDashboardInner data={data} mediaData={mediaData} fieldNotes={fieldNotes} options={options} />
     </Suspense>
   );

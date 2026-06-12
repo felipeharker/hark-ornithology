@@ -10,7 +10,7 @@ export interface SiteOptions {
 
 const DEFAULT_OPTIONS: SiteOptions = {
   title: 'Ornithological Report',
-  secondaryColorHex: '#000080',
+  secondaryColorHex: '#ff6361',
   dataFileName: 'ebird-data-latest.csv',
 };
 
