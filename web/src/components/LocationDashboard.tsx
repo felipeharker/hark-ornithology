@@ -307,6 +307,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
           onClick={() => handleTabClick('map')}
           className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
+          {activeTab === 'map' ? '▼ ' : '▶ '}
           {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}
         </button>
         {activeTab === 'map' && (
@@ -504,6 +505,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
           onClick={() => handleTabClick('list')}
           className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
+          {activeTab === 'list' ? '▼ ' : '▶ '}
           {activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}
         </button>
         {activeTab === 'list' && (
@@ -680,6 +682,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
           onClick={() => handleTabClick('media')}
           className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
+          {activeTab === 'media' ? '▼ ' : '▶ '}
           Media
         </button>
         {activeTab === 'media' && (
@@ -740,6 +743,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
           onClick={() => handleTabClick('field-notes')}
           className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
+          {activeTab === 'field-notes' ? '▼ ' : '▶ '}
           {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}
         </button>
         {activeTab === 'field-notes' && (
@@ -840,6 +844,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
           onClick={() => handleTabClick('about')}
           className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
         >
+          {activeTab === 'about' ? '▼ ' : '▶ '}
           About
         </button>
         {activeTab === 'about' && (
