@@ -71,7 +71,7 @@ export default function MapView({ data, selectedLocationId, onLocationSelect, op
   }, [selectedLocation]);
 
   return (
-    <div className="w-full h-full border border-[#808080] relative">
+    <div className="w-full h-full border border-black relative">
       <Map
         ref={mapRef}
         initialViewState={{
