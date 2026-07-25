@@ -2,6 +2,7 @@
 
 - flights
 - lodging
+- replace physical credit cards!
 - pack list (camera, clothes, packs)
 - excursions
 - dinners on board
