@@ -21,39 +21,34 @@
 
 - iPad Pro
 
-- multi-charge power bank
+- Multi-charge power bank
 - USB-C to USB-C cables
 - USB-C to AC adapter blocks
 
----
+## Birding
 
-## 2. Travel & Transport Equipment
+- Binoculars/optics
+- Field Notes notebook and pen
 
-### Luggage & Cases
-- [ ] **Hardcase for Core Electronics:** (ATA-rated, watertight, pressure-equalized case like a Pelican for carry-on air travel and safe sea transport)
-- [ ] **Expedition Camera Backpack:** (Ergonomic, weather-resistant bag for the on-foot segments of the trip; must fit comfortably fully loaded)
-- [ ] **Packable Duffel/Dry Bag:** (For organizing non-electronic gear or wrapping the backpack during wet Zodiac sea landings)
+## Digital Resources
 
-### Accessory Organization
-- [ ] **Cable Organizer Pouches:** (Dedicated clamshell or roll-up cases for charging cables and adapters)
-- [ ] **Desiccant Packets:** (To throw into cases and bags to combat extreme humidity/sea moisture)
-- [ ] **Neoprene Lens Pouches:** (For extra shock absorption inside the backpack)
-- [ ] **Small Waterproof Dry Bags:** (For quickly stashing batteries or your phone during sudden squalls)
+- Merlin libraries downloaded
+- Field guides for each geography printed(?)
 
----
+## Travel Documents
 
-## 3. Field Gear & Personal Observation Items
+- Passport, USA
+- Passport, Brazil
+- Cruise rez.
+- Air rez.
+- Hotel rez.
 
-### Observation & Documentation
-- [ ] **High-End Binoculars:** (8x42 or 10x42 configuration, nitrogen-purged and waterproof)
-- [ ] **Binocular Harness:** (To distribute weight off the neck during long hikes)
-- [ ] **Waterproof Field Notebook:** (e.g., Rite in the Rain for logging sightings in damp conditions)
-- [ ] **All-Weather Pens/Pencils:** (Pressurized ink cartridges that write through moisture)
-- [ ] **Regional Field Guides:** (Physical, weatherproofed book specific to your destination)
-- [ ] **Digital Field Guides/Audio Apps:** (Downloaded for offline use)
+## Clothing
 
-### Navigation & Utilities
-- [ ] **Satellite Messenger / PLB:** (e.g., Garmin inReach for emergencies in off-grid maritime or wilderness zones)
-- [ ] **Multi-Tool:** (With hex keys and screwdrivers for tightening tripod legs or camera plates)
-- [ ] **Headlamp with Red-Light Mode:** (For hands-free operation and preserving night vision during pre-dawn starts)
-- [ ] **Compass & Topographic Map:** (Analog backups to digital navigation)
+## Luggage and Transit
+
+- Topo Designs duffle
+- Patagonia rucksack
+- Nikon drybag
+
+- Cable organizer pouches/interal storage
