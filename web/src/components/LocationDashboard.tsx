@@ -5,21 +5,17 @@ import { EbirdObservation } from '@/lib/parseEbirdData';
 import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
 import { FieldNote } from '@/lib/parseFieldNotes';
 import ImageLightbox from './ImageLightbox';
+import LocationDetailPanel from './LocationDetailPanel';
 import MapView from './Map';
+import { AccordionSection } from './ui/AccordionSection';
+import { EmptyState } from './ui/EmptyState';
+import { Panel } from './ui/Panel';
+import { MediaGrid } from './ui/MediaGrid';
+import { SearchIcon } from './ui/Icons';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
 
 interface LocationDashboardProps {
   data: EbirdObservation[];
@@ -45,9 +41,15 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
   const [activeTab, setActiveTab] = useState<TabView | null>(initialLocationId ? 'list' : null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [currentMediaList, setCurrentMediaList] = useState<EbirdMediaObservation[]>([]);
+  const [locationFilter, setLocationFilter] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
   const locationRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const sectionTopRef = useRef<HTMLDivElement>(null);
+
+  const openMedia = (items: EbirdMediaObservation[], index: number) => {
+    setCurrentMediaList(items);
+    setLightboxIndex(index);
+  };
 
   const locations = useMemo(() => {
     const locMap = new Map<string, { id: string; name: string; count: number, isHotspot: boolean }>();
@@ -75,6 +77,17 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
       return a.name.localeCompare(b.name);
     });
   }, [data, selectedLocationId]);
+
+  const filteredLocations = useMemo(() => {
+    const query = locationFilter.trim().toLowerCase();
+    if (!query) return locations;
+    return locations.filter((loc) => loc.name.toLowerCase().includes(query));
+  }, [locations, locationFilter]);
+
+  const selectedLocation = useMemo(
+    () => locations.find((loc) => loc.id === selectedLocationId) || null,
+    [locations, selectedLocationId]
+  );
 
   const locationData = useMemo(() => {
     if (!selectedLocationId) return [];
@@ -296,234 +309,78 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
     }
   }, [selectedLocationId]);
 
-  const sharedH3Class = "text-xl font-bold font-serif border-b border-black pb-2 mb-4";
-  const sharedContainerClass = "border border-black bg-white";
+  const selectLocation = (id: string | null) => {
+    setSelectedLocationId(id);
+    const newUrl = id ? `?locationId=${id}` : window.location.pathname;
+    window.history.pushState({}, '', newUrl);
+  };
 
   return (
     <div className="flex flex-col space-y-8 bg-white" ref={sectionTopRef}>
-      {/* Map Accordion */}
-      <div className="w-full">
-        <button
-          onClick={() => handleTabClick('map')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
-        >
-          <span className="text-lg mr-2">{activeTab === 'map' ? '▼' : '▶'}</span>
-          {activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}
-        </button>
-        {activeTab === 'map' && (
-          <div className="flex flex-col w-full py-4">
-          {/* Top Section: Map */}
-          <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-gray-300">
-            <MapView
-              data={data}
-              selectedLocationId={selectedLocationId}
-              options={options}
-              onLocationSelect={(id) => {
-                setSelectedLocationId(id);
-                // Update URL to match state
-                const newUrl = id ? `?locationId=${id}` : window.location.pathname;
-                window.history.pushState({}, '', newUrl);
+      <AccordionSection
+        label={activeTab === 'map' && selectedLocationId ? 'Return' : 'Map'}
+        isOpen={activeTab === 'map'}
+        onToggle={() => handleTabClick('map')}
+      >
+        {/* Top Section: Map */}
+        <div className="w-full relative h-[500px] lg:h-[600px] mb-8 border border-gray-300">
+          <MapView
+            data={data}
+            selectedLocationId={selectedLocationId}
+            onLocationSelect={(id) => {
+              selectLocation(id);
+              if (id) {
+                setTimeout(() => {
+                  locationRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+              }
+            }}
+          />
+        </div>
 
-                if (id) {
-                  setTimeout(() => {
-                    if (locationRefs.current[id]) {
-                      locationRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                  }, 100);
-                }
-              }}
-            />
-          </div>
-
-          {/* If a location is selected in map view, show its details below */}
-          {selectedLocationId && (
-            <div className="flex-1 space-y-4 mt-8">
-              {locations.filter((loc) => loc.id === selectedLocationId).map((loc) => {
-                const textColorClass = 'text-black';
-
-                const getLocationChecklists = () => {
-                    const chkMap = new Map<string, { submissionId: string; date: string; time: string; hasMedia: boolean }>();
-                    data.forEach((obs) => {
-                      if (obs.LocationID === loc.id) {
-                         if (!chkMap.has(obs.SubmissionID)) {
-                            chkMap.set(obs.SubmissionID, {
-                               submissionId: obs.SubmissionID,
-                               date: obs.Date || '',
-                               time: obs.Time || '',
-                               hasMedia: false
-                            });
-                         }
-                         if (obs.MLCatalogNumbers) {
-                            chkMap.get(obs.SubmissionID)!.hasMedia = true;
-                         }
-                      }
-                    });
-                    const arr = Array.from(chkMap.values());
-                    arr.sort((a, b) => {
-                       const dateA = a.date + ' ' + a.time;
-                       const dateB = b.date + ' ' + b.time;
-                       return dateB.localeCompare(dateA);
-                    });
-                    return arr;
-                };
-
-                const getOverallTotals = () => {
-                  const speciesMap = new Map<string, { commonName: string, scientificName: string, total: number, onlyX: boolean }>();
-                  data.forEach((obs) => {
-                    if (obs.LocationID === loc.id) {
-                      const key = obs.CommonName;
-                      if (!speciesMap.has(key)) {
-                        speciesMap.set(key, { commonName: key, scientificName: obs.ScientificName, total: 0, onlyX: true });
-                      }
-                      const entry = speciesMap.get(key)!;
-                      if (obs.Count && obs.Count.toUpperCase() !== 'X') {
-                        const count = parseInt(obs.Count, 10);
-                        if (!isNaN(count)) {
-                          entry.total += count;
-                          entry.onlyX = false;
-                        }
-                      }
-                    }
-                  });
-                  const arr = Array.from(speciesMap.values());
-                  arr.sort((a, b) => {
-                    if (a.onlyX && !b.onlyX) return 1;
-                    if (!a.onlyX && b.onlyX) return -1;
-                    if (!a.onlyX && !b.onlyX && b.total !== a.total) {
-                      return b.total - a.total;
-                    }
-                    return a.commonName.localeCompare(b.commonName);
-                  });
-                  return arr;
-                };
-
-                const locationChecklistsList = getLocationChecklists();
-                const overallTotalsList = getOverallTotals();
-
-                return (
-                  <div
-                    key={loc.id}
-                    ref={(el) => { locationRefs.current[loc.id] = el; }}
-                    className="border border-black bg-white"
-                  >
-                    {/* Header */}
-                    <div className={`p-4 md:p-6 transition-colors border-b border-black`}>
-                      <div className="flex flex-row items-center justify-between">
-                        <div className="flex-1">
-                          <h2 className={`text-xl md:text-2xl font-bold font-serif ${textColorClass}`}>
-                            {loc.name}
-                          </h2>
-                          <div className={`font-mono text-sm mt-1 opacity-80 ${textColorClass}`}>
-                            {loc.count} {loc.count === 1 ? 'Observation' : 'Observations'}
-                            {loc.isHotspot && ' • Hotspot'}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Expanded Details */}
-                    <div className="p-4 md:p-8 bg-white text-black border-t border-black">
-                      <div className="mb-8">
-                        <h3 className={sharedH3Class}>Checklists</h3>
-                        {locationChecklistsList.length > 0 ? (
-                          <div className="space-y-0 border-t border-gray-200">
-                             {locationChecklistsList.map(checklist => (
-                               <div key={checklist.submissionId} className="flex flex-row items-center border-b border-gray-200 p-3 hover:bg-gray-50 transition-colors">
-                                 <div className="font-mono text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
-                                 <Link
-                                   href={`/checklist/${checklist.submissionId}?locationId=${loc.id}`}
-                                   className="font-mono text-sm hover:underline"
-                                   style={{ color: secondaryColor }}
-                                 >
-                                   {checklist.hasMedia ? "Checklist and Media" : "Checklist"}
-                                 </Link>
-                               </div>
-                             ))}
-                          </div>
-                        ) : (
-                          <p className="font-mono text-gray-500 italic">No checklists available.</p>
-                        )}
-                      </div>
-
-                      {/* Species Total Table */}
-                      <div className="mb-8">
-                        <h3 className={sharedH3Class}>Species Totals</h3>
-                        <div className="overflow-x-auto border-t border-b border-black">
-                          <table className="min-w-full divide-y divide-gray-300 text-sm font-mono">
-                            <thead>
-                              <tr>
-                                <th className="px-2 py-3 text-left font-bold">Species</th>
-                                <th className="px-2 py-3 text-right font-bold">Count</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-300">
-                              {overallTotalsList.map(item => (
-                                <tr key={item.commonName}>
-                                  <td className="px-2 py-2 whitespace-nowrap">
-                                    <div className="font-bold">{item.commonName}</div>
-                                    <div className="text-xs italic text-gray-600">{item.scientificName}</div>
-                                  </td>
-                                  <td className="px-2 py-2 whitespace-nowrap text-right font-bold">
-                                    {item.onlyX ? 'X' : item.total}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-
-                      {/* Line Chart */}
-                      <div>
-                        <h3 className={sharedH3Class}>Observations over Time (Month/Year)</h3>
-                        <div className="h-[400px] md:h-[500px] border border-black p-4">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={barChartData}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                              <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
-                              <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
-                              <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
-                              <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
-                            </LineChart>
-                          </ResponsiveContainer>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                );
-              })}
+        {/* If a location is selected in map view, show its details below */}
+        {selectedLocation && (
+          <div className="flex-1 space-y-4 mt-8">
+            <div
+              key={selectedLocation.id}
+              ref={(el) => { locationRefs.current[selectedLocation.id] = el; }}
+              className="border border-black bg-white"
+            >
+              <LocationDetailPanel
+                location={selectedLocation}
+                checklists={locationChecklists}
+                totals={overallTotals}
+                chartData={barChartData}
+                chartColor={CHART_COLORS[0]}
+                onMediaSelect={openMedia}
+              />
             </div>
-          )}
           </div>
         )}
-      </div>
+      </AccordionSection>
 
-      {/* Lists Accordion */}
-      <div className="w-full">
-        <button
-          onClick={() => handleTabClick('list')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
-        >
-          <span className="text-lg mr-2">{activeTab === 'list' ? '▼' : '▶'}</span>
-          {activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}
-        </button>
-        {activeTab === 'list' && (
-          <div className="w-full flex flex-col bg-white py-4">
-          <div ref={listRef} className="flex-1 space-y-4">
-            {locations.map((loc) => {
-              const isSelected = selectedLocationId === loc.id;
-
-            let textColorClass = 'text-black';
-            let bgColorClass = 'bg-white';
-            let inlineStyle = {};
-
-            if (isSelected) {
-              bgColorClass = 'bg-black';
-              textColorClass = 'text-white';
-            } else {
-              inlineStyle = { color: secondaryColor };
-            }
+      <AccordionSection
+        label={activeTab === 'list' && selectedLocationId ? 'Return' : 'Lists'}
+        isOpen={activeTab === 'list'}
+        onToggle={() => handleTabClick('list')}
+      >
+        <div className="relative mb-4">
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+            placeholder="Filter locations by name..."
+            aria-label="Filter locations by name"
+            className="w-full border border-black bg-white pl-9 pr-3 py-2 font-mono text-sm placeholder:text-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--accent)]"
+          />
+        </div>
+        <div ref={listRef} className="flex-1 space-y-4">
+          {filteredLocations.length === 0 && (
+            <p className="font-mono text-gray-500 italic">No locations match &ldquo;{locationFilter}&rdquo;.</p>
+          )}
+          {filteredLocations.map((loc) => {
+            const isSelected = selectedLocationId === loc.id;
 
             return (
               <div
@@ -534,390 +391,199 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                 className={`border border-black ${isSelected ? 'border-2' : ''}`}
               >
                 <button
-                  onClick={() => {
-                    const newId = isSelected ? null : loc.id;
-                    setSelectedLocationId(newId);
-                    const newUrl = newId ? `?locationId=${newId}` : window.location.pathname;
-                    window.history.pushState({}, '', newUrl);
-                  }}
-                  className={`w-full text-left p-4 font-mono text-sm transition-colors ${bgColorClass} ${textColorClass}`}
-                  style={inlineStyle}
+                  onClick={() => selectLocation(isSelected ? null : loc.id)}
+                  aria-expanded={isSelected}
+                  className={`w-full text-left p-4 font-mono text-sm transition-colors ${isSelected ? 'bg-black text-white' : 'bg-white text-[var(--accent)]'}`}
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-base md:text-lg">{loc.name}</span>
-
                   </div>
                 </button>
 
-                {/* Expanded Details */}
                 {isSelected && (
-                  <div className="p-4 md:p-8 border-t border-black bg-white text-black">
-                    {/* Checklists */}
-                    <div className="mb-8">
-                      <h3 className={sharedH3Class}>Checklists</h3>
-                      {locationChecklists.length > 0 ? (
-                        <div className="space-y-0 border-t border-gray-200">
-                           {locationChecklists.map(checklist => (
-                             <div key={checklist.submissionId} className="flex flex-row items-center border-b border-gray-200 p-3 hover:bg-gray-50 transition-colors">
-                               <div className="font-mono text-sm mr-4 w-40">{checklist.date} {checklist.time}</div>
-                               <Link
-                                 href={`/checklist/${checklist.submissionId}?locationId=${loc.id}`}
-                                 className="font-mono text-sm hover:underline"
-                                 style={{ color: secondaryColor }}
-                               >
-                                 {checklist.hasMedia ? "Checklist and Media" : "Checklist"}
-                               </Link>
-                             </div>
-                           ))}
-                        </div>
-                      ) : (
-                        <p className="font-mono text-gray-500 italic">No checklists available.</p>
-                      )}
-                    </div>
-
-                    {/* Species Total Table */}
-                    <div className="mb-8">
-                      <h3 className={sharedH3Class}>Species Totals</h3>
-                      <div className="overflow-x-auto border-t border-b border-black">
-                        <table className="min-w-full divide-y divide-gray-300 text-sm font-mono">
-                          <thead>
-                            <tr>
-                              <th className="px-2 py-3 text-left font-bold">Species</th>
-                              <th className="px-2 py-3 text-right font-bold">Count</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-gray-300">
-                            {overallTotals.map(item => (
-                              <tr key={item.commonName}>
-                                <td className="px-2 py-2 whitespace-nowrap">
-                                  <div className="font-bold">{item.commonName}</div>
-                                  <div className="text-xs italic text-gray-600">{item.scientificName}</div>
-                                </td>
-                                <td className="px-2 py-2 whitespace-nowrap text-right font-bold">
-                                  {item.onlyX ? 'X' : item.total}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-
-                    {/* Media from Location */}
-                    <div className="mb-8">
-                      <h3 className={sharedH3Class}>Media</h3>
-                      {locationMedia.length > 0 ? (
-                        <div className="space-y-8">
-                           {locationMedia.map(group => (
-                             <div key={group.checklistId} className="border border-black p-4 bg-white">
-                               <div className="flex flex-row items-center justify-between mb-4 border-b border-black pb-2">
-                                 <div className="font-mono text-sm font-bold">{group.date} {group.time}</div>
-                                 <Link
-                                   href={`/checklist/${group.checklistId}?locationId=${loc.id}`}
-                                   className="font-mono text-sm hover:underline"
-                                   style={{ color: secondaryColor }}
-                                 >
-                                   Checklist
-                                 </Link>
-                               </div>
-                               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                 {group.items.map((m, idx) => (
-                                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-gray-200 hover:border-black transition-colors"
-                                      onClick={() => {
-                                        setCurrentMediaList(group.items);
-                                        setLightboxIndex(idx);
-                                      }}
-                                    >
-                                       <div className="aspect-square bg-gray-100 overflow-hidden relative">
-                                         <img
-                                           src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
-                                           alt={m.CommonName}
-                                           className="object-cover w-full h-full"
-                                           loading="lazy"
-                                         />
-                                       </div>
-                                       <div className="p-2 text-xs font-mono bg-white text-black truncate">
-                                          {m.CommonName}
-                                       </div>
-                                    </div>
-                                 ))}
-                               </div>
-                             </div>
-                           ))}
-                        </div>
-                      ) : (
-                        <p className="font-mono text-gray-500 italic">No media available for this location.</p>
-                      )}
-                    </div>
-
-                    {/* Line Chart */}
-                    <div>
-                      <h3 className={sharedH3Class}>Observations over Time (Month/Year)</h3>
-                      <div className="h-[400px] md:h-[500px] border border-black p-4">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={barChartData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                            <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
-                            <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
-                            <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
-                            <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-
+                  <div className="border-t border-black">
+                    <LocationDetailPanel
+                      location={loc}
+                      checklists={locationChecklists}
+                      totals={overallTotals}
+                      chartData={barChartData}
+                      chartColor={CHART_COLORS[0]}
+                      media={locationMedia}
+                      onMediaSelect={openMedia}
+                    />
                   </div>
                 )}
-                </div>
-              );
-            })}
-          </div>
-          </div>
-        )}
-      </div>
+              </div>
+            );
+          })}
+        </div>
+      </AccordionSection>
 
-      {/* Media Accordion */}
-      <div className="w-full">
-        <button
-          onClick={() => handleTabClick('media')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
-        >
-          <span className="text-lg mr-2">{activeTab === 'media' ? '▼' : '▶'}</span>
-          Media
-        </button>
-        {activeTab === 'media' && (
-          <div className="flex flex-col w-full min-h-[500px] py-4">
-          <div className="flex-1 space-y-8">
-            {allMedia.map((group) => (
-              <div key={group.checklistId} className={sharedContainerClass + " p-4 md:p-6"}>
-                <div className="flex flex-row items-center justify-between mb-4 border-b border-black pb-2">
-                  <div className="font-bold text-base md:text-lg font-serif">{group.location}</div>
-                  <div className="font-mono text-sm flex items-center space-x-4">
-                    <span>{group.date} {group.time}</span>
-                    <Link
-                      href={`/checklist/${group.checklistId}`}
-                      className="hover:underline"
-                      style={{ color: secondaryColor }}
-                    >
-                      Checklist
-                    </Link>
+      <AccordionSection label="Media" isOpen={activeTab === 'media'} onToggle={() => handleTabClick('media')} contentClassName="min-h-[500px]">
+        <div className="flex-1 space-y-8">
+          {allMedia.map((group) => (
+            <Panel key={group.checklistId} className="p-4 md:p-6">
+              <div className="flex flex-row items-center justify-between mb-4 border-b border-black pb-2">
+                <div className="font-bold text-base md:text-lg font-serif">{group.location}</div>
+                <div className="font-mono text-sm flex items-center space-x-4">
+                  <span>{group.date} {group.time}</span>
+                  <Link href={`/checklist/${group.checklistId}`} className="hover:underline text-[var(--accent)]">
+                    Checklist
+                  </Link>
+                </div>
+              </div>
+              <MediaGrid items={group.items} onSelect={(idx) => openMedia(group.items, idx)} />
+            </Panel>
+          ))}
+          {allMedia.length === 0 && <EmptyState>No media available.</EmptyState>}
+        </div>
+      </AccordionSection>
+
+      <AccordionSection
+        label={activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}
+        isOpen={activeTab === 'field-notes'}
+        onToggle={() => handleTabClick('field-notes')}
+        contentClassName="min-h-[500px]"
+      >
+        <div className="flex-1 space-y-4">
+          {fieldNotes.length > 0 ? fieldNotes.map((note) => {
+            const isSelected = selectedNoteId === note.id;
+
+            return (
+              <div key={note.id} className={`border border-black ${isSelected ? 'border-2' : ''}`}>
+                <button
+                  onClick={() => {
+                    if (isSelected) {
+                      setSelectedNoteId(null);
+                    } else {
+                      setSelectedNoteId(note.id);
+                      setTimeout(() => {
+                         scrollToTop();
+                      }, 50);
+                    }
+                  }}
+                  aria-expanded={isSelected}
+                  className={`w-full text-left p-4 font-mono text-sm transition-colors ${isSelected ? 'bg-black text-white' : 'bg-white text-[var(--accent)]'}`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-base md:text-lg">{note.title}</span>
+                    <span>{note.date}</span>
                   </div>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {group.items.map((m, idx) => (
-                    <div key={m.MLCatalogNumber} className="cursor-pointer border border-gray-200 hover:border-black transition-colors"
-                      onClick={() => {
-                        setCurrentMediaList(group.items);
-                        setLightboxIndex(idx);
-                      }}
-                    >
-                        <div className="aspect-square bg-gray-100 overflow-hidden relative">
-                          <img
-                            src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
-                            alt={m.CommonName}
-                            className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="p-2 text-xs font-mono bg-white text-black truncate">
-                          {m.CommonName}
-                        </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-            {allMedia.length === 0 && (
-                <div className="p-8 border border-black text-center font-mono text-gray-500">
-                    No media available.
-                </div>
-            )}
-          </div>
-          </div>
-        )}
-      </div>
+                </button>
 
-      {/* Notes Accordion */}
-      <div className="w-full">
-        <button
-          onClick={() => handleTabClick('field-notes')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
-        >
-          <span className="text-lg mr-2">{activeTab === 'field-notes' ? '▼' : '▶'}</span>
-          {activeTab === 'field-notes' && selectedNoteId !== null ? 'Return' : 'Notes'}
-        </button>
-        {activeTab === 'field-notes' && (
-          <div className="flex flex-col w-full min-h-[500px] py-4">
-          <div className="flex-1 space-y-4">
-            {fieldNotes.length > 0 ? fieldNotes.map((note) => {
-              const isSelected = selectedNoteId === note.id;
-
-              let textColorClass = 'text-black';
-              let bgColorClass = 'bg-white';
-              let inlineStyle = {};
-
-              if (isSelected) {
-                bgColorClass = 'bg-black';
-                textColorClass = 'text-white';
-              } else {
-                inlineStyle = { color: secondaryColor };
-              }
-
-              return (
-                <div key={note.id} className={`border border-black ${isSelected ? 'border-2' : ''}`}>
-                  <button
-                    onClick={() => {
-                      if (isSelected) {
-                        setSelectedNoteId(null);
-                      } else {
-                        setSelectedNoteId(note.id);
-                        setTimeout(() => {
-                           scrollToTop();
-                        }, 50);
-                      }
-                    }}
-                    className={`w-full text-left p-4 font-mono text-sm transition-colors ${bgColorClass} ${textColorClass}`}
-                    style={inlineStyle}
-                  >
-                    <div className="flex justify-between items-center">
-                      <span className="font-bold text-base md:text-lg">{note.title}</span>
-                      <span>{note.date}</span>
-                    </div>
-                  </button>
-
-                  {isSelected && (
-                    <div className="p-4 md:p-8 border-t border-black bg-white text-black">
-                      {/* Meta Information */}
-                      <div className="mb-8 flex flex-col gap-4 font-mono text-sm border-b border-black pb-4">
+                {isSelected && (
+                  <div className="p-4 md:p-8 border-t border-black bg-white text-black">
+                    {/* Meta Information */}
+                    <div className="mb-8 flex flex-col gap-4 font-mono text-sm border-b border-black pb-4">
+                      <div>
+                         <span className="font-bold">Date:</span> {note.date}
+                      </div>
+                      {note.location && (
                         <div>
-                           <span className="font-bold">Date:</span> {note.date}
+                          <span className="font-bold">Location:</span> {note.location}
                         </div>
-                        {note.location && (
-                          <div>
-                            <span className="font-bold">Location:</span> {note.location}
-                          </div>
-                        )}
-                        {note.conditions && (
-                          <div>
-                            <span className="font-bold">Conditions:</span> {note.conditions}
-                          </div>
-                        )}
-                        {note.links && note.links.length > 0 && (
-                          <div>
-                            <span className="font-bold">Links:</span>
-                            <ul className="list-disc list-inside mt-1">
-                              {note.links.map((link, i) => (
-                                <li key={i}>
-                                  <a href={link} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 underline" style={{ color: secondaryColor }}>
-                                    {link}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="prose prose-p:font-serif prose-headings:font-serif prose-a:text-[#ff6361] max-w-none">
-                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                           {note.content}
-                         </ReactMarkdown>
-                      </div>
+                      )}
+                      {note.conditions && (
+                        <div>
+                          <span className="font-bold">Conditions:</span> {note.conditions}
+                        </div>
+                      )}
+                      {note.links && note.links.length > 0 && (
+                        <div>
+                          <span className="font-bold">Links:</span>
+                          <ul className="list-disc list-inside mt-1">
+                            {note.links.map((link, i) => (
+                              <li key={i}>
+                                <a href={link} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 underline text-[var(--accent)]">
+                                  {link}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );
-            }) : (
-              <div className="p-8 border border-black text-center font-mono text-gray-500">
-                No field notes available. Create markdown files in the field-notes directory.
+
+                    {/* Content */}
+                    <div className="prose prose-p:font-serif prose-headings:font-serif prose-a:text-[var(--accent)] max-w-none">
+                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                         {note.content}
+                       </ReactMarkdown>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          </div>
-        )}
-      </div>
+            );
+          }) : (
+            <EmptyState>No field notes available. Create markdown files in the field-notes directory.</EmptyState>
+          )}
+        </div>
+      </AccordionSection>
 
-      {/* About Accordion */}
-      <div className="w-full">
-        <button
-          onClick={() => handleTabClick('about')}
-          className="w-full text-left font-serif text-2xl hover:text-gray-600 transition-colors whitespace-nowrap"
-        >
-          <span className="text-lg mr-2">{activeTab === 'about' ? '▼' : '▶'}</span>
-          About
-        </button>
-        {activeTab === 'about' && (
-          <div className="flex flex-col w-full min-h-[500px] py-4">
-            <div className="border border-black bg-white p-4 md:p-8">
-              <section className="space-y-6 text-lg font-serif">
-                <p>
-                  This project is built and maintained by Felipe. Resources and additional information are available below. Thank you.
+      <AccordionSection label="About" isOpen={activeTab === 'about'} onToggle={() => handleTabClick('about')} contentClassName="min-h-[500px]">
+        <Panel className="p-4 md:p-8">
+          <section className="space-y-6 text-lg font-serif">
+            <p>
+              This project is built and maintained by Felipe. Resources and additional information are available below. Thank you.
+            </p>
+
+            <ul className="list-disc list-inside space-y-4 ml-4">
+              <li>
+                <a
+                  href="https://github.com/felipeharker/hark-ornithology"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline font-mono text-[var(--accent)]"
+                >
+                  Github Repository
+                </a>
+                <p className="mt-1">
+                  See underlying project codebase, contribute your own ideas, and host this site locally.
                 </p>
-
-                <ul className="list-disc list-inside space-y-4 ml-4">
-                  <li>
-                    <a
-                      href="https://github.com/felipeharker/hark-ornithology"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: secondaryColor }}
-                      className="hover:underline font-mono"
-                    >
-                      Github Repository
-                    </a>
-                    <p className="mt-1">
-                      See underlying project codebase, contribute your own ideas, and host this site locally.
-                    </p>
-                  </li>
-                  <li>
-                    <a
-                      href="https://ebird.org/profile/ODE0ODA5NQ/world"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: secondaryColor }}
-                      className="hover:underline font-mono"
-                    >
-                      eBird Account
-                    </a>
-                    <p className="mt-1">
-                      All checklists, locations, observations, and more can also be seen on eBird.
-                    </p>
-                  </li>
-                  <li>
-                    <a
-                      href="https://media.ebird.org/catalog?unconfirmed=incl&mediaType=photo&userId=USER8148095"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: secondaryColor }}
-                      className="hover:underline font-mono"
-                    >
-                      Macaulay Library
-                    </a>
-                      <p className="mt-1">
-                        Media such as images, audio, and video recordings are cataloged on Macaulay Library.
-                      </p>
-                  </li>
-                  <li>
-                    <a
-                      href="https://merlin.allaboutbirds.org/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: secondaryColor }}
-                      className="hover:underline font-mono"
-                    >
-                      Merlin Bird ID
-                    </a>
-                    <p className="mt-1">
-                      State-of-the-art visual and audio bird identification mobile app. Invaluable resource for any birder.
-                    </p>
-                  </li>
-                </ul>
-              </section>
-            </div>
-          </div>
-        )}
-      </div>
+              </li>
+              <li>
+                <a
+                  href="https://ebird.org/profile/ODE0ODA5NQ/world"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline font-mono text-[var(--accent)]"
+                >
+                  eBird Account
+                </a>
+                <p className="mt-1">
+                  All checklists, locations, observations, and more can also be seen on eBird.
+                </p>
+              </li>
+              <li>
+                <a
+                  href="https://media.ebird.org/catalog?unconfirmed=incl&mediaType=photo&userId=USER8148095"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline font-mono text-[var(--accent)]"
+                >
+                  Macaulay Library
+                </a>
+                  <p className="mt-1">
+                    Media such as images, audio, and video recordings are cataloged on Macaulay Library.
+                  </p>
+              </li>
+              <li>
+                <a
+                  href="https://merlin.allaboutbirds.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline font-mono text-[var(--accent)]"
+                >
+                  Merlin Bird ID
+                </a>
+                <p className="mt-1">
+                  State-of-the-art visual and audio bird identification mobile app. Invaluable resource for any birder.
+                </p>
+              </li>
+            </ul>
+          </section>
+        </Panel>
+      </AccordionSection>
 
       {lightboxIndex !== null && (
          <ImageLightbox
@@ -932,7 +598,7 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
 
 export default function LocationDashboard({ data, mediaData = [], fieldNotes = [], options }: LocationDashboardProps) {
   return (
-    <Suspense fallback={<div className="font-mono">Loading data...</div>}>
+    <Suspense fallback={<EmptyState className="animate-pulse">Loading data...</EmptyState>}>
       <LocationDashboardInner data={data} mediaData={mediaData} fieldNotes={fieldNotes} options={options} />
     </Suspense>
   );

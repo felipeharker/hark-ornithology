@@ -20,7 +20,8 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Enforce flat UI constraints */
+/* Enforce flat UI constraints. Note: this also zeroes out Tailwind's
+   box-shadow-based `ring-*` utilities - use `outline` for focus rings. */
 * {
   border-radius: 0 !important;
   box-shadow: none !important;

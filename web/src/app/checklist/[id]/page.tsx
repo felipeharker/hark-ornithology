@@ -1,15 +1,58 @@
+import type { Metadata } from 'next';
 import { getLatestEbirdData } from '@/lib/parseEbirdData';
 import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
+import { getSiteOptions } from '@/lib/parseOptions';
 import ChecklistClientView from '@/components/ChecklistClientView';
+import { Badge } from '@/components/ui/Badge';
+import { ChevronLeftIcon, PersonIcon, ClockIcon, CommentIcon } from '@/components/ui/Icons';
 import Link from 'next/link';
+
+// eBird dates come as either YYYY-MM-DD or MM/DD/YYYY; disambiguate by part length.
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  try {
+    const parts = dateStr.split(/[-/]/);
+    if (parts.length >= 3) {
+      let year, month, day;
+      if (parts[0].length === 4) {
+        [year, month, day] = parts;
+      } else {
+        [month, day, year] = parts;
+      }
+      const date = new Date(parseInt(year as string), parseInt(month as string) - 1, parseInt(day as string));
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+  } catch (_e) {}
+  return dateStr;
+}
 
 export async function generateStaticParams() {
   const { data } = getLatestEbirdData();
-  const { data: allMediaData } = getLatestEbirdMediaData();
   const submissionIds = new Set(data.map((obs) => obs.SubmissionID).filter(Boolean));
   return Array.from(submissionIds).map((id) => ({
     id: id as string,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id: submissionId } = await params;
+  const { data } = getLatestEbirdData();
+  const checklistData = data.filter((obs) => obs.SubmissionID === submissionId);
+
+  if (checklistData.length === 0) {
+    return { title: 'Checklist Not Found' };
+  }
+
+  const meta = checklistData[0];
+  const options = getSiteOptions();
+  return {
+    title: `${formatDate(meta.Date)} · ${meta.Location} | ${options.title}`,
+    description: `${checklistData.length} species recorded at ${meta.Location} on ${formatDate(meta.Date)}.`,
+  };
 }
 
 // Next.js dynamic route params
@@ -47,27 +90,6 @@ export default async function ChecklistPage({
 
   // Extract checklist metadata from the first observation (they should all share these)
   const meta = checklistData[0];
-
-  // Format Date nicely
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return '';
-    try {
-      const parts = dateStr.split(/[-/]/);
-      if (parts.length >= 3) {
-        let year, month, day;
-        if (parts[0].length === 4) {
-          [year, month, day] = parts;
-        } else {
-           [month, day, year] = parts;
-        }
-
-        const date = new Date(parseInt(year as string), parseInt(month as string) - 1, parseInt(day as string));
-        return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-      }
-    } catch(_e) {}
-    return dateStr;
-  };
-
   const formattedDate = formatDate(meta.Date);
 
   // Group official location string (e.g. County, State, Country/Region)
@@ -83,9 +105,7 @@ export default async function ChecklistPage({
             href={`/?locationId=${meta.LocationID}`}
             className="flex items-center text-black font-mono text-sm w-full"
           >
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
+            <ChevronLeftIcon className="mr-2" />
             Return to Listing
           </Link>
         </div>
@@ -109,12 +129,7 @@ export default async function ChecklistPage({
             {meta.NumberOfObservers && (
               <div className="flex items-start">
                 <div className="w-8 text-gray-500 flex-shrink-0">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                  </svg>
+                  <PersonIcon />
                 </div>
                 <div>{meta.NumberOfObservers} Observer{parseInt(meta.NumberOfObservers) > 1 ? 's' : ''}</div>
               </div>
@@ -123,15 +138,12 @@ export default async function ChecklistPage({
             {meta.Protocol && (
               <div className="flex items-start">
                 <div className="w-8 text-gray-500 flex-shrink-0">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
+                  <ClockIcon />
                 </div>
                 <div>
                   {meta.Protocol}
                   {meta.AllObsReported === '0' && (
-                    <span className="ml-2 px-2 py-0.5 bg-blue-500 text-white text-xs rounded-full">Incomplete</span>
+                    <Badge variant="inverted" className="ml-2">Incomplete</Badge>
                   )}
                 </div>
               </div>
@@ -140,9 +152,7 @@ export default async function ChecklistPage({
             {meta.ChecklistComments && (
               <div className="flex items-start">
                 <div className="w-8 text-gray-500 flex-shrink-0 mt-0.5">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                  </svg>
+                  <CommentIcon />
                 </div>
                 <div className="text-gray-800">{meta.ChecklistComments}</div>
               </div>
