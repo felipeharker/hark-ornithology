@@ -28,8 +28,9 @@ export function getFieldNotes(): FieldNote[] {
       // Remove ".md" from file name to get slug
       const slug = fileName.replace(/\.md$/, '');
 
-      // Extract the id from the filename (e.g. field-note-1.md -> 1)
-      const match = fileName.match(/field-note-(\d+)\.md/);
+      // Extract the id from the filename (e.g. field-note-1.md -> 1).
+      // Anchored so template/reference files (TEMPLATE.md, README.md) are skipped.
+      const match = fileName.match(/^field-note-(\d+)\.md$/);
       const id = match ? parseInt(match[1], 10) : -1;
 
       const fullPath = path.join(notesDirectory, fileName);

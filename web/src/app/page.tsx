@@ -2,9 +2,8 @@ import { getLatestEbirdData } from '@/lib/parseEbirdData';
 import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
 import { getFieldNotes } from '@/lib/parseFieldNotes';
 import LocationDashboard from '@/components/LocationDashboard';
-import { Suspense } from 'react';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { getSiteOptions } from '@/lib/parseOptions';
-import Link from 'next/link';
 
 // Wrap search param usage in a component to let Next.js stream it or handle it cleanly
 export default function Home() {
@@ -54,14 +53,12 @@ export default function Home() {
         <section className="mt-16 md:mt-24">
           {data.length > 0 ? (
             <div className="bg-white">
-              <Suspense fallback={<div className="font-mono">Loading data...</div>}>
-                <LocationDashboard data={data} mediaData={mediaData} fieldNotes={fieldNotes} options={options} />
-              </Suspense>
+              <LocationDashboard data={data} mediaData={mediaData} fieldNotes={fieldNotes} options={options} />
             </div>
           ) : (
-            <div className="p-8 md:p-12 border border-dashed border-black text-center font-mono text-gray-500">
+            <EmptyState className="p-8 md:p-12">
               No observation data found. Please add ebird CSV data to the observation-data directory.
-            </div>
+            </EmptyState>
           )}
         </section>
       </div>

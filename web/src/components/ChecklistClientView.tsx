@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { EbirdObservation } from '@/lib/parseEbirdData';
 import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
 import ImageLightbox from './ImageLightbox';
+import { MediaGrid } from './ui/MediaGrid';
+import { Badge } from './ui/Badge';
 
 interface ChecklistClientViewProps {
   checklistData: EbirdObservation[];
@@ -48,9 +50,7 @@ export default function ChecklistClientView({ checklistData, mediaData }: Checkl
                   )}
 
                   {obs.BreedingCode && (
-                    <div className="text-xs font-mono inline-block px-2 py-1 border border-black bg-white text-black mt-2">
-                      Breeding Code: {obs.BreedingCode}
-                    </div>
+                    <Badge className="mt-2">Breeding Code: {obs.BreedingCode}</Badge>
                   )}
                 </div>
               </div>
@@ -59,27 +59,7 @@ export default function ChecklistClientView({ checklistData, mediaData }: Checkl
         </div>
       ) : (
         <div className="p-4 md:p-6 bg-white">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {mediaData.map((m, idx) => (
-              <div
-                key={m.MLCatalogNumber}
-                className="cursor-pointer border border-gray-200 hover:border-black transition-colors bg-white"
-                onClick={() => setLightboxIndex(idx)}
-              >
-                <div className="aspect-square bg-gray-100 overflow-hidden relative">
-                  <img
-                    src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
-                    alt={m.CommonName}
-                    className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-2 text-xs font-mono bg-white text-black truncate">
-                  {m.CommonName}
-                </div>
-              </div>
-            ))}
-          </div>
+          <MediaGrid items={mediaData} onSelect={setLightboxIndex} />
         </div>
       )}
 

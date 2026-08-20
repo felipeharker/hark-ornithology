@@ -4,13 +4,12 @@ import { useMemo, useRef, useEffect } from 'react';
 import Map, { Marker, MapRef } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { EbirdObservation } from '../lib/parseEbirdData';
-import { SiteOptions } from '../lib/parseOptions';
+import { MapPinIcon } from './ui/Icons';
 
 interface MapViewProps {
   data: EbirdObservation[];
   selectedLocationId: string | null;
   onLocationSelect: (id: string | null) => void;
-  options: SiteOptions;
 }
 
 interface LocationGroup {
@@ -24,7 +23,7 @@ interface LocationGroup {
   observations: EbirdObservation[];
 }
 
-export default function MapView({ data, selectedLocationId, onLocationSelect, options }: MapViewProps) {
+export default function MapView({ data, selectedLocationId, onLocationSelect }: MapViewProps) {
   const mapRef = useRef<MapRef>(null);
 
   const locationGroups = useMemo(() => {
@@ -83,17 +82,10 @@ export default function MapView({ data, selectedLocationId, onLocationSelect, op
       >
         {locationGroups.map((group) => {
           const isSelected = selectedLocation?.id === group.id;
-
-          let markerColorClass = '';
-          let inlineStyle = {};
-
-          if (isSelected) {
-             markerColorClass = 'text-black hover:text-gray-800 z-10 relative scale-125';
-          } else {
-             inlineStyle = { color: options.secondaryColorHex };
-             // Use opacity on hover for non-selected items to give a visual cue
-             markerColorClass = 'hover:opacity-80';
-          }
+          // Use opacity on hover for non-selected items to give a visual cue
+          const markerColorClass = isSelected
+            ? 'text-black hover:text-gray-800 z-10 relative scale-125'
+            : 'text-[var(--accent)] hover:opacity-80';
 
           return (
             <Marker
@@ -106,12 +98,13 @@ export default function MapView({ data, selectedLocationId, onLocationSelect, op
                 onLocationSelect(group.id);
               }}
             >
-              <div className={`cursor-pointer transition-colors ${markerColorClass}`} style={inlineStyle}>
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-                  <circle cx="12" cy="9" r="3" fill="white" />
-                </svg>
-              </div>
+              <button
+                type="button"
+                aria-label={`${group.location}${isSelected ? ' (selected)' : ''}`}
+                className={`cursor-pointer transition-colors ${markerColorClass}`}
+              >
+                <MapPinIcon />
+              </button>
             </Marker>
           );
         })}

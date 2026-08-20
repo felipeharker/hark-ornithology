@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { EbirdMediaObservation } from '../lib/parseEbirdMediaData';
 
 interface ImageLightboxProps {
@@ -12,13 +12,13 @@ interface ImageLightboxProps {
 export default function ImageLightbox({ mediaList, initialIndex, onClose }: ImageLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % mediaList.length);
-  };
+  }, [mediaList.length]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + mediaList.length) % mediaList.length);
-  };
+  }, [mediaList.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -28,15 +28,22 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, mediaList.length, onClose]);
+  }, [nextImage, prevImage, onClose]);
 
   const currentMedia = mediaList[currentIndex];
   if (!currentMedia) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${currentMedia.CommonName} image viewer`}
+    >
       <button
-        onClick={onClose}
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        aria-label="Close"
         className="absolute top-4 right-4 text-white text-3xl font-mono hover:text-gray-300 z-50"
       >
         &times;
@@ -45,13 +52,15 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
       {mediaList.length > 1 && (
         <>
           <button
-            onClick={prevImage}
+            onClick={(e) => { e.stopPropagation(); prevImage(); }}
+            aria-label="Previous image"
             className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl p-2 hover:text-gray-300 z-50 font-mono"
           >
             &#8592;
           </button>
           <button
-            onClick={nextImage}
+            onClick={(e) => { e.stopPropagation(); nextImage(); }}
+            aria-label="Next image"
             className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl p-2 hover:text-gray-300 z-50 font-mono"
           >
             &#8594;
@@ -59,7 +68,10 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
         </>
       )}
 
-      <div className="relative w-full h-full max-w-5xl max-h-[85vh] flex flex-col items-center justify-center p-4">
+      <div
+        className="relative w-full h-full max-w-5xl max-h-[85vh] flex flex-col items-center justify-center p-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <img
           src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${currentMedia.MLCatalogNumber}/1200`}
           alt={currentMedia.CommonName}
