@@ -12,7 +12,6 @@ import remarkGfm from 'remark-gfm';
 import ImageLightbox from './ImageLightbox';
 import MapView from './Map';
 import { MediaGrid } from './ui/MediaGrid';
-import { Sparkline } from './ui/Sparkline';
 import { SearchIcon } from './ui/Icons';
 
 interface HomeDocumentProps {
@@ -37,16 +36,6 @@ const ABOUT_LINKS = [
   { label: 'Macaulay Library', href: 'https://media.ebird.org/catalog?unconfirmed=incl&mediaType=photo&userId=USER8148095', desc: 'Media such as images, audio, and video recordings are cataloged on Macaulay Library.' },
   { label: 'Merlin Bird ID', href: 'https://merlin.allaboutbirds.org/', desc: 'State-of-the-art visual and audio bird identification mobile app. Invaluable resource for any birder.' },
 ];
-
-function getYearMonth(dateStr?: string) {
-  if (!dateStr) return null;
-  const parts = dateStr.split(/[-/]/);
-  if (parts.length >= 3) {
-    if (parts[0].length === 4) return `${parts[0]}-${parts[1].padStart(2, '0')}`;
-    return `${parts[2]}-${parts[0].padStart(2, '0')}`;
-  }
-  return null;
-}
 
 function HomeDocumentInner({ data, mediaData, fieldNotes, options }: HomeDocumentProps) {
   const searchParams = useSearchParams();
@@ -89,7 +78,7 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, options }: HomeDocumen
   };
 
   const locations = useMemo(() => {
-    const map = new Map<string, { id: string; name: string; place: string; count: number; isHotspot: boolean }>();
+    const map = new Map<string, { id: string; name: string; place: string; count: number }>();
     data.forEach((obs) => {
       if (!obs.LocationID) return;
       if (!map.has(obs.LocationID)) {
@@ -98,7 +87,6 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, options }: HomeDocumen
           name: obs.Location,
           place: [obs.County, obs.StateProvince].filter(Boolean).join(', '),
           count: 0,
-          isHotspot: obs.LocationID.startsWith('L'),
         });
       }
       map.get(obs.LocationID)!.count += 1;
@@ -162,35 +150,6 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, options }: HomeDocumen
       return a.common.localeCompare(b.common);
     });
   }, [locationData]);
-
-  const selectedSparkline = useMemo(() => {
-    if (!locationData.length || !data.length) return [];
-    let minYm: string | null = null;
-    let maxYm: string | null = null;
-    data.forEach((obs) => {
-      const ym = getYearMonth(obs.Date);
-      if (ym) {
-        if (!minYm || ym < minYm) minYm = ym;
-        if (!maxYm || ym > maxYm) maxYm = ym;
-      }
-    });
-    if (!minYm || !maxYm) return [];
-    const months: string[] = [];
-    let [y, m] = (minYm as string).split('-').map(Number);
-    const [maxY, maxM] = (maxYm as string).split('-').map(Number);
-    while (y < maxY || (y === maxY && m <= maxM)) {
-      months.push(`${y}-${String(m).padStart(2, '0')}`);
-      m += 1;
-      if (m > 12) { m = 1; y += 1; }
-    }
-    const counts = new Map<string, number>();
-    months.forEach((mo) => counts.set(mo, 0));
-    locationData.forEach((obs) => {
-      const ym = getYearMonth(obs.Date);
-      if (ym && counts.has(ym)) counts.set(ym, counts.get(ym)! + 1);
-    });
-    return months.map((mo) => ({ date: mo, count: counts.get(mo) || 0 }));
-  }, [locationData, data]);
 
   const mediaGroups = useMemo(() => {
     const groups: Record<string, { checklistId: string; date: string; time: string; location: string; items: EbirdMediaObservation[] }> = {};
@@ -319,7 +278,6 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, options }: HomeDocumen
                       >
                         <td>
                           <strong>{loc.name}</strong>
-                          {loc.isHotspot && <span className="tag tag-neutral" style={{ marginLeft: 'var(--space-2)' }}>Hotspot</span>}
                         </td>
                         <td style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>{loc.place}</td>
                         <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)' }}>{loc.count}</td>
@@ -360,10 +318,6 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, options }: HomeDocumen
                                 </tbody>
                               </table>
                               <div className="hk-figcap" style={{ marginTop: 'var(--space-2)' }}>Table — species totals at {loc.name}.</div>
-
-                              <div className="hk-label" style={{ margin: 'var(--space-6) 0 var(--space-2)' }}>Observations over Time</div>
-                              <Sparkline data={selectedSparkline} />
-                              <div className="hk-figcap" style={{ marginTop: 'var(--space-2)' }}>Figure — cumulative observations at {loc.name}.</div>
                             </div>
                           </td>
                         </tr>
