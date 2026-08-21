@@ -6,7 +6,4 @@ conditions: "Late summer/early fall"
 links:
   - "https://ebird.org/"
 ---
-
-# Trip Planning Report
-
 [WIP]
