@@ -11,16 +11,6 @@ import { useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
-
 interface LocationDashboardProps {
   data: EbirdObservation[];
   mediaData?: EbirdMediaObservation[];
@@ -36,8 +26,6 @@ type TabView = 'map' | 'list' | 'media' | 'field-notes' | 'about';
 
 function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options }: LocationDashboardProps) {
   const secondaryColor = options.secondaryColorHex || '#ff6361';
-  // Avoid duplicating colors if secondary is the same as the default chart color
-  const CHART_COLORS = ['#003f5c', secondaryColor, '#bc5090', '#ffa600', '#58508d'];
   const searchParams = useSearchParams();
   const initialLocationId = searchParams.get('locationId');
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(initialLocationId);
@@ -80,65 +68,6 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
     if (!selectedLocationId) return [];
     return data.filter((obs) => obs.LocationID === selectedLocationId);
   }, [data, selectedLocationId]);
-
-  const barChartData = useMemo(() => {
-    if (!locationData.length || !data.length) return [];
-
-    const getYearMonth = (dateStr?: string) => {
-      if (!dateStr) return null;
-      const parts = dateStr.split(/[-/]/);
-      if (parts.length >= 3) {
-        if (parts[0].length === 4) {
-          return `${parts[0]}-${parts[1].padStart(2, '0')}`;
-        } else {
-          return `${parts[2]}-${parts[0].padStart(2, '0')}`;
-        }
-      }
-      return null;
-    };
-
-    let minDateStr: string | null = null;
-    let maxDateStr: string | null = null;
-    data.forEach((obs) => {
-      const ym = getYearMonth(obs.Date);
-      if (ym) {
-        if (!minDateStr || ym < minDateStr) minDateStr = ym;
-        if (!maxDateStr || ym > maxDateStr) maxDateStr = ym;
-      }
-    });
-
-    if (!minDateStr || !maxDateStr) return [];
-
-    const minDate: string = minDateStr;
-    const maxDate: string = maxDateStr;
-
-    const allMonths: string[] = [];
-    let [currYear, currMonth] = minDate.split('-').map(Number);
-    const [maxYear, maxMonth] = maxDate.split('-').map(Number);
-
-    while (currYear < maxYear || (currYear === maxYear && currMonth <= maxMonth)) {
-      allMonths.push(`${currYear}-${currMonth.toString().padStart(2, '0')}`);
-      currMonth++;
-      if (currMonth > 12) {
-        currMonth = 1;
-        currYear++;
-      }
-    }
-
-    const monthlyCounts = new Map<string, number>();
-    allMonths.forEach(m => monthlyCounts.set(m, 0));
-
-    locationData.forEach((obs) => {
-      const ym = getYearMonth(obs.Date);
-      if (ym && monthlyCounts.has(ym)) {
-        monthlyCounts.set(ym, monthlyCounts.get(ym)! + 1);
-      }
-    });
-
-    return Array.from(monthlyCounts.entries())
-      .map(([date, count]) => ({ date, count }))
-      .sort((a, b) => a.date.localeCompare(b.date));
-  }, [locationData, data]);
 
   const overallTotals = useMemo(() => {
     if (!locationData.length) return [];
@@ -473,22 +402,6 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                         </div>
                       </div>
 
-                      {/* Line Chart */}
-                      <div>
-                        <h3 className={sharedH3Class}>Observations over Time (Month/Year)</h3>
-                        <div className="h-[400px] md:h-[500px] border border-black p-4">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={barChartData}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                              <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
-                              <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
-                              <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
-                              <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
-                            </LineChart>
-                          </ResponsiveContainer>
-                        </div>
-                      </div>
-
                     </div>
                   </div>
                 );
@@ -648,22 +561,6 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
                       ) : (
                         <p className="font-mono text-gray-500 italic">No media available for this location.</p>
                       )}
-                    </div>
-
-                    {/* Line Chart */}
-                    <div>
-                      <h3 className={sharedH3Class}>Observations over Time (Month/Year)</h3>
-                      <div className="h-[400px] md:h-[500px] border border-black p-4">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={barChartData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                            <XAxis dataKey="date" tick={{fontFamily: 'monospace', fontSize: 12}} />
-                            <YAxis allowDecimals={false} tick={{fontFamily: 'monospace', fontSize: 12}} />
-                            <Tooltip contentStyle={{ borderRadius: 0, border: '1px solid black', fontFamily: 'monospace' }} />
-                            <Line type="monotone" dataKey="count" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} isAnimationActive={false} />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </div>
                     </div>
 
                   </div>
