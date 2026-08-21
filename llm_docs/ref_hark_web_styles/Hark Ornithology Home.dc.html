@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/modernist-28127e47-e5c5-4bd3-9e86-60a13508662d/styles.css">
+  <script src="_ds/modernist-28127e47-e5c5-4bd3-9e86-60a13508662d/_ds_bundle.js"></script>
+  <script src="./image-slot.js"></script>
+  <script src="./hark-data.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    a { color: var(--color-accent-700); }
+    a:hover { color: var(--color-accent-900); }
+    .hk-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.55; }
+    .hk-figcap { font-family: var(--font-mono); font-size: 11px; opacity: 0.55; }
+  </style>
+</helmet>
+
+<div style="background:var(--color-bg); color:var(--color-text); font-family:var(--font-body); min-height:100vh; --font-mono:'Roboto Mono', ui-monospace, monospace;">
+
+  <div style="display:flex; gap:var(--space-8); max-width:1000px; margin:0 auto; padding:0 var(--space-4); align-items:flex-start;">
+
+    <aside style="width:160px; flex-shrink:0; position:sticky; top:var(--space-6); padding-top:var(--space-8);">
+      <nav aria-label="Sections">
+        <ol style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:var(--space-1);">
+          <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+            <li>
+              <a href="{{ item.hash }}" style="display:block; padding:var(--space-2) 0 var(--space-2) var(--space-3); border-left:2px solid {{ item.borderColor }}; color:{{ item.color }}; font-weight:{{ item.weight }}; font-size:13px; font-family:var(--font-mono); text-decoration:none;" style-hover="color:var(--color-accent-900);">{{ item.n }}. {{ item.label }}</a>
+            </li>
+          </sc-for>
+        </ol>
+      </nav>
+    </aside>
+
+    <main style="max-width:720px; flex:1; min-width:0; padding:var(--space-8) 0 calc(var(--space-8) * 2); line-height:1.6;">
+
+<header>
+      <h1 style="margin:0 0 2px;">{{ siteTitle }}</h1>
+      <div style="font-family:var(--font-mono); font-size:13px; opacity:0.7;">Felipe Harker · Observer</div>
+
+      <div style="margin-top:var(--space-6); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+        <div class="hk-label" style="margin-bottom:var(--space-2);">Abstract</div>
+        <p style="max-width:68ch; font-size:16px; margin:0;">This project catalogs and shares birding observations from around the world, with checklists and media hosted on eBird and the Macaulay Library. It began as an experiment merging a love of birds with web development, and remains under active, frequent development.</p>
+      </div>
+
+    </header>
+
+    <section id="sec-map" style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">1.</span>
+        <h2 style="margin:0;">Map</h2>
+      </div>
+      <div style="width:100%; height:480px; border:1px solid var(--color-divider); margin-top:var(--space-4);">
+        <iframe src="Hark Ornithology Map.html" title="Observation map" style="width:100%; height:100%; border:none;"></iframe>
+      </div>
+      <div class="hk-figcap" style="margin-top:var(--space-2);">Figure 1 — {{ locationCount }} locations plotted from recorded coordinates.</div>
+
+      <sc-if value="{{ selectedLocation }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:var(--space-4); padding-top:var(--space-4); border-top:1px solid var(--color-divider);">
+          <div class="hk-label">Selected</div>
+          <h3 style="margin:var(--space-1) 0 var(--space-1);">{{ selectedLocation.name }}</h3>
+          <p style="margin:0 0 var(--space-2); font-family:var(--font-mono); font-size:13px; opacity:0.7;">{{ selectedLocation.place }} · {{ selectedLocation.count }} observations</p>
+          <a href="#sec-locations">View in Location Index →</a>
+        </div>
+      </sc-if>
+    </section>
+
+    <section id="sec-locations" style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">2.</span>
+        <h2 style="margin:0;">Locations</h2>
+      </div>
+      <div class="field" style="position:relative; margin-top:var(--space-4); max-width:340px;">
+        <label for="hd-filter" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);">Filter locations by name</label>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; left:10px; top:11px; opacity:0.5; pointer-events:none;"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        <input id="hd-filter" class="input" style="padding-left:32px;" placeholder="Filter locations by name…" value="{{ locationFilter }}" onChange="{{ onFilterChange }}">
+      </div>
+
+      <table class="table" style="margin-top:var(--space-4);">
+        <thead><tr><th>Location</th><th>Place</th><th style="text-align:right;">Obs.</th></tr></thead>
+        <tbody>
+          <sc-for list="{{ filteredLocations }}" as="loc" hint-placeholder-count="4">
+            <tr onClick="{{ loc.onSelect }}" style="cursor:pointer; border-left:{{ loc.rowBorder }};" style-hover="background:var(--color-surface);">
+              <td>
+                <strong>{{ loc.name }}</strong>
+                <sc-if value="{{ loc.hotspot }}" hint-placeholder-val="{{ false }}">
+                  <span class="tag tag-neutral" style="margin-left:var(--space-2);">Hotspot</span>
+                </sc-if>
+              </td>
+              <td style="font-family:var(--font-mono); font-size:13px;">{{ loc.place }}</td>
+              <td style="text-align:right; font-family:var(--font-mono);">{{ loc.count }}</td>
+            </tr>
+            <sc-if value="{{ loc.isSelected }}" hint-placeholder-val="{{ false }}">
+              <tr>
+                <td colspan="3" style="background:var(--color-surface); padding:0;">
+                  <div style="padding:var(--space-4) var(--space-3);">
+
+                    <div class="hk-label" style="margin-bottom:var(--space-2);">Checklists</div>
+                    <sc-if value="{{ selectedDetail.checklists.length }}" hint-placeholder-val="{{ true }}">
+                      <div style="margin-bottom:var(--space-6);">
+                        <sc-for list="{{ selectedDetail.checklists }}" as="cl" hint-placeholder-count="2">
+                          <div style="display:flex; gap:var(--space-3); align-items:baseline; padding:var(--space-2) 0; border-bottom:1px solid var(--color-divider); font-size:13px;">
+                            <span style="font-family:var(--font-mono); width:170px; flex-shrink:0;">{{ cl.date }} {{ cl.time }}</span>
+                            <a href="{{ cl.href }}">Checklist Report →</a>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+
+                    <div class="hk-label" style="margin-bottom:var(--space-2);">Species Observed</div>
+                    <table class="table" style="background:var(--color-bg);">
+                      <thead><tr><th>Species</th><th style="text-align:right;">Total</th></tr></thead>
+                      <tbody>
+                        <sc-for list="{{ selectedDetail.species }}" as="sp" hint-placeholder-count="3">
+                          <tr>
+                            <td>
+                              <div>{{ sp.common }}</div>
+                              <div style="font-family:var(--font-mono); font-style:italic; font-size:12px; opacity:0.6;">{{ sp.sci }}</div>
+                            </td>
+                            <td style="text-align:right; font-family:var(--font-mono);">{{ sp.displayTotal }}</td>
+                          </tr>
+                        </sc-for>
+                      </tbody>
+                    </table>
+                    <div class="hk-figcap" style="margin-top:var(--space-2);">Table — species totals at {{ selectedDetail.name }}.</div>
+
+                    <div class="hk-label" style="margin:var(--space-6) 0 var(--space-2);">Observations over Time</div>
+                    <svg width="100%" height="70" viewBox="0 0 220 56" preserveAspectRatio="none" style="display:block; border:1px solid var(--color-divider); background:var(--color-bg);">
+                      <polyline points="0,44 30,40 60,30 90,34 120,18 150,22 180,8 220,14" fill="none" stroke="var(--color-text)" stroke-width="2"/>
+                      <circle cx="220" cy="14" r="3" fill="var(--color-text)"/>
+                    </svg>
+                    <div class="hk-figcap" style="margin-top:var(--space-2);">Figure — cumulative observations at {{ selectedDetail.name }}.</div>
+                  </div>
+                </td>
+              </tr>
+            </sc-if>
+          </sc-for>
+        </tbody>
+      </table>
+      <div class="hk-figcap" style="margin-top:var(--space-2);">Table 1 — study locations and total observations recorded.</div>
+      <sc-if value="{{ noLocationsMatch }}" hint-placeholder-val="{{ false }}">
+        <p style="font-family:var(--font-mono); opacity:0.55; font-style:italic; margin-top:var(--space-3);">No locations match &ldquo;{{ locationFilter }}&rdquo;.</p>
+      </sc-if>
+    </section>
+
+    <section id="sec-media" style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">3.</span>
+        <h2 style="margin:0;">Media</h2>
+      </div>
+      <div style="margin-top:var(--space-4); display:flex; flex-direction:column; gap:var(--space-6);">
+        <sc-for list="{{ mediaGroups }}" as="grp" hint-placeholder-count="2">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--color-divider); padding-bottom:var(--space-2); margin-bottom:var(--space-3);">
+              <div style="font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:16px;">{{ grp.location }}</div>
+              <div style="font-family:var(--font-mono); font-size:12px; display:flex; gap:var(--space-3); align-items:center;">
+                <span>{{ grp.date }} {{ grp.time }}</span>
+                <a href="{{ grp.href }}">Checklist Report →</a>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:var(--space-4);">
+              <sc-for list="{{ grp.items }}" as="item" hint-placeholder-count="2">
+                <figure style="margin:0;">
+                  <button type="button" onClick="{{ item.onOpen }}" style="display:block; width:100%; padding:0; border:1px solid var(--color-divider); background:none; cursor:pointer;" style-hover="border-color:var(--color-accent);">
+                    <div style="aspect-ratio:1;"><image-slot id="{{ item.slotId }}" shape="rect" placeholder="Photo"></image-slot></div>
+                  </button>
+                  <figcaption class="hk-figcap" style="margin-top:var(--space-1);">Fig. {{ item.fig }} — {{ item.common }}</figcaption>
+                </figure>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="sec-notes" style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">4.</span>
+        <h2 style="margin:0;">Field Notes</h2>
+      </div>
+
+      <div style="margin-top:var(--space-4); display:flex; flex-direction:column; gap:var(--space-6);">
+        <sc-for list="{{ notes }}" as="note" hint-placeholder-count="2">
+          <div>
+            <div style="display:flex; align-items:baseline; gap:var(--space-2);">
+              <span style="font-family:var(--font-mono); font-size:13px; opacity:0.5;">4.{{ note.n }}</span>
+              <h3 style="margin:0;">{{ note.title }}</h3>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:var(--space-1); font-family:var(--font-mono); font-size:13px; opacity:0.8; border-bottom:1px solid var(--color-divider); padding-bottom:var(--space-3); margin:var(--space-2) 0 var(--space-3);">
+              <div><strong style="opacity:0.6;">Date&nbsp;</strong>{{ note.date }}</div>
+              <div><strong style="opacity:0.6;">Location&nbsp;</strong>{{ note.location }}</div>
+              <div><strong style="opacity:0.6;">Conditions&nbsp;</strong>{{ note.conditions }}</div>
+              <sc-if value="{{ note.hasLinks }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <strong style="opacity:0.6;">Links&nbsp;</strong>
+                  <sc-for list="{{ note.links }}" as="link" hint-placeholder-count="1">
+                    <a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ link }}</a>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ note.body }}" hint-placeholder-val="{{ false }}">
+              <p style="margin:0; max-width:68ch;">{{ note.body }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="sec-refs" style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">5.</span>
+        <h2 style="margin:0;">Reference</h2>
+      </div>
+      <ol style="list-style:none; padding:0; margin:var(--space-4) 0 0; display:flex; flex-direction:column; gap:var(--space-3);">
+        <sc-for list="{{ aboutLinks }}" as="link" hint-placeholder-count="4">
+          <li style="display:flex; gap:var(--space-3); align-items:baseline;">
+            <span style="font-family:var(--font-mono); font-size:13px; opacity:0.5; flex-shrink:0;">[{{ link.n }}]</span>
+            <span>
+              <a href="{{ link.href }}" target="_blank" rel="noopener noreferrer">{{ link.label }}</a>
+              <span style="font-size:14px; opacity:0.75;"> — {{ link.desc }}</span>
+            </span>
+          </li>
+        </sc-for>
+      </ol>
+    </section>
+
+    <footer style="margin-top:var(--space-8); padding-top:var(--space-4); border-top:2px solid var(--color-divider); font-family:var(--font-mono); font-size:11px; opacity:0.55;">
+      Data current as of {{ latestChecklist }}. Compiled from eBird checklist exports — <a href="https://github.com/felipeharker/hark-ornithology" target="_blank" rel="noopener noreferrer">source on GitHub</a>.
+    </footer>
+
+    </main>
+
+  </div>
+
+  <sc-if value="{{ lightbox }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; background:color-mix(in srgb, var(--color-neutral-900) 90%, transparent);" onClick="{{ onCloseLightbox }}">
+      <button type="button" aria-label="Close" onClick="{{ onCloseLightbox }}" style="position:absolute; top:16px; right:16px; background:none; border:none; color:var(--color-bg); cursor:pointer; padding:8px;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <button type="button" aria-label="Previous" onClick="{{ onPrevImage }}" style="position:absolute; left:16px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--color-bg); cursor:pointer; padding:8px;">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button type="button" aria-label="Next" onClick="{{ onNextImage }}" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--color-bg); cursor:pointer; padding:8px;">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div style="width:min(420px, 70vw); height:min(420px, 60vh);" onClick="{{ stopPropagation }}">
+        <image-slot id="hd-lightbox" shape="rect" placeholder="Photo"></image-slot>
+        <div style="text-align:center; margin-top:var(--space-3); color:var(--color-bg); font-family:var(--font-mono); font-size:13px;">
+          {{ lightbox.current.common }} <span style="opacity:0.7; font-style:italic;">{{ lightbox.current.sci }}</span>
+          <div style="opacity:0.6; font-size:11px; margin-top:4px;">{{ lightbox.position }}</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { selectedLocationId: null, locationFilter: '', lightbox: null, activeSection: 'sec-map' };
+  sectionIds = ['sec-map', 'sec-locations', 'sec-media', 'sec-notes', 'sec-refs'];
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const loc = params.get('locationId');
+      if (loc) {
+        this.setState({ selectedLocationId: loc });
+        window.location.hash = 'sec-locations';
+      }
+    } catch (e) {}
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) this.setState({ activeSection: entry.target.id });
+      });
+    }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+    this.sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) this.observer.observe(el);
+    });
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+    if (this.observer) this.observer.disconnect();
+  }
+  handleKeyDown = (e) => {
+    if (!this.state.lightbox) return;
+    if (e.key === 'Escape') this.closeLightbox();
+    if (e.key === 'ArrowRight') this.nextImage();
+    if (e.key === 'ArrowLeft') this.prevImage();
+  };
+
+  selectLocation = (id) => this.setState((s) => ({ selectedLocationId: s.selectedLocationId === id ? null : id }));
+  setFilter = (v) => this.setState({ locationFilter: v });
+  openLightbox = (items, index) => this.setState({ lightbox: { items, index } });
+  closeLightbox = () => this.setState({ lightbox: null });
+  nextImage = () => this.setState((s) => ({ lightbox: { items: s.lightbox.items, index: (s.lightbox.index + 1) % s.lightbox.items.length } }));
+  prevImage = () => this.setState((s) => ({ lightbox: { items: s.lightbox.items, index: (s.lightbox.index - 1 + s.lightbox.items.length) % s.lightbox.items.length } }));
+
+  formatDate(iso) {
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  renderVals() {
+    const D = window.HarkData || { locations: [], checklists: {}, fieldNotes: [], aboutLinks: [], checklistsForLocation: () => [], speciesTotalsForLocation: () => [], countForLocation: () => 0, allMediaGroups: () => [], latestChecklistDate: () => '', lifeListSize: () => 0 };
+    const { selectedLocationId, locationFilter, lightbox } = this.state;
+
+    const allChecklists = Object.keys(D.checklists).map((id) => D.checklists[id]);
+    const dates = allChecklists.map((c) => c.date).sort();
+    const states = new Set((D.locations || []).map((l) => (l.place || '').split(',').pop().trim()).filter(Boolean));
+
+    const decorated = D.locations.map((loc) => {
+      const isSelected = loc.id === selectedLocationId;
+      return {
+        ...loc,
+        count: D.countForLocation(loc.id),
+        isSelected,
+        rowBorder: isSelected ? '2px solid var(--color-accent)' : '2px solid transparent',
+        onSelect: () => this.selectLocation(loc.id),
+      };
+    });
+
+    const filteredLocations = decorated
+      .filter((l) => l.name.toLowerCase().includes(locationFilter.trim().toLowerCase()))
+      .sort((a, b) => {
+        if (selectedLocationId) {
+          if (a.id === selectedLocationId) return -1;
+          if (b.id === selectedLocationId) return 1;
+        }
+        if (b.count !== a.count) return b.count - a.count;
+        return a.name.localeCompare(b.name);
+      });
+
+    const selectedLocation = decorated.find((l) => l.isSelected) || null;
+    const selectedDetail = selectedLocation ? {
+      ...selectedLocation,
+      checklists: D.checklistsForLocation(selectedLocation.id).map((c) => ({ ...c, href: 'Hark%20Ornithology%20Checklist.dc.html?id=' + c.id })),
+      species: D.speciesTotalsForLocation(selectedLocation.id).map((sp) => ({ ...sp, displayTotal: sp.onlyX ? 'X' : sp.total })),
+    } : null;
+
+    const notes = D.fieldNotes.map((n, i) => ({
+      ...n,
+      n: i + 1,
+      hasLinks: !!(n.links && n.links.length),
+    }));
+
+    let figN = 0;
+    const mediaGroups = D.allMediaGroups().map((g) => ({
+      ...g,
+      href: 'Hark%20Ornithology%20Checklist.dc.html?id=' + g.id,
+      items: g.media.map((m, i) => { figN += 1; return { ...m, fig: figN, slotId: 'media-' + g.id + '-' + i, onOpen: () => this.openLightbox(g.media, i) }; }),
+    }));
+
+    const aboutLinks = (D.aboutLinks || []).map((l, i) => ({ ...l, n: i + 1 }));
+
+    const sectionMeta = [
+      { id: 'sec-map', label: 'Map' },
+      { id: 'sec-locations', label: 'Locations' },
+      { id: 'sec-media', label: 'Media' },
+      { id: 'sec-notes', label: 'Field Notes' },
+      { id: 'sec-refs', label: 'Reference' },
+    ];
+    const navItems = sectionMeta.map((s, i) => {
+      const active = s.id === this.state.activeSection;
+      return {
+        n: i + 1,
+        label: s.label,
+        hash: '#' + s.id,
+        active,
+        color: active ? 'var(--color-accent-700)' : 'var(--color-text)',
+        weight: active ? 700 : 400,
+        borderColor: active ? 'var(--color-accent)' : 'transparent',
+      };
+    });
+
+    const lightboxView = lightbox ? {
+      current: lightbox.items[lightbox.index],
+      position: (lightbox.index + 1) + ' of ' + lightbox.items.length,
+    } : null;
+
+    return {
+      siteTitle: D.siteTitle,
+      checklistCount: allChecklists.length,
+      locationCount: D.locations.length,
+      stateCount: states.size === 1 ? Array.from(states)[0] : states.size + ' states',
+      lifeListSize: D.lifeListSize(),
+      firstDate: dates.length ? this.formatDate(dates[0]) : '—',
+      lastDate: dates.length ? this.formatDate(dates[dates.length - 1]) : '—',
+      latestChecklist: D.latestChecklistDate(),
+      locationFilter,
+      onFilterChange: (e) => this.setFilter(e.target.value),
+      filteredLocations,
+      noLocationsMatch: filteredLocations.length === 0,
+      selectedLocation,
+      selectedDetail,
+      mediaGroups,
+      notes,
+      aboutIntro: D.aboutIntro,
+      aboutLinks,
+      navItems,
+      lightbox: lightboxView,
+      onCloseLightbox: this.closeLightbox,
+      onNextImage: this.nextImage,
+      onPrevImage: this.prevImage,
+      stopPropagation: (e) => e.stopPropagation(),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

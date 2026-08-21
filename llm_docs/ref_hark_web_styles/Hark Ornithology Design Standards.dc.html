@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/modernist-28127e47-e5c5-4bd3-9e86-60a13508662d/styles.css">
+  <script src="_ds/modernist-28127e47-e5c5-4bd3-9e86-60a13508662d/_ds_bundle.js"></script>
+  <script src="./hark-data.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    a { color: var(--color-accent-700); }
+    a:hover { color: var(--color-accent-900); }
+    .hk-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.55; }
+    .hk-figcap { font-family: var(--font-mono); font-size: 11px; opacity: 0.55; }
+  </style>
+</helmet>
+
+<div style="background:var(--color-bg); color:var(--color-text); font-family:var(--font-body); min-height:100vh; --font-mono:'Roboto Mono', ui-monospace, monospace;">
+
+  <nav class="nav">
+    <a href="Hark%20Ornithology%20Home.dc.html" class="nav-brand" style="text-decoration:none; color:inherit;">{{ siteTitle }}</a>
+    <a href="https://github.com/felipeharker/hark-ornithology" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="margin-left:auto;">GitHub</a>
+  </nav>
+
+  <main style="max-width:720px; margin:0 auto; padding:var(--space-8) var(--space-4) calc(var(--space-8) * 2); line-height:1.6;">
+
+    <a href="Hark%20Ornithology%20Home.dc.html#sec-refs" style="font-size:14px;">← Back to Reference</a>
+
+    <header style="margin-top:var(--space-4); padding-bottom:var(--space-6); border-bottom:2px solid var(--color-divider);">
+      <div class="hk-label">Reference [2]</div>
+      <h1 style="margin:var(--space-2) 0 2px;">Design Standards</h1>
+      <div style="font-family:var(--font-mono); font-size:13px; opacity:0.7;">Fonts, spacing and formatting used throughout this site.</div>
+    </header>
+
+    <section style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">1.</span>
+        <h2 style="margin:0;">Type</h2>
+      </div>
+      <p style="max-width:68ch; margin-top:var(--space-2);">Archivo carries every heading and every line of body prose. Roboto Mono is reserved for data — dates, times, counts, coordinates, scientific names — plus captions and section numerals, so a reader can tell a recorded value from a written sentence at a glance.</p>
+
+      <table class="table" style="margin-top:var(--space-4);">
+        <thead><tr><th>Role</th><th>Family</th><th style="text-align:right;">Size</th></tr></thead>
+        <tbody>
+          <tr><td>Lead paragraph (Abstract)</td><td>Archivo</td><td style="text-align:right; font-family:var(--font-mono);">16px</td></tr>
+          <tr><td>Body text</td><td>Archivo</td><td style="text-align:right; font-family:var(--font-mono);">15px</td></tr>
+          <tr><td>Section numeral (1. 2. 3.)</td><td>Roboto Mono</td><td style="text-align:right; font-family:var(--font-mono);">15px</td></tr>
+          <tr><td>Table &amp; list text</td><td>Archivo</td><td style="text-align:right; font-family:var(--font-mono);">14px</td></tr>
+          <tr><td>Metadata &amp; dateline</td><td>Roboto Mono</td><td style="text-align:right; font-family:var(--font-mono);">13px</td></tr>
+          <tr><td>Scientific name annotation</td><td>Roboto Mono italic</td><td style="text-align:right; font-family:var(--font-mono);">12px</td></tr>
+          <tr><td>Caption &amp; eyebrow label</td><td>Roboto Mono</td><td style="text-align:right; font-family:var(--font-mono);">11px</td></tr>
+        </tbody>
+      </table>
+      <div class="hk-figcap" style="margin-top:var(--space-2);">Table 1 — the site's complete type scale. Headings keep the base stylesheet's sizes (h1 42px, h2 32px, h3 25px) unmodified.</div>
+    </section>
+
+    <section style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">2.</span>
+        <h2 style="margin:0;">Spacing &amp; Rules</h2>
+      </div>
+      <p style="max-width:68ch; margin-top:var(--space-2);">Every margin, padding and gap comes from Modernist's <code>--space-*</code> scale — never a bare pixel value. Two rule weights carry all structure: a 2px divider between major sections and around the masthead and footer, and a 1px divider between rows within a section.</p>
+
+      <div style="display:flex; gap:var(--space-6); margin-top:var(--space-4); align-items:flex-end;">
+        <div>
+          <div style="width:160px; border-top:2px solid var(--color-text);"></div>
+          <div class="hk-figcap" style="margin-top:var(--space-2);">2px — major divider</div>
+        </div>
+        <div>
+          <div style="width:160px; border-top:1px solid var(--color-divider);"></div>
+          <div class="hk-figcap" style="margin-top:var(--space-2);">1px — row divider</div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">3.</span>
+        <h2 style="margin:0;">Color</h2>
+      </div>
+      <p style="max-width:68ch; margin-top:var(--space-2);">A light ground with one accent, used sparingly: the active item in the section nav, hotspot tags, and small emphasis. Paragraph-size accent text always uses the deeper <code>accent-700</code> step, never the bare accent, to hold contrast.</p>
+      <div style="display:flex; gap:var(--space-2); margin-top:var(--space-4);">
+        <div style="flex:1;"><div style="height:40px; background:var(--color-bg); border:1px solid var(--color-divider);"></div><div class="hk-figcap" style="margin-top:4px;">bg</div></div>
+        <div style="flex:1;"><div style="height:40px; background:var(--color-surface); border:1px solid var(--color-divider);"></div><div class="hk-figcap" style="margin-top:4px;">surface</div></div>
+        <div style="flex:1;"><div style="height:40px; background:var(--color-text);"></div><div class="hk-figcap" style="margin-top:4px;">text</div></div>
+        <div style="flex:1;"><div style="height:40px; background:var(--color-divider);"></div><div class="hk-figcap" style="margin-top:4px;">divider</div></div>
+        <div style="flex:1;"><div style="height:40px; background:var(--color-accent);"></div><div class="hk-figcap" style="margin-top:4px;">accent</div></div>
+        <div style="flex:1;"><div style="height:40px; background:var(--color-accent-700);"></div><div class="hk-figcap" style="margin-top:4px;">accent-700</div></div>
+      </div>
+    </section>
+
+    <section style="margin-top:var(--space-8); padding-top:var(--space-6); border-top:2px solid var(--color-divider);">
+      <div style="display:flex; align-items:baseline; gap:var(--space-3);">
+        <span style="font-family:var(--font-mono); font-size:15px; opacity:0.5;">4.</span>
+        <h2 style="margin:0;">Document Conventions</h2>
+      </div>
+      <ul style="max-width:68ch; margin:var(--space-2) 0 0; padding-left:1.1em; display:flex; flex-direction:column; gap:var(--space-2);">
+        <li>Content flows as numbered sections (1., 2., 3. …) that stay open — no tabs or accordions at the top level.</li>
+        <li>The one exception is a table row, such as a location: it may disclose supplementary detail on click.</li>
+        <li>Every figure and table carries a caption below it, in sentence case: "Figure N — …" or "Table N — …".</li>
+        <li>References are numbered like a bibliography: "[N] Label — description."</li>
+      </ul>
+    </section>
+
+    <footer style="margin-top:var(--space-8); padding-top:var(--space-4); border-top:2px solid var(--color-divider); font-family:var(--font-mono); font-size:11px; opacity:0.55;">
+      Applies to every page in this project — <a href="Hark%20Ornithology%20Home.dc.html">{{ siteTitle }}</a>.
+    </footer>
+
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const D = window.HarkData || {};
+    return { siteTitle: D.siteTitle || 'Harker Ornithology Report' };
+  }
+}
+
+</script>
+</body>
+</html>
