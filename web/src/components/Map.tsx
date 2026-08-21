@@ -70,7 +70,7 @@ export default function MapView({ data, selectedLocationId, onLocationSelect }: 
   }, [selectedLocation]);
 
   return (
-    <div className="w-full h-full border border-black relative">
+    <div className="w-full h-full relative" style={{ border: '1px solid var(--color-divider)' }}>
       <Map
         ref={mapRef}
         initialViewState={{
@@ -84,8 +84,9 @@ export default function MapView({ data, selectedLocationId, onLocationSelect }: 
           const isSelected = selectedLocation?.id === group.id;
           // Use opacity on hover for non-selected items to give a visual cue
           const markerColorClass = isSelected
-            ? 'text-black hover:text-gray-800 z-10 relative scale-125'
-            : 'text-[var(--accent)] hover:opacity-80';
+            ? 'z-10 relative scale-125'
+            : 'hover:opacity-80';
+          const markerStyle = { color: isSelected ? 'var(--color-text)' : 'var(--color-accent)' };
 
           return (
             <Marker
@@ -102,6 +103,7 @@ export default function MapView({ data, selectedLocationId, onLocationSelect }: 
                 type="button"
                 aria-label={`${group.location}${isSelected ? ' (selected)' : ''}`}
                 className={`cursor-pointer transition-colors ${markerColorClass}`}
+                style={markerStyle}
               >
                 <MapPinIcon />
               </button>

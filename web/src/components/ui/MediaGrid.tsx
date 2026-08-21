@@ -3,31 +3,37 @@ import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
 interface MediaGridProps {
   items: EbirdMediaObservation[];
   onSelect: (index: number) => void;
+  /** Figure numbering offset so captions can continue across groups on one page. */
+  figOffset?: number;
 }
 
-// Consistent responsive thumbnail grid, used everywhere media is shown.
-export function MediaGrid({ items, onSelect }: MediaGridProps) {
+// Consistent responsive thumbnail grid, used for Media and Checklist media views.
+export function MediaGrid({ items, onSelect, figOffset = 0 }: MediaGridProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
       {items.map((m, idx) => (
-        <button
-          key={m.MLCatalogNumber}
-          type="button"
-          onClick={() => onSelect(idx)}
-          className="text-left cursor-pointer border border-gray-200 hover:border-black transition-colors bg-white"
-        >
-          <div className="aspect-square bg-gray-100 overflow-hidden relative">
-            <img
-              src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
-              alt={m.CommonName}
-              className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
-              loading="lazy"
-            />
-          </div>
-          <div className="p-2 text-xs font-mono bg-white text-black truncate">
-            {m.CommonName}
-          </div>
-        </button>
+        <figure key={m.MLCatalogNumber} className="m-0">
+          <button
+            type="button"
+            onClick={() => onSelect(idx)}
+            className="block w-full p-0 cursor-pointer transition-colors"
+            style={{ border: '1px solid var(--color-divider)', background: 'none' }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-divider)'; }}
+          >
+            <div className="aspect-square overflow-hidden">
+              <img
+                src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
+                alt={m.CommonName}
+                className="object-cover w-full h-full"
+                loading="lazy"
+              />
+            </div>
+          </button>
+          <figcaption className="hk-figcap mt-1">
+            Fig. {figOffset + idx + 1} — {m.CommonName}
+          </figcaption>
+        </figure>
       ))}
     </div>
   );
