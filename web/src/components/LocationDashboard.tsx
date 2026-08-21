@@ -246,7 +246,6 @@ function LocationDashboardInner({ data, mediaData = [], fieldNotes = [], options
             <MapView
               data={data}
               selectedLocationId={selectedLocationId}
-              options={options}
               onLocationSelect={(id) => {
                 setSelectedLocationId(id);
                 // Update URL to match state
