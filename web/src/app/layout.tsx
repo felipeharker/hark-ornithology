@@ -1,11 +1,9 @@
-import type { CSSProperties } from "react";
 import type { Metadata } from "next";
-import { Inter, EB_Garamond, Roboto_Mono } from "next/font/google";
+import { Archivo, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
-const garamond = EB_Garamond({ subsets: ["latin"], variable: '--font-serif' });
-const robotoMono = Roboto_Mono({ subsets: ["latin"], variable: '--font-mono' });
+const archivo = Archivo({ subsets: ["latin"], weight: ["400", "600", "800"], variable: '--font-archivo' });
+const robotoMono = Roboto_Mono({ subsets: ["latin"], weight: ["400", "500", "700"], variable: '--font-roboto-mono' });
 
 import { getSiteOptions } from "@/lib/parseOptions";
 
@@ -25,18 +23,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const options = getSiteOptions();
-  // Exposed as a CSS var so every component can use the site's configured
-  // accent color (public/options.csv) via `text-[var(--accent)]` etc.,
-  // instead of threading it through props or inline styles everywhere.
-  const accentStyle = { '--accent': options.secondaryColorHex } as CSSProperties;
-
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${garamond.variable} ${robotoMono.variable} font-serif antialiased`}
-        style={accentStyle}
-      >
+      <body className={`${archivo.variable} ${robotoMono.variable} antialiased`}>
         {children}
       </body>
     </html>
