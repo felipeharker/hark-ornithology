@@ -6,6 +6,4 @@ conditions: "Late fall, mostly sunny, hot"
 links:
   - "https://ebird.org/tripreport/528364"
 ---
-
-# Birding Brazil
 [WIP]
