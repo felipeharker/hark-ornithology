@@ -11,46 +11,62 @@ interface ChecklistDocumentProps {
   media: EbirdMediaObservation[];
 }
 
+/**
+ * The species table for one checklist, with a toggle to its photos when the
+ * checklist has any.
+ */
 export default function ChecklistDocument({ species, media }: ChecklistDocumentProps) {
   const [viewMode, setViewMode] = useState<'list' | 'media'>('list');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const hasMedia = media.length > 0;
 
   return (
-    <section style={{ marginTop: 'var(--space-6)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 'var(--space-3)' }}>
-        <div className="hk-figcap">Table 1 — Species Observed ({species.length} total)</div>
+    <section className="section">
+      <h2 className="section-heading">
+        <span className="num">1</span>
+        <span>{viewMode === 'list' ? 'Species Observed' : 'Media'}</span>
+      </h2>
+
+      <div className="toolbar">
+        <p className="caption">
+          {viewMode === 'list'
+            ? `Table 1 — ${species.length} species recorded.`
+            : `${media.length} photograph${media.length === 1 ? '' : 's'} from this checklist.`}
+        </p>
         {hasMedia && (
-          <button type="button" className="btn btn-secondary" onClick={() => setViewMode(viewMode === 'list' ? 'media' : 'list')}>
+          <button type="button" className="btn" onClick={() => setViewMode(viewMode === 'list' ? 'media' : 'list')}>
             {viewMode === 'list' ? 'View Media' : 'View List'}
           </button>
         )}
       </div>
 
       {viewMode === 'list' ? (
-        <table className="table">
-          <thead><tr><th>Species</th><th style={{ textAlign: 'right' }}>Count</th></tr></thead>
-          <tbody>
-            {species.map((obs, idx) => {
-              const displayCount = obs.Count && obs.Count !== '' ? obs.Count : 'X';
-              return (
+        <div className="table-scroll">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Species</th>
+                <th className="num-cell">Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              {species.map((obs, idx) => (
                 <tr key={idx}>
                   <td>
-                    {obs.CommonName}{' '}
-                    <span style={{ opacity: 0.6, fontStyle: 'italic', fontSize: 12, fontFamily: 'var(--font-mono)' }}>{obs.ScientificName}</span>
-                    {obs.BreedingCode && (
-                      <span className="tag tag-neutral" style={{ marginLeft: 'var(--space-2)' }}>{obs.BreedingCode}</span>
-                    )}
-                    {obs.ObservationDetails && (
-                      <div className="hk-figcap" style={{ marginTop: 4, opacity: 0.8 }}>{obs.ObservationDetails}</div>
-                    )}
+                    <div>
+                      {obs.CommonName}
+                      {obs.BreedingCode && <span className="tag tag--neutral"> {obs.BreedingCode}</span>}
+                    </div>
+                    <div className="sci">{obs.ScientificName}</div>
+                    {obs.ObservationDetails && <div className="caption">{obs.ObservationDetails}</div>}
                   </td>
-                  <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{displayCount}</td>
+                  {/* eBird records an unspecified quantity as "X". */}
+                  <td className="num-cell">{obs.Count && obs.Count !== '' ? obs.Count : 'X'}</td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <MediaGrid items={media} onSelect={setLightboxIndex} />
       )}

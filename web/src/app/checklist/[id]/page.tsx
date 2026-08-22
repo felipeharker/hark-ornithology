@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { getLatestEbirdData } from '@/lib/parseEbirdData';
 import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
 import { getSiteOptions } from '@/lib/parseOptions';
 import { formatDate } from '@/lib/formatDate';
 import ChecklistDocument from '@/components/ChecklistDocument';
 import { Nav } from '@/components/ui/Nav';
-import Link from 'next/link';
 
+/** One static page per submitted checklist in the observation CSV. */
 export async function generateStaticParams() {
   const { data } = getLatestEbirdData();
   const submissionIds = new Set(data.map((obs) => obs.SubmissionID).filter(Boolean));
@@ -34,11 +35,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ChecklistPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function ChecklistPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: submissionId } = await params;
   const { data } = getLatestEbirdData();
   const { data: allMediaData } = getLatestEbirdMediaData();
@@ -49,70 +46,81 @@ export default async function ChecklistPage({
 
   if (checklistData.length === 0) {
     return (
-      <div style={{ background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-body)', minHeight: '100vh' }}>
+      <>
         <Nav siteTitle={options.title} />
-        <main style={{ maxWidth: 720, margin: '0 auto', padding: 'var(--space-8) var(--space-4)', textAlign: 'center' }}>
-          <h1>Checklist Not Found</h1>
-          <p>The checklist ID {submissionId} could not be found in the dataset.</p>
-          <Link href="/" className="btn btn-primary">Return to Homepage</Link>
-        </main>
-      </div>
+        <article className="doc doc--interior">
+          <h1 className="title">Checklist Not Found</h1>
+          <p className="body-text">
+            The checklist ID {submissionId} could not be found in the dataset.
+          </p>
+          <p className="body-text">
+            <Link href="/">← Return to the report</Link>
+          </p>
+        </article>
+      </>
     );
   }
 
   const meta = checklistData[0];
   const place = [meta.County, meta.StateProvince].filter(Boolean).join(', ');
   const incomplete = meta.AllObsReported === '0';
+  // Casual observations record neither duration nor distance; showing the bare
+  // units in that case reads as a rendering bug, so the row is omitted.
+  const effort = [
+    meta.DurationMin && `${meta.DurationMin} min`,
+    meta.DistanceTraveledKm && `${meta.DistanceTraveledKm} km`,
+  ].filter(Boolean).join(' · ');
 
   return (
-    <div style={{ background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-body)', minHeight: '100vh' }}>
+    <>
       <Nav siteTitle={options.title} />
+      <article className="doc doc--interior">
+        <Link href={`/?locationId=${meta.LocationID}`} className="backlink">
+          ← Back to the location index
+        </Link>
 
-      <main style={{ maxWidth: 720, margin: '0 auto', padding: 'var(--space-8) var(--space-4) calc(var(--space-8) * 2)', lineHeight: 1.6 }}>
-        <Link href={`/?locationId=${meta.LocationID}`} style={{ fontSize: 14 }}>← Back to Location Index</Link>
-
-        <header style={{ marginTop: 'var(--space-4)', paddingBottom: 'var(--space-6)', borderBottom: '2px solid var(--color-divider)' }}>
-          <div className="hk-label">Checklist Report</div>
-          <h1 style={{ margin: 'var(--space-2) 0 2px' }}>{meta.Location}</h1>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, opacity: 0.7 }}>
+        <header className="masthead--left">
+          <p className="kicker">Checklist Report</p>
+          <h1 className="title">{meta.Location}</h1>
+          <p className="dateline">
             {place} · {formatDate(meta.Date)} · {meta.Time}
-          </div>
+          </p>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'max-content 1fr',
-              gap: 'var(--space-2) var(--space-4)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 13,
-              borderTop: '1px solid var(--color-divider)',
-              paddingTop: 'var(--space-4)',
-              marginTop: 'var(--space-4)',
-            }}
-          >
-            <div className="hk-label" style={{ alignSelf: 'baseline' }}>Protocol</div>
-            <div>{meta.Protocol}</div>
-            <div className="hk-label" style={{ alignSelf: 'baseline' }}>Effort</div>
-            <div>{meta.DurationMin} min · {meta.DistanceTraveledKm} km</div>
-            <div className="hk-label" style={{ alignSelf: 'baseline' }}>Observers</div>
-            <div>{meta.NumberOfObservers}</div>
+          <dl className="record">
+            <dt>Protocol</dt>
+            <dd>{meta.Protocol}</dd>
+            {effort && (
+              <>
+                <dt>Effort</dt>
+                <dd>{effort}</dd>
+              </>
+            )}
+            <dt>Observers</dt>
+            <dd>{meta.NumberOfObservers}</dd>
             {incomplete && (
               <>
-                <div className="hk-label" style={{ alignSelf: 'baseline' }}>Status</div>
-                <div><span className="tag tag-outline">Incomplete</span></div>
+                <dt>Status</dt>
+                <dd>
+                  <span className="tag">Incomplete</span>
+                </dd>
               </>
             )}
             {meta.ChecklistComments && (
               <>
-                <div className="hk-label" style={{ alignSelf: 'baseline' }}>Comments</div>
-                <div>{meta.ChecklistComments}</div>
+                <dt>Comments</dt>
+                <dd>{meta.ChecklistComments}</dd>
               </>
             )}
-          </div>
+          </dl>
         </header>
 
         <ChecklistDocument species={checklistData} media={checklistMedia} />
-      </main>
-    </div>
+
+        <p className="colophon">
+          Submission {submissionId} · recorded on eBird, rendered from the export in
+          observation-data/.
+        </p>
+      </article>
+    </>
   );
 }

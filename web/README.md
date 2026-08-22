@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# `web/` — the site
 
-## Getting Started
-
-First, run the development server:
+A Next.js app exported as a fully static site. There is no server and no
+database: every page is pre-rendered at build time from the CSV and Markdown
+files in this repository.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # static export into out/
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What builds each part of the page
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Source file | What it produces |
+|---|---|
+| `../observation-data/ebird-data-latest.csv` | Map pins, the location index, species tables, and one page per checklist. |
+| `../observation-data/ebird-media-latest.csv` | The Media section and the photo lightboxes. |
+| `content/abstract.md` | The abstract under the title on the homepage. |
+| `field-notes/field-note-*.md` | The Field Notes section. |
+| `../public/options.csv` | Site title, accent color, and which observation CSV to read. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Nothing on the site is hardcoded content — changing any file above and
+rebuilding is the entire update workflow.
 
-## Learn More
+## Layout
 
-To learn more about Next.js, take a look at the following resources:
+```
+content/            prose files (abstract)
+field-notes/        Markdown trip reports, one file per note
+src/app/
+  styles_primary.css   ALL site styling — tokens at the top, commented throughout
+  styles_map.css       ALL map styling (frame, pins, MapLibre chrome)
+  layout.tsx           fonts, metadata, accent color
+  page.tsx             reads every content source, hands it to HomeDocument
+  checklist/[id]/      one static page per submitted checklist
+  design-standards/    the design reference page
+src/components/     HomeDocument, ChecklistDocument, Map, ImageLightbox, ui/
+src/lib/            one parser per content source
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Styling
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Plain CSS, no framework. Two stylesheets, both imported in `src/app/layout.tsx`:
 
-## Deploy on Vercel
+- **`src/app/styles_primary.css`** — everything except the map. It opens with a
+  block of design tokens (color, type, spacing, measure) and is organised into
+  19 numbered, commented sections. Restyling the site means changing a token,
+  not hunting through rules.
+- **`src/app/styles_map.css`** — the map frame, the pins, and MapLibre's own
+  controls. Its header explains which parts of a MapLibre map are CSS and which
+  are not (the basemap itself is a JSON style document, selected by URL in
+  `src/components/Map.tsx`).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Components carry class names only; there are no inline style objects apart from
+one data-driven color swatch on the design-standards page.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The design language is shared with [Alexandria
+Library](https://github.com/felipeharker/alexandria_script_library_master) —
+see `/design-standards` on the running site.

@@ -1,6 +1,6 @@
 # Field Notes
 
-Markdown blog posts rendered in the "Notes" section of the dashboard
+Markdown blog posts rendered in the Field Notes section of the site
 (parsed by `src/lib/parseFieldNotes.ts`).
 
 ## Adding a note
