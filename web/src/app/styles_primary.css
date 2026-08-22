@@ -23,7 +23,7 @@
       1.  Design tokens ............ every color, font, size and spacing value
       2.  Document skeleton ........ page frame, resets, base elements
       3.  Masthead ................. title block at the top of each page
-      4.  Abstract ................. summary paragraph + keywords
+      4.  Abstract ................. the summary paragraph
       5.  Table of contents ........ the section index on the homepage
       6.  Section headings ......... "Map", "Locations", "Media", …
       7.  Body copy ................ paragraphs, lists, labels, captions
@@ -157,6 +157,12 @@
      what makes the document read as a page rather than as a scrolling feed. */
   --doc-pad-top: 80px;
   --doc-pad-bottom: 120px;
+  /* The gutter between the document's content and the edge of the window.
+     It has to clear more than it looks: the right-hand column of a table —
+     an observation count, a Show/Hide control — sits flush against the
+     content edge by design, so this value is the only thing standing between
+     those and the bezel. */
+  --doc-pad-x: 40px;
 
   /* -- Motion --------------------------------------------------------------
      One duration, one easing, everywhere. */
@@ -227,7 +233,7 @@ figure { margin: 0; }
 .doc {
   max-width: var(--measure);
   margin: 0 auto;
-  padding: var(--doc-pad-top) var(--space-5) var(--doc-pad-bottom);
+  padding: var(--doc-pad-top) var(--doc-pad-x) var(--doc-pad-bottom);
 }
 
 /* Interior pages (checklist, design standards) sit under a nav bar, so they
@@ -316,6 +322,9 @@ figure { margin: 0; }
 /* ============================================================================
    4. ABSTRACT
    Prose is sourced from web/content/abstract.md — edit that file, not markup.
+   The block is the paragraph and its label; a keyword list used to follow it,
+   and was removed as one more line of text that told a reader nothing the
+   paragraph above had not already said.
    ========================================================================= */
 
 .abstract {
@@ -343,12 +352,6 @@ figure { margin: 0; }
 
 .abstract p:last-child { margin-bottom: 0; }
 
-.keywords {
-  font-size: 14px;   /* a step under the abstract, which it annotates */
-  color: var(--color-text-mute);
-  margin: var(--space-4) 0 0;
-}
-
 
 /* ============================================================================
    5. TABLE OF CONTENTS
@@ -365,33 +368,26 @@ figure { margin: 0; }
   margin: 0 0 var(--space-3);
 }
 
-/* Laid out as a wrapping row rather than a stacked list — five short labels
-   read faster on one line than as five lines of near-empty page. */
+/* One entry per line. A wrapping row packs the labels tighter, but it also
+   lets a five-item index break across two lines at some widths and not
+   others; stacked, the list is the same shape on every screen and each label
+   gets its own generous tap target. */
 .toc {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
   margin: 0;
   padding: 0;
   font-size: var(--size-table);
 }
 
 .toc a {
-  display: inline-block;
-  padding: var(--space-1) 0;
+  display: block;
+  padding: var(--space-2) 0;
   text-decoration: none;
   color: var(--color-text-soft);
-  /* The hover underline is drawn as a border so it sits a predictable
-     distance below the text regardless of the label's descenders. */
-  border-bottom: 1px solid transparent;
-  transition: color var(--transition), border-color var(--transition);
+  transition: color var(--transition);
 }
 
-.toc a:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
-}
+.toc a:hover { color: var(--color-accent); }
 
 
 /* ============================================================================
@@ -567,10 +563,12 @@ figure { margin: 0; }
   border-bottom: 1px solid var(--color-rule);
 }
 
-/* The last cell in a row carries no trailing gutter — the page edge already
-   provides it. */
+/* The last cell keeps a small trailing gutter rather than sitting flush with
+   the table's edge. On an untinted row the difference is invisible, but on a
+   selected row — which is tinted right up to that edge — a flush number reads
+   as a number that has been cut off. */
 .table th:last-child,
-.table td:last-child { padding-right: 0; }
+.table td:last-child { padding-right: var(--space-3); }
 
 /* Right-align numeric columns. The alignment applies to the whole column … */
 .table .num-cell { text-align: right; }
@@ -596,36 +594,17 @@ figure { margin: 0; }
    The locations dashboard: a table of sites, any one of which expands in
    place to show its checklists and species.
 
-   The problem this section solves: an expanded row is a panel *inside* a
-   table, and it is easy to end up with three competing surfaces — a tinted
-   row, a tinted panel, and a white nested table floating on top of it — each
-   with its own padding and its own borders. The rules below treat the
-   selected row and its detail panel as ONE object:
+   An expanded row is a panel *inside* a table, which is easy to get wrong:
+   the obvious treatments — a coloured bar down the edge, a strong tint, a
+   nested table with its own background — all add another border or another
+   colour to a row that is already sitting inside a bordered structure, and
+   the result reads as clutter rather than as depth.
 
-     · one tint, shared by the row and the panel below it
-     · one accent spine down the left edge of both, so the pair reads as a
-       single selected unit rather than as two stacked stripes
-     · one value (--index-gutter) setting both the column's left gutter and
-       the panel's inset, so the row's name and the panel's labels share a
-       left edge
-     · nothing nested inside the panel paints its own background
-
+   So this section adds as little as it can. The selected row and its panel
+   share one faint tint and are closed off by one hairline; the row's name
+   takes the accent; and nothing else changes. No coloured spine, no second
+   background, no heavier rule than the table already uses.
    ========================================================================= */
-
-/* The gutter the accent spine sits in, and the inset of the panel's content.
-   They are the SAME value, which is what makes a location's name and the
-   "Checklists" label beneath it line up on a common left edge. Change one and
-   change the other. */
-.table--index {
-  --index-gutter: var(--space-4);
-}
-
-/* Reserved on every row, not just the selected one, so clicking a row never
-   shifts the column. Applied to .row-toggle and the header rather than to
-   `td:first-child` generally, so the full-width detail cell below is free to
-   manage its own padding. */
-.table--index thead th:first-child,
-.table--index .row-toggle > td:first-child { padding-left: var(--index-gutter); }
 
 /* -- The clickable row ---------------------------------------------------- */
 
@@ -639,8 +618,10 @@ figure { margin: 0; }
    table is a list of names and setting all of them bold defeats the point. */
 .row-name { font-weight: var(--weight-medium); color: var(--color-text); }
 
-/* A selected row shares the panel's tint, and its bottom hairline is removed
-   so row and panel meet as one surface. */
+/* A selected row takes the panel's tint, and its bottom hairline is removed
+   so the row and the panel below it read as one surface rather than as two
+   stacked bands. The accent moves to the name — the one place it costs
+   nothing and says exactly what it means. */
 .row-toggle[data-selected='true'] > td {
   background: var(--color-surface);
   border-bottom-color: transparent;
@@ -648,32 +629,19 @@ figure { margin: 0; }
 
 .row-toggle[data-selected='true'] .row-name { color: var(--color-accent); }
 
-/* The accent spine. Drawn as an inset shadow rather than a border because a
-   border would change the cell's box and shift the table's columns on click;
-   the shadow paints inside the existing box, so nothing moves. The same rule
-   applies to the first cell of the selected row and to the panel below it,
-   which is what makes the spine continuous across the pair. */
-.row-toggle[data-selected='true'] > td:first-child,
-.row-detail > td {
-  box-shadow: inset 2px 0 0 var(--color-accent);
-}
-
 /* -- The expanded panel ---------------------------------------------------- */
 
-/* The <td> is only a container: it carries the tint and the spine, and the
-   padding is applied to the div inside it, where it can be a single value. */
+/* The <td> carries the tint and closes the unit; the padding is applied to
+   the div inside it, where it can be a single value. */
 .row-detail > td {
   background: var(--color-surface);
   padding: 0;
   border-bottom: 1px solid var(--color-rule-strong);
 }
 
-.row-detail-body {
-  /* Vertical padding is generous, horizontal padding matches the gutter the
-     rest of the column already uses — alignment with the row above matters
-     more here than a symmetric box. */
-  padding: var(--space-5) var(--index-gutter);
-}
+/* Content is inset from the tint's edges on every side. The inset is what
+   separates the panel from the row above it now that no border does. */
+.row-detail-body { padding: var(--space-5) var(--space-4); }
 
 /* Spacing between the panel's blocks ("Checklists", then "Species"). */
 .detail-group + .detail-group { margin-top: var(--space-6); }
@@ -681,7 +649,7 @@ figure { margin: 0; }
 /* -- Checklist links -------------------------------------------------------
    Formerly a nested table, which meant a second set of column rules inside
    a panel that already had its own. A checklist entry is a timestamp and a
-   link, so it is a list: timestamp left, link right, hairline between. */
+   link, so it is a list: timestamp, then link, hairline between. */
 
 .link-list {
   list-style: none;
@@ -1293,7 +1261,7 @@ figure { margin: 0; }
   gap: var(--space-4);
   max-width: var(--measure);
   margin: 0 auto;
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-4) var(--doc-pad-x);
   border-bottom: 1px solid var(--color-rule-strong);
 }
 
@@ -1348,20 +1316,31 @@ figure { margin: 0; }
     --size-subsection: 16px;
     --doc-pad-top: 44px;
     --doc-pad-bottom: 80px;
+    --doc-pad-x: 24px;
   }
 
-  .doc { padding: var(--doc-pad-top) var(--space-4) var(--doc-pad-bottom); }
+  .doc { padding: var(--doc-pad-top) var(--doc-pad-x) var(--doc-pad-bottom); }
   .doc--interior { padding-top: var(--space-5); }
 
-  .nav { padding: var(--space-3) var(--space-4); }
+  .nav { padding: var(--space-3) var(--doc-pad-x); }
 
-  /* The gutter tightens on narrow screens, where 18px on the left costs a
-     meaningful share of the line. Both the rows and the panel follow it. */
-  .table--index { --index-gutter: var(--space-3); }
+  /* The panel's inset tightens, so its content keeps as much of the line as
+     the narrow screen can give it. */
+  .row-detail-body { padding: var(--space-4) var(--space-3); }
 
   /* Headers stop refusing to wrap, so a long column label costs height
      rather than forcing the whole table to scroll. */
   .table th { white-space: normal; }
+
+  /* Columns sit closer together. The gutter between the page and the window
+     is worth more than the gutter between two columns, so on a phone the
+     table gives up the second to protect the first.
+
+     Note this deliberately does NOT touch the last column: the :last-child
+     rule in section 9 is the more specific selector and still wins here, so
+     the trailing gutter that keeps a selected row's count clear of the tint
+     survives on narrow screens too. */
+  .table th, .table td { padding-right: var(--space-2); }
 
   /* Stack label above value instead of side by side. */
   .record, .note-meta { grid-template-columns: 1fr; gap: var(--space-1); }

@@ -244,10 +244,6 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
           <div className="abstract">
             <p className="abstract-label">Abstract</p>
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{abstract}</ReactMarkdown>
-            <p className="keywords">
-              Keywords: ornithology; birding; eBird; Macaulay Library; field observation;
-              checklist; species distribution.
-            </p>
           </div>
           <hr className="rule-soft" />
         </>
@@ -311,10 +307,7 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
         </div>
 
         <div className="table-scroll">
-          {/* `table--index` opts this table into the location-index rules in
-              section 10 of the stylesheet: the spine gutter and the expanded
-              detail panel. */}
-          <table className="table table--index">
+          <table className="table">
             <thead>
               <tr>
                 <th>Location</th>

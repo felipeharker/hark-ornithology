@@ -71,8 +71,9 @@ CSV/Markdown need a page refresh in dev, or a rebuild for production.
   `**bold**`, and `[links](https://example.com)` all work. Save and refresh.
 - **What it affects:** the paragraphs under the title on the homepage, nothing
   else. Delete the file entirely and the abstract block simply doesn't render.
-- **The Keywords line** below the abstract is not in that file — it is markup in
-  `web/src/components/HomeDocument.tsx`, in the abstract block.
+- **A keywords line** used to sit below the abstract. It was removed: it
+  repeated the paragraph above it in list form. The abstract block is now the
+  label and the prose, nothing else.
 
 ## 3. Adding a field note
 
