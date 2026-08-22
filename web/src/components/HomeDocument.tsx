@@ -264,10 +264,6 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
       {/* -- Map ------------------------------------------------------------ */}
       <Section id="sec-map" title="Map">
         <MapView data={data} selectedLocationId={selectedLocationId} onLocationSelect={selectLocation} />
-        <p className="caption">
-          {locations.length} locations plotted from recorded coordinates. Select a pin to open
-          that location below.
-        </p>
 
         {selectedLocation && (
           <div className="selected-note">
