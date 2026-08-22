@@ -432,11 +432,6 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
           <span className="num">3</span>
           <span>Media</span>
         </h2>
-        <p className="caption">
-          {totalMedia} photographs across {mediaGroups.length} checklists, cataloged on the
-          Macaulay Library. Open a checklist to view its images.
-        </p>
-
         {mediaGroups.map((grp, i) => (
           <details className="disclosure disclosure--sub" key={grp.checklistId}>
             <summary>
