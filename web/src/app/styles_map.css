@@ -13,9 +13,9 @@
      1. THE BASEMAP (roads, water, labels, land colour) is not CSS. It is a
         MapLibre Style JSON document served by the tile provider, and it is
         selected by URL in src/components/Map.tsx (the BASEMAP_STYLE_URL
-        constant, currently Carto's "Positron" — a pale grey basemap chosen
-        so the pins and the page read as one document). To change the
-        basemap's own colours you point that constant at a different style
+        constant, currently Carto's "Positron" — a pale grey basemap whose
+        low contrast keeps the map as quiet as the rest of the page). To
+        change the basemap's own colours you point that constant at a different style
         URL, or host your own style JSON. There is no CSS hook for it.
 
      2. EVERYTHING DRAWN ON TOP is ordinary DOM, and that is what this file
@@ -37,18 +37,20 @@
    ========================================================================= */
 
 :root {
-  --map-height: 480px;                            /* frame height on desktop */
-  --map-height-small: 320px;                      /* … and on narrow screens */
-  --map-border: 1px solid var(--color-rule-soft); /* frame around the canvas */
+  --map-height: 460px;                             /* frame height on desktop */
+  --map-height-small: 300px;                       /* … and on narrow screens */
+  --map-border: 1px solid var(--color-rule);       /* frame around the canvas */
+  --map-radius: var(--radius-md);                  /* matches panels and inputs */
 
-  --map-pin-size: 26px;                           /* pin height at rest */
-  --map-pin-scale-selected: 1.3;                  /* growth factor when picked */
-  --map-pin-color: var(--color-accent);           /* unselected pin */
-  --map-pin-color-selected: var(--color-text);    /* selected pin */
+  --map-pin-size: 24px;                            /* pin height at rest */
+  --map-pin-scale-selected: 1.3;                   /* growth factor when picked */
+  --map-pin-color: var(--color-accent);            /* unselected pin */
+  --map-pin-color-selected: var(--color-text);     /* selected pin */
   --map-pin-opacity-hover: 0.75;
 
   --map-control-bg: var(--color-bg);
-  --map-control-border: var(--color-rule-soft);
+  --map-control-border: var(--color-rule);
+  --map-control-radius: var(--radius-sm);
   --map-attribution-size: 10px;
 }
 
@@ -64,7 +66,8 @@
   width: 100%;
   height: var(--map-height);
   border: var(--map-border);
-  overflow: hidden;
+  border-radius: var(--map-radius);
+  overflow: hidden;   /* clips the canvas to the frame's rounded corners */
 }
 
 /* react-map-gl renders its own wrapper div inside; make it fill the frame. */
@@ -86,7 +89,8 @@
   cursor: pointer;
   line-height: 0;
   color: var(--map-pin-color);
-  transition: color 120ms ease, transform 120ms ease, opacity 120ms ease;
+  transition: color var(--transition), transform var(--transition),
+    opacity var(--transition);
 }
 
 .map-pin svg { width: var(--map-pin-size); height: var(--map-pin-size); }
@@ -110,8 +114,8 @@
 /* ============================================================================
    4. MAPLIBRE CHROME
    MapLibre injects its own widgets with fixed class names. These overrides
-   bring them in line with the rest of the page: square corners, no shadows,
-   the site's monospace face.
+   bring them in line with the rest of the page: the site's own corner radius,
+   hairline borders, no drop shadows, and the monospace face for attribution.
    ========================================================================= */
 
 /* Attribution credit in the corner of the map. Required by the tile
@@ -120,16 +124,17 @@
   font-family: var(--font-mono);
   font-size: var(--map-attribution-size);
   background: var(--map-control-bg) !important;
-  border-radius: 0 !important;
+  border-radius: var(--map-control-radius) !important;
 }
 
 .maplibregl-ctrl-attrib a { color: var(--color-text-mute); }
 
-/* Zoom / compass buttons. */
+/* Zoom / compass buttons. `!important` is needed on both: MapLibre ships its
+   own radius and shadow in a stylesheet loaded after this one. */
 .maplibregl-ctrl-group {
   background: var(--map-control-bg);
   border: 1px solid var(--map-control-border);
-  border-radius: 0 !important;
+  border-radius: var(--map-control-radius) !important;
   box-shadow: none !important;
 }
 
@@ -141,7 +146,7 @@
   font-family: var(--font-body);
   background: var(--map-control-bg);
   border: 1px solid var(--map-control-border);
-  border-radius: 0;
+  border-radius: var(--map-control-radius);
   box-shadow: none;
   padding: var(--space-3);
 }

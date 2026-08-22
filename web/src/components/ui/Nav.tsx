@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SITE_LINKS, externalLinkProps } from '@/lib/siteLinks';
 
 /**
  * Top bar for interior pages (checklist reports, design standards).
@@ -10,7 +11,7 @@ export function Nav({ siteTitle }: { siteTitle: string }) {
       <Link href="/" className="nav-brand">
         {siteTitle}
       </Link>
-      <a href="https://github.com/felipeharker/hark-ornithology" target="_blank" rel="noopener noreferrer">
+      <a href={SITE_LINKS.repository} {...externalLinkProps(SITE_LINKS.repository)}>
         GitHub
       </a>
     </nav>

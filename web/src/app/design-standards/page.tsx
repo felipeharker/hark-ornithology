@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getSiteOptions } from '@/lib/parseOptions';
 import { Nav } from '@/components/ui/Nav';
+import { Masthead } from '@/components/ui/Masthead';
+import { Section } from '@/components/ui/Section';
 
 export async function generateMetadata(): Promise<Metadata> {
   const options = getSiteOptions();
@@ -10,24 +12,32 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Role, family, size — mirrors the type scale tokens in styles_primary.css. */
 const TYPE_ROWS: [string, string, string][] = [
-  ['Page title', 'STIX Two Text', '40px'],
-  ['Section heading', 'STIX Two Text', '27px'],
-  ['Subsection heading', 'STIX Two Text', '21px'],
-  ['Body text', 'STIX Two Text', '18px'],
-  ['Abstract', 'STIX Two Text', '17px'],
-  ['Table text', 'STIX Two Text', '16px'],
-  ['Recorded data (dates, counts, coordinates)', 'Courier Prime', '13px'],
-  ['Caption, dateline', 'Courier Prime', '13px'],
-  ['Scientific name', 'Courier Prime italic', '12px'],
-  ['Eyebrow label', 'Courier Prime', '11px'],
+  ['Page title', 'Inter Semibold', '34px'],
+  ['Section heading', 'Inter Semibold', '23px'],
+  ['Subsection heading', 'Inter Medium', '17px'],
+  ['Body text', 'Inter Regular', '16px'],
+  ['Table text', 'Inter Regular', '15px'],
+  ['Caption, description', 'Inter Regular', '13px'],
+  ['Recorded data (dates, counts, coordinates)', 'IBM Plex Mono', '13px'],
+  ['Scientific name', 'IBM Plex Mono Italic', '12px'],
+  ['Eyebrow label, table header', 'Inter Medium', '11px'],
+];
+
+/** Weight, token, and what each is for. Nothing on the site is set bolder. */
+const WEIGHT_ROWS: [string, string, string][] = [
+  ['400', '--weight-regular', 'Body copy, table cells, everything read at length.'],
+  ['500', '--weight-medium', 'Noticed but not a heading: table headers, selected rows, buttons, labels.'],
+  ['600', '--weight-strong', 'Headings and the page title. The heaviest weight on the site.'],
 ];
 
 const SWATCHES: [string, string][] = [
   ['bg', 'var(--color-bg)'],
   ['surface', 'var(--color-surface)'],
   ['text', 'var(--color-text)'],
+  ['text-soft', 'var(--color-text-soft)'],
   ['text-mute', 'var(--color-text-mute)'],
-  ['rule-soft', 'var(--color-rule-soft)'],
+  ['rule', 'var(--color-rule)'],
+  ['rule-strong', 'var(--color-rule-strong)'],
   ['accent', 'var(--color-accent)'],
 ];
 
@@ -42,23 +52,25 @@ export default function DesignStandardsPage() {
           ← Back to Reference
         </Link>
 
-        <header className="masthead--left">
-          <p className="kicker">Reference [2]</p>
-          <h1 className="title">Design Standards</h1>
-          <p className="dateline">Type, color, spacing and document conventions used site-wide.</p>
-        </header>
+        <Masthead
+          align="left"
+          kicker="Reference"
+          title="Design Standards"
+          dateline="Type, color, spacing and document conventions used site-wide."
+        />
 
-        <section className="section">
-          <h2 className="section-heading">
-            <span className="num">1</span>
-            <span>Shared Language</span>
-          </h2>
+        <Section title="Shared Language">
           <p className="body-text">
             This site and its sibling project, <i>Alexandria Library</i>, share one visual
-            language: a printed technical paper. Serif prose, a monospace face reserved for
-            recorded data, black rules instead of boxes and shadows, and a single deep red used
-            sparingly. Where this site has a component the other does not — the map, the media
-            grids, the checklist records — that component is styled to the same rules rather than
+            language: a quiet, modern document. A neutral sans carries every heading and every
+            line of prose; a monospace face is reserved for recorded values, where column
+            alignment matters and a reader benefits from seeing at a glance that something is
+            data rather than a sentence. Structure comes from hairline rules and whitespace
+            rather than heavy bars, boxes or shadows, and a single deep red is the only accent.
+          </p>
+          <p className="body-text">
+            Where this site has a component the other does not — the map, the media grids, the
+            checklist records — that component is styled to the same rules rather than
             introducing a second idiom.
           </p>
           <p className="body-text">
@@ -67,18 +79,14 @@ export default function DesignStandardsPage() {
             block of custom properties; restyling means changing a token, not hunting through
             rules.
           </p>
-        </section>
+        </Section>
 
-        <section className="section">
-          <h2 className="section-heading">
-            <span className="num">2</span>
-            <span>Type</span>
-          </h2>
+        <Section title="Type">
           <p className="body-text">
-            STIX Two Text carries every heading and every line of prose. Courier Prime is reserved
-            for data — dates, times, counts, coordinates, scientific names — plus captions and
-            eyebrow labels, so a reader can tell a recorded value from a written sentence at a
-            glance.
+            Inter carries every heading and every line of prose. IBM Plex Mono is reserved for
+            data — dates, times, counts, coordinates, scientific names — so a reader can tell a
+            recorded value from a written sentence at a glance. Anything that is not prose sits
+            a step down in colour, which is most of what keeps the page feeling light.
           </p>
 
           <div className="table-scroll">
@@ -102,44 +110,70 @@ export default function DesignStandardsPage() {
             </table>
           </div>
           <p className="caption">
-            Table 1 — the complete type scale, declared as <code>--size-*</code> tokens.
+            The complete type scale, declared as <code>--size-*</code> tokens.
           </p>
-        </section>
+        </Section>
 
-        <section className="section">
-          <h2 className="section-heading">
-            <span className="num">3</span>
-            <span>Spacing &amp; Rules</span>
-          </h2>
+        <Section title="Weight">
+          <p className="body-text">
+            Three weights, and no bold. The step from regular to semibold is enough to mark a
+            heading when the type around it is calm, and a page that never reaches for 700 reads
+            lighter without giving up its hierarchy.
+          </p>
+
+          <div className="table-scroll">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Weight</th>
+                  <th>Token</th>
+                  <th>Used for</th>
+                </tr>
+              </thead>
+              <tbody>
+                {WEIGHT_ROWS.map(([weight, token, usage]) => (
+                  <tr key={token}>
+                    <td>{weight}</td>
+                    <td>
+                      <code>{token}</code>
+                    </td>
+                    <td>{usage}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Section>
+
+        <Section title="Spacing &amp; Rules">
           <p className="body-text">
             Every margin, padding and gap comes from the <code>--space-*</code> scale — never a
-            bare pixel value. Two rule weights carry all structure: a 2px rule between major
-            sections and around the masthead and colophon, and a 1px rule between rows within a
-            section.
+            bare pixel value. Both rule weights are hairlines: they differ in contrast, not
+            thickness. A divider should tell a reader where a section ends without drawing
+            attention to itself while doing it, so the space above a section, not the rule, is
+            what separates it from the one before.
           </p>
 
           <div className="specimens">
             <div className="specimen">
               <hr className="rule" />
-              <p className="caption">2px — major division</p>
+              <p className="caption">Section division — 1px, rule-strong</p>
             </div>
             <div className="specimen">
               <hr className="rule-soft" />
-              <p className="caption">1px — row division</p>
+              <p className="caption">Row division — 1px, rule</p>
             </div>
           </div>
-        </section>
+        </Section>
 
-        <section className="section">
-          <h2 className="section-heading">
-            <span className="num">4</span>
-            <span>Color</span>
-          </h2>
+        <Section title="Color">
           <p className="body-text">
-            A white ground with one accent, used sparingly: links, section numerals in the table
-            of contents, the selected map pin, and the disclosure hints. The accent is configurable
-            per-site via <code>accent color hex</code> in <code>public/options.csv</code>; the
-            hover step is derived from it, so both move together.
+            A white ground with one accent, used sparingly and with one meaning: this is
+            interactive, or this is selected. Links, the selected map pin, the selected location
+            row and the disclosure hints carry it; nothing else does. The accent is configurable
+            per-site via <code>accent color hex</code> in <code>public/options.csv</code>, and
+            both the hover step and the faint wash behind a selected control are derived from it,
+            so all three move together.
           </p>
           <div className="swatches">
             {SWATCHES.map(([label, color]) => (
@@ -149,34 +183,35 @@ export default function DesignStandardsPage() {
               </div>
             ))}
           </div>
-        </section>
+        </Section>
 
-        <section className="section">
-          <h2 className="section-heading">
-            <span className="num">5</span>
-            <span>Document Conventions</span>
-          </h2>
+        <Section title="Document Conventions">
           <ul className="list">
             <li>
-              Content flows as numbered sections (1., 2., 3. …), indexed by a table of contents at
-              the top of the page.
+              Content flows as named sections — Map, Locations, Media — indexed by a contents
+              list at the top of the page. Nothing is numbered: the heading and the index entry
+              carry the same name, which is all a reader needs to navigate by.
             </li>
             <li>
               A section whose content is long — the location index, a checklist&rsquo;s photos —
               is a native <code>&lt;details&gt;</code> disclosure that opens on click, so the page
-              starts short.
+              starts short. Its Show / Hide control names the action only, never a count.
             </li>
             <li>
-              Every figure and table carries a caption below it, in sentence case:
-              &ldquo;Figure N — …&rdquo; or &ldquo;Table N — …&rdquo;.
+              A figure or table carries a caption below it when the caption says something the
+              content does not. Captions are sentence case and unnumbered.
             </li>
-            <li>References are numbered like a bibliography: &ldquo;[N] Label — description.&rdquo;</li>
+            <li>
+              References are a plain list of links with a line of description each, gathered at
+              the foot of the page. Nothing in the prose points at them with a superscript
+              marker.
+            </li>
             <li>
               Prose and data are sourced from files, never hardcoded: CSV exports for observations
               and media, Markdown for the abstract and field notes.
             </li>
           </ul>
-        </section>
+        </Section>
 
         <p className="colophon">
           Applies to every page in this project — <Link href="/">{options.title}</Link>.

@@ -1,25 +1,41 @@
 import type { Metadata } from 'next';
-import { STIX_Two_Text, Courier_Prime } from 'next/font/google';
+import { Inter, IBM_Plex_Mono } from 'next/font/google';
 import { getSiteOptions } from '@/lib/parseOptions';
 
-// The two faces the design uses: a serif for prose, a monospace for recorded
-// data. They are exposed as CSS variables and consumed by --font-body /
-// --font-mono in styles_primary.css.
 import './styles_primary.css';
 import './styles_map.css';
 
-const stix = STIX_Two_Text({
+/**
+ * The two faces the design uses.
+ *
+ * Inter carries everything a reader reads: headings, prose, tables, labels.
+ * It is a neutral, low-contrast grotesque that stays legible at small sizes
+ * and — unlike the serif this site used before — does not need to be set
+ * large or bold to hold a heading together. Only three weights are loaded;
+ * the design never asks for a fourth, and every extra weight is a font file
+ * the visitor has to download.
+ *
+ * IBM Plex Mono is reserved for recorded values: dates, times, counts,
+ * coordinates, scientific names. Its job is column alignment and signalling
+ * "this is data, not a sentence" — not decoration, so it is deliberately
+ * scarce.
+ *
+ * Both are exposed as CSS variables and consumed by --font-body / --font-mono
+ * in styles_primary.css. next/font self-hosts the files at build time, so
+ * there is no request to Google at runtime and no flash of unstyled text.
+ */
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
-  variable: '--font-stix',
+  variable: '--font-sans',
 });
 
-const courier = Courier_Prime({
+const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['400', '500'],
   style: ['normal', 'italic'],
-  variable: '--font-courier',
+  variable: '--font-mono-face',
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,14 +53,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const options = getSiteOptions();
 
   return (
-    <html lang="en">
+    /* The font variable classes go on <html>, not <body>, and that placement
+       is load-bearing. next/font emits a class that declares --font-sans and
+       --font-mono-face on whatever element carries it, while styles_primary.css
+       composes --font-body from them inside its :root block — which *is*
+       <html>. A custom property is substituted against the element it is
+       declared on, so a --font-body built in :root out of variables that only
+       exist further down the tree resolves to nothing at all: the declaration
+       becomes invalid and every page silently falls back to the browser's
+       default serif. Keeping the classes here means the variables and the
+       token that consumes them live on the same element. */
+    <html lang="en" className={`${inter.variable} ${plexMono.variable}`}>
       {/* The configured accent colour from public/options.csv is applied once,
           here, as a --color-accent override. Every accent in the stylesheets
           derives from it. */}
-      <body
-        className={`${stix.variable} ${courier.variable}`}
-        style={{ '--color-accent': options.accentColorHex } as React.CSSProperties}
-      >
+      <body style={{ '--color-accent': options.accentColorHex } as React.CSSProperties}>
         {children}
       </body>
     </html>

@@ -5,35 +5,40 @@
    framework and no build-time style tooling: what you read here is what the
    browser gets.
 
-   The design language is shared with its sibling project, Alexandria Library
-   (see alexandria_script_library_master/web/assets/style.css). Both read as a
-   printed technical paper: a serif face for prose, a monospace face for
-   recorded data, black rules instead of boxes and shadows, and a single deep
-   red used sparingly.
+   THE DESIGN, IN ONE PARAGRAPH
+   A quiet, modern document. A neutral sans (Inter) carries every heading and
+   every line of prose; a monospace (IBM Plex Mono) is reserved for recorded
+   values, where column alignment matters and the reader benefits from seeing
+   at a glance that something is data rather than a sentence. Structure is
+   carried by hairline rules and generous whitespace — not by heavy black
+   bars, boxes, or drop shadows. Weight is used sparingly: nothing on the site
+   is set bolder than 600, and the page never shouts to establish a hierarchy
+   that spacing and colour already make clear. One deep red is the only accent,
+   and it means "this is interactive or this is selected" — nothing else.
 
    Map styling is NOT here — it lives in styles_map.css, which is imported
    alongside this file in src/app/layout.tsx.
 
    HOW THIS FILE IS ORGANISED
-     1.  Design tokens ............ every color, font, and spacing value
-     2.  Document skeleton ........ page frame, resets, base elements
-     3.  Masthead ................. title block at the top of each page
-     4.  Abstract ................. summary paragraph + keywords
-     5.  Table of contents ........ the numbered section index
-     6.  Section headings ......... numbered "1. Map", "2. Locations", …
-     7.  Body copy ................ paragraphs, lists, inline prose
-     8.  Rules ..................... the horizontal dividers
-     9.  Tables ..................... data tables and their captions
-    10.  Collapsible sections ...... <details>/<summary> disclosure blocks
-    11.  Form controls ............. the location filter input
-    12.  Media ..................... photo grids and the fullscreen lightbox
-    13.  Field notes ............... rendered Markdown trip reports
-    14.  References ................ the numbered bibliography
-    15.  Checklist pages ........... per-checklist report layout
-    16.  Top navigation ............ the bar on interior pages
-    17.  Colophon .................. page footer
-    18.  Utilities ................. small shared helpers
-    19.  Responsive ................ narrow-screen overrides
+      1.  Design tokens ............ every color, font, size and spacing value
+      2.  Document skeleton ........ page frame, resets, base elements
+      3.  Masthead ................. title block at the top of each page
+      4.  Abstract ................. summary paragraph + keywords
+      5.  Table of contents ........ the section index on the homepage
+      6.  Section headings ......... "Map", "Locations", "Media", …
+      7.  Body copy ................ paragraphs, lists, labels, captions
+      8.  Rules .................... the horizontal dividers
+      9.  Tables .................... data tables and their captions
+     10.  Location index ........... the expandable locations dashboard
+     11.  Collapsible sections ..... <details>/<summary> disclosure blocks
+     12.  Form controls ............ the location filter input
+     13.  Media .................... photo grids and the fullscreen lightbox
+     14.  Field notes .............. rendered Markdown trip reports
+     15.  References ............... the link list at the foot of the page
+     16.  Checklist pages .......... per-checklist report layout
+     17.  Top navigation ........... the bar on interior pages
+     18.  Colophon ................. page footer
+     19.  Responsive ............... narrow-screen overrides
 
    To restyle the whole site, change a token in section 1 rather than editing
    the rules below — nearly every rule is expressed in terms of those tokens.
@@ -46,14 +51,22 @@
    ========================================================================= */
 
 :root {
-  /* -- Color: surfaces ---------------------------------------------------- */
+  /* -- Color: surfaces -----------------------------------------------------
+     Only two grounds exist. `--color-surface` is a barely-there warm tint,
+     used for the one thing on the site that needs to read as "opened": the
+     expanded location panel. It is deliberately close to white — a darker
+     panel would fight the page instead of nesting inside it. */
   --color-bg: #ffffff;              /* page background */
-  --color-surface: #f7f5f3;         /* inset panels: expanded table rows */
+  --color-surface: #faf9f7;         /* expanded location panel */
+  --color-surface-hover: #f4f2ef;   /* row hover feedback */
 
-  /* -- Color: text -------------------------------------------------------- */
-  --color-text: #201e1d;            /* body copy and headings */
-  --color-text-soft: #3d3a37;       /* secondary prose: descriptions, notes */
-  --color-text-mute: #5c5854;       /* tertiary: captions, datelines, labels */
+  /* -- Color: text ---------------------------------------------------------
+     Three steps, in descending emphasis. Anything that is not prose — a
+     caption, a coordinate, an eyebrow label — sits on one of the lower two,
+     which is most of what keeps the page feeling light. */
+  --color-text: #1c1a19;            /* body copy and headings */
+  --color-text-soft: #4a4643;       /* secondary prose: descriptions, notes */
+  --color-text-mute: #7a746e;       /* tertiary: captions, datelines, labels */
 
   /* -- Color: accent -------------------------------------------------------
      A single deep red. `--color-accent` can be overridden per-site from
@@ -61,32 +74,59 @@
      <body>, so everything below follows automatically. */
   --color-accent: #7c1405;
   --color-selection: #ffe0d9;       /* ::selection highlight */
-  /* --color-accent-hover is derived from --color-accent in the `body` rule in
-     section 2, not here: it has to resolve *after* the inline override, so
-     changing the accent in options.csv darkens the hover state to match. */
+  --color-scrim: rgba(20, 19, 18, 0.95);  /* ground behind the lightbox */
+  /* --color-accent-hover and --color-accent-wash are derived from
+     --color-accent in the `body` rule in section 2, not here: they have to
+     resolve *after* the inline override, so changing the accent in
+     options.csv carries the derived tints with it. */
 
   /* -- Color: rules --------------------------------------------------------
-     Only two weights carry all structure on the page. */
-  --color-rule-strong: #201e1d;     /* 2px: between major sections */
-  --color-rule-soft: #d8d4d0;       /* 1px: between rows within a section */
+     Structure is hairlines, not bars. Both weights are 1px; they differ only
+     in contrast, and even the "strong" one is a light grey. This is the
+     single biggest reason the page reads as lighter than a ruled document:
+     a divider should tell you where a section ends, not draw attention to
+     itself while doing it. */
+  --color-rule: #eae7e3;            /* between rows within a section */
+  --color-rule-strong: #d5d0ca;     /* between major sections */
 
   /* -- Type ----------------------------------------------------------------
      Both families are loaded by next/font in layout.tsx, which sets
-     --font-stix and --font-courier. The fallbacks apply if fonts fail. */
-  --font-body: var(--font-stix), Georgia, 'Times New Roman', serif;
-  --font-mono: var(--font-courier), 'Courier New', monospace;
+     --font-sans and --font-mono-face. The fallbacks apply if fonts fail. */
+  --font-body: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+
+  /* -- Type weights --------------------------------------------------------
+     Three weights, and no bold. 600 is the heaviest thing on the site; the
+     jump from 400 to 600 is enough to mark a heading when the type around it
+     is calm. Use --weight-medium for anything that needs to be *noticed*
+     without being a heading: a table header, a selected row, a button. */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-strong: 600;
 
   /* -- Type scale ----------------------------------------------------------
-     Serif sizes are generous because the face runs small at a given px size. */
-  --size-title: 40px;               /* page title */
-  --size-section: 27px;             /* numbered section heading */
-  --size-subsection: 21px;          /* collapsible subsection heading */
-  --size-body: 18px;                /* body paragraphs */
-  --size-abstract: 17px;            /* abstract paragraph */
-  --size-table: 16px;               /* table cells */
+     Sizes are smaller than a serif would need at the same apparent scale:
+     Inter has a large x-height, so it reads bigger per px. */
+  --size-title: 34px;               /* page title */
+  --size-title-record: 27px;        /* … on a record page (checklist, reference) */
+  --size-section: 23px;             /* section heading */
+  --size-subsection: 17px;          /* collapsible subsection heading */
+  --size-body: 16px;                /* body paragraphs */
+  --size-abstract: 16px;            /* abstract paragraph */
+  --size-table: 15px;               /* table cells */
   --size-data: 13px;                /* monospace data: dates, counts, coords */
   --size-caption: 13px;             /* figure/table captions */
-  --size-label: 12px;               /* uppercase eyebrow labels */
+  --size-fine: 12px;                /* scientific names, photo captions */
+  --size-label: 11px;               /* uppercase eyebrow labels, tags */
+
+  /* -- Letter-spacing ------------------------------------------------------
+     Inter is drawn for interfaces and sets slightly loose at display sizes,
+     so large type is tightened and small caps-tracked type is opened up. */
+  --track-tight: -0.02em;           /* titles and section headings */
+  --track-body: -0.006em;           /* running prose */
+  --track-label: 0.08em;            /* uppercase eyebrow labels */
 
   /* -- Spacing -------------------------------------------------------------
      A coarse scale; prefer these over bare pixel values. */
@@ -98,11 +138,29 @@
   --space-6: 40px;
   --space-7: 56px;
 
+  /* -- Radius --------------------------------------------------------------
+     Used only where an element is genuinely a control or a panel — inputs,
+     buttons, thumbnails, the expanded location panel. Text and tables stay
+     square; rounding them would read as decoration. */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
   /* -- Measure -------------------------------------------------------------
      --measure caps the document; --measure-text caps running prose so lines
      stay readable even when the document itself is wide. */
   --measure: 1000px;
-  --measure-text: 68ch;
+  --measure-text: 70ch;
+
+  /* -- Page frame ----------------------------------------------------------
+     The homepage's headroom and footroom. Both sit outside the --space-*
+     scale on purpose: they are larger than any gap between elements, which is
+     what makes the document read as a page rather than as a scrolling feed. */
+  --doc-pad-top: 80px;
+  --doc-pad-bottom: 120px;
+
+  /* -- Motion --------------------------------------------------------------
+     One duration, one easing, everywhere. */
+  --transition: 140ms ease;
 }
 
 
@@ -112,27 +170,54 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;    /* the table of contents jumps to sections */
+}
 
 body {
-  /* Derived here rather than in :root — see the note on --color-accent above. */
+  /* Derived here rather than in :root — see the note on --color-accent above.
+     --color-accent-wash is the faintest possible accent tint, used for the
+     selected row in the location index. */
   --color-accent-hover: color-mix(in srgb, var(--color-accent) 72%, #000000);
+  --color-accent-wash: color-mix(in srgb, var(--color-accent) 5%, #ffffff);
 
   margin: 0;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--size-body);
+  font-weight: var(--weight-regular);
   line-height: 1.6;
+  letter-spacing: var(--track-body);
+  /* Kerning and default ligatures on; Inter's contextual alternates are left
+     off, since they change letterforms mid-word in ways that read as a bug in
+     data columns. */
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection { background: var(--color-selection); }
 
-a { color: var(--color-accent); text-underline-offset: 3px; }
-a:hover { color: var(--color-accent-hover); }
-a:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+/* Links carry the accent and a hairline underline that thickens on hover —
+   quieter at rest than a full-weight underline, still unmistakably a link. */
+a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--transition);
+}
 
-code { font-family: var(--font-mono); font-size: 0.87em; }
+a:hover { color: var(--color-accent-hover); }
+
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+code { font-family: var(--font-mono); font-size: 0.88em; }
 
 img { display: block; max-width: 100%; }
 
@@ -142,12 +227,26 @@ figure { margin: 0; }
 .doc {
   max-width: var(--measure);
   margin: 0 auto;
-  padding: 88px var(--space-4) 120px;
+  padding: var(--doc-pad-top) var(--space-5) var(--doc-pad-bottom);
 }
 
 /* Interior pages (checklist, design standards) sit under a nav bar, so they
    need less headroom than the homepage. */
 .doc--interior { padding-top: var(--space-6); }
+
+/* Anchored sections stop below the point they would otherwise land, so a
+   heading is never flush against the top edge of the viewport. */
+[id] { scroll-margin-top: var(--space-6); }
+
+/* Honour a reader's request for reduced motion: nothing here is meaningful
+   animation, so it can all be switched off. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
 
 
 /* ============================================================================
@@ -156,11 +255,13 @@ figure { margin: 0; }
    Used at the top of the homepage; interior pages use a left-aligned variant.
    ========================================================================= */
 
+/* Small tracked caps above the title. Set in the body face rather than the
+   monospace: mono caps at this size read as a system message, not a label. */
 .kicker {
   text-align: center;
-  font-family: var(--font-mono);
   font-size: var(--size-label);
-  letter-spacing: 0.18em;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--color-text-mute);
   margin: 0 0 var(--space-4);
@@ -169,25 +270,31 @@ figure { margin: 0; }
 .title {
   text-align: center;
   font-size: var(--size-title);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
   line-height: 1.15;
+  letter-spacing: var(--track-tight);
   margin: 0 0 var(--space-3);
 }
 
 .subtitle {
   text-align: center;
-  font-size: 19px;
-  font-style: italic;
+  /* Between --size-body and --size-section, and used once. A token here would
+     be a name with a single caller. */
+  font-size: 17px;
+  font-weight: var(--weight-regular);
   color: var(--color-text-soft);
   margin: 0 0 var(--space-5);
 }
 
 .byline {
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;   /* one step under the subtitle it sits below */
+  color: var(--color-text-soft);
   margin: 0 0 var(--space-1);
 }
 
+/* The one line of the masthead that is a recorded value, so it is the one
+   line set in the data face. */
 .dateline {
   text-align: center;
   font-family: var(--font-mono);
@@ -202,7 +309,7 @@ figure { margin: 0; }
 .masthead--left .title,
 .masthead--left .subtitle,
 .masthead--left .dateline { text-align: left; }
-.masthead--left .title { font-size: 32px; margin-bottom: var(--space-2); }
+.masthead--left .title { font-size: var(--size-title-record); margin-bottom: var(--space-2); }
 .masthead--left .dateline { margin-bottom: 0; }
 
 
@@ -211,85 +318,95 @@ figure { margin: 0; }
    Prose is sourced from web/content/abstract.md — edit that file, not markup.
    ========================================================================= */
 
-.abstract { margin: 0 var(--space-5) var(--space-6); }
+.abstract {
+  max-width: var(--measure-text);
+  margin: 0 auto var(--space-6);
+}
 
 .abstract-label {
   text-align: center;
-  font-size: var(--size-caption);
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
+  color: var(--color-text-mute);
   margin: 0 0 var(--space-3);
 }
 
 /* The Markdown renderer emits <p> elements, so style by descendant. */
 .abstract p {
   font-size: var(--size-abstract);
-  line-height: 1.65;
-  hyphens: auto;
+  line-height: 1.7;
+  color: var(--color-text-soft);
   margin: 0 0 var(--space-3);
 }
 
 .abstract p:last-child { margin-bottom: 0; }
 
 .keywords {
-  font-size: 15px;
-  font-style: italic;
-  color: var(--color-text-soft);
+  font-size: 14px;   /* a step under the abstract, which it annotates */
+  color: var(--color-text-mute);
   margin: var(--space-4) 0 0;
 }
 
 
 /* ============================================================================
    5. TABLE OF CONTENTS
+   A plain index of the sections below. There are no numerals: the list order
+   is the document order, which is all a numeral was telling the reader.
    ========================================================================= */
 
 .toc-label {
-  font-size: var(--size-caption);
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
+  color: var(--color-text-mute);
   margin: 0 0 var(--space-3);
 }
 
+/* Laid out as a wrapping row rather than a stacked list — five short labels
+   read faster on one line than as five lines of near-empty page. */
 .toc {
   list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
   margin: 0;
   padding: 0;
-  font-size: 17px;
-  line-height: 1.95;
+  font-size: var(--size-table);
 }
 
 .toc a {
-  display: flex;
-  gap: var(--space-3);
+  display: inline-block;
+  padding: var(--space-1) 0;
   text-decoration: none;
-  color: var(--color-text);
+  color: var(--color-text-soft);
+  /* The hover underline is drawn as a border so it sits a predictable
+     distance below the text regardless of the label's descenders. */
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition), border-color var(--transition);
 }
 
-.toc a:hover { text-decoration: underline; }
-
-/* The section numeral, held to a fixed width so the labels align. */
-.toc .num {
-  width: 22px;
-  display: inline-block;
+.toc a:hover {
   color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
 }
 
 
 /* ============================================================================
    6. SECTION HEADINGS
-   "1. Map", "2. Locations" — the numeral sits in its own aligned column.
+   Plain labels — "Map", "Locations", "Media". Nothing is numbered: the
+   headings and the contents list carry the same names, which is enough to
+   navigate by.
    ========================================================================= */
 
 .section-heading {
   font-size: var(--size-section);
-  font-weight: 700;
-  line-height: 1.2;
+  font-weight: var(--weight-strong);
+  line-height: 1.25;
+  letter-spacing: var(--track-tight);
   margin: 0 0 var(--space-4);
-  display: flex;
-  gap: var(--space-3);
-  align-items: baseline;
 }
 
 /* Whatever follows a section heading gets its gap from the heading's own
@@ -301,16 +418,12 @@ figure { margin: 0; }
 .section-heading + .list,
 .section-heading + .table { margin-top: 0; }
 
-.section-heading .num {
-  min-width: 32px;
-  display: inline-block;
-}
-
-/* Each top-level section is separated by a heavy rule. */
+/* Each top-level section opens with a hairline. The generous top margin, not
+   the rule's weight, is what separates one section from the next. */
 .section {
-  margin-top: var(--space-6);
+  margin-top: var(--space-7);
   padding-top: var(--space-5);
-  border-top: 2px solid var(--color-rule-strong);
+  border-top: 1px solid var(--color-rule-strong);
 }
 
 
@@ -320,40 +433,41 @@ figure { margin: 0; }
 
 .body-text {
   font-size: var(--size-body);
-  line-height: 1.65;
+  line-height: 1.7;
+  color: var(--color-text-soft);
   max-width: var(--measure-text);
   margin: 0 0 var(--space-4);
 }
 
-/* Justified variant, for standalone blocks of running prose. */
-
 .list {
   font-size: var(--size-table);
-  line-height: 1.65;
+  line-height: 1.7;
+  color: var(--color-text-soft);
   max-width: var(--measure-text);
   margin: var(--space-3) 0 0;
-  padding-left: var(--space-5);
+  padding-left: var(--space-4);
 }
 
 .list li { margin-bottom: var(--space-2); }
 .list li:last-child { margin-bottom: 0; }
 
-/* An uppercase monospace eyebrow above a block of content. */
+/* An uppercase tracked eyebrow above a block of content. */
 .label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--color-text-mute);
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--space-3);
 }
 
-/* Caption under a figure or table. Always sentence case: "Table 1 — …". */
+/* Caption under a figure or table. Sentence case, never numbered — a caption
+   describes the thing above it, and "Figure 4" describes nothing. */
 .caption {
-  font-family: var(--font-mono);
   font-size: var(--size-caption);
   color: var(--color-text-mute);
-  margin: var(--space-2) 0 0;
+  line-height: 1.55;
+  margin: var(--space-3) 0 0;
 }
 
 /* Monospace run of recorded data inside prose: dates, counts, coordinates. */
@@ -361,68 +475,69 @@ figure { margin: 0; }
   font-family: var(--font-mono);
   font-size: var(--size-data);
   color: var(--color-text-mute);
+  font-variant-numeric: tabular-nums;   /* digits line up between rows */
 }
 
-/* Scientific names, always italic monospace so they read as a recorded value. */
+/* Scientific names, always italic monospace so they read as a recorded value
+   rather than as emphasis. */
 .sci {
   font-family: var(--font-mono);
   font-style: italic;
-  font-size: 12px;
+  font-size: var(--size-fine);
   color: var(--color-text-mute);
 }
 
-/* Extra headroom when a label follows a block of content rather than opening
-   a section. */
-.label--spaced { margin-top: var(--space-5); }
-
 /* An empty-state line where a section has no content to show. */
 .empty {
-  font-family: var(--font-mono);
   font-size: var(--size-caption);
-  font-style: italic;
   color: var(--color-text-mute);
   margin: var(--space-3) 0 0;
 }
 
 
 /* -- Map "currently selected" callout --------------------------------------
-   Appears under the map once a pin is chosen. A soft rule, not a heavy one:
-   it is part of section 1, not a new section. */
+   Appears under the map once a pin is chosen. It belongs to the Map section,
+   so it is separated by whitespace and a faint rule, not a section divider. */
 .selected-note {
-  margin-top: var(--space-4);
+  margin-top: var(--space-5);
   padding-top: var(--space-4);
-  border-top: 1px solid var(--color-rule-soft);
+  border-top: 1px solid var(--color-rule);
 }
 
 .selected-note-title {
   font-size: var(--size-subsection);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--track-tight);
   margin: var(--space-1) 0 var(--space-2);
 }
 
-.selected-note-link { margin: var(--space-2) 0 0; font-size: var(--size-table); }
+.selected-note-link { margin: var(--space-3) 0 0; font-size: var(--size-table); }
 
 
 /* ============================================================================
    8. RULES
-   Two weights only: 2px for major divisions, 1px for rows within a section.
+   Both weights are hairlines; they differ in contrast, not thickness.
    ========================================================================= */
 
+/* Major division — under the masthead, above the colophon. */
 .rule {
   border: none;
-  border-top: 2px solid var(--color-rule-strong);
+  border-top: 1px solid var(--color-rule-strong);
   margin: 0 0 var(--space-6);
 }
 
+/* Row-level division within a block. */
 .rule-soft {
   border: none;
-  border-top: 1px solid var(--color-rule-soft);
+  border-top: 1px solid var(--color-rule);
   margin: 0 0 var(--space-5);
 }
 
 
 /* ============================================================================
    9. TABLES
+   Hairline horizontal rules only — no verticals, no zebra striping, no outer
+   border. A table should look like aligned text, not like a spreadsheet.
    ========================================================================= */
 
 .table {
@@ -432,55 +547,192 @@ figure { margin: 0; }
   font-size: var(--size-table);
 }
 
+/* Header row: small tracked caps, medium weight. It is distinguished from the
+   body by case and colour rather than by a heavy rule above and below it. */
 .table th {
   text-align: left;
-  padding: var(--space-2) var(--space-3) var(--space-2) 0;
-  border-top: 2px solid var(--color-rule-strong);
+  padding: 0 var(--space-4) var(--space-3) 0;
   border-bottom: 1px solid var(--color-rule-strong);
-  font-size: 12px;
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  font-weight: 700;
-}
-
-.table td {
-  padding: var(--space-2) var(--space-3) var(--space-2) 0;
-  vertical-align: top;
-  border-bottom: 1px solid var(--color-rule-soft);
-}
-
-/* Close the table with the same heavy rule that opens it. */
-.table tbody tr:last-child > td { border-bottom: 2px solid var(--color-rule-strong); }
-
-/* Right-align numeric columns and set them in the data face. */
-.table .num-cell {
-  text-align: right;
-  font-family: var(--font-mono);
-  font-size: var(--size-data);
+  color: var(--color-text-mute);
   white-space: nowrap;
 }
 
-/* A table nested inside an expanded row sits on the page ground, not the
-   surface tint, so it stays legible against the inset panel. */
-.table--nested { background: var(--color-bg); margin-top: 0; }
+.table td {
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-rule);
+}
 
-/* -- Clickable location rows ---------------------------------------------
-   Rows in the Locations table expand in place. The 2px left border is always
-   present but transparent until selected, so nothing shifts on click. */
-.row-toggle { cursor: pointer; border-left: 2px solid transparent; }
-.row-toggle:hover > td { background: var(--color-surface); }
-.row-toggle[data-selected='true'] { border-left-color: var(--color-accent); }
-.row-toggle[data-selected='true'] > td { background: var(--color-surface); }
+/* The last cell in a row carries no trailing gutter — the page edge already
+   provides it. */
+.table th:last-child,
+.table td:last-child { padding-right: 0; }
 
-/* The expanded detail panel that drops below a selected row. */
-.row-detail > td { background: var(--color-surface); padding: 0; }
-.row-detail-body { padding: var(--space-4) var(--space-3); }
+/* Right-align numeric columns. The alignment applies to the whole column … */
+.table .num-cell { text-align: right; }
+
+/* … but only the cells carry the data face. A numeric column's header is
+   still a header, and setting it in mono at the data size made it read a
+   size larger than the headers beside it. */
+.table td.num-cell {
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--color-text-mute);
+}
+
+/* Let a wide table scroll inside its own box rather than forcing the whole
+   page sideways. */
+.table-scroll { overflow-x: auto; }
 
 
 /* ============================================================================
-   10. COLLAPSIBLE SECTIONS
+   10. LOCATION INDEX
+   The locations dashboard: a table of sites, any one of which expands in
+   place to show its checklists and species.
+
+   The problem this section solves: an expanded row is a panel *inside* a
+   table, and it is easy to end up with three competing surfaces — a tinted
+   row, a tinted panel, and a white nested table floating on top of it — each
+   with its own padding and its own borders. The rules below treat the
+   selected row and its detail panel as ONE object:
+
+     · one tint, shared by the row and the panel below it
+     · one accent spine down the left edge of both, so the pair reads as a
+       single selected unit rather than as two stacked stripes
+     · one value (--index-gutter) setting both the column's left gutter and
+       the panel's inset, so the row's name and the panel's labels share a
+       left edge
+     · nothing nested inside the panel paints its own background
+
+   ========================================================================= */
+
+/* The gutter the accent spine sits in, and the inset of the panel's content.
+   They are the SAME value, which is what makes a location's name and the
+   "Checklists" label beneath it line up on a common left edge. Change one and
+   change the other. */
+.table--index {
+  --index-gutter: var(--space-4);
+}
+
+/* Reserved on every row, not just the selected one, so clicking a row never
+   shifts the column. Applied to .row-toggle and the header rather than to
+   `td:first-child` generally, so the full-width detail cell below is free to
+   manage its own padding. */
+.table--index thead th:first-child,
+.table--index .row-toggle > td:first-child { padding-left: var(--index-gutter); }
+
+/* -- The clickable row ---------------------------------------------------- */
+
+.row-toggle { cursor: pointer; }
+
+.row-toggle > td { transition: background-color var(--transition); }
+
+.row-toggle:hover > td { background: var(--color-surface-hover); }
+
+/* The location's name. Medium, not bold: it is the primary column, but the
+   table is a list of names and setting all of them bold defeats the point. */
+.row-name { font-weight: var(--weight-medium); color: var(--color-text); }
+
+/* A selected row shares the panel's tint, and its bottom hairline is removed
+   so row and panel meet as one surface. */
+.row-toggle[data-selected='true'] > td {
+  background: var(--color-surface);
+  border-bottom-color: transparent;
+}
+
+.row-toggle[data-selected='true'] .row-name { color: var(--color-accent); }
+
+/* The accent spine. Drawn as an inset shadow rather than a border because a
+   border would change the cell's box and shift the table's columns on click;
+   the shadow paints inside the existing box, so nothing moves. The same rule
+   applies to the first cell of the selected row and to the panel below it,
+   which is what makes the spine continuous across the pair. */
+.row-toggle[data-selected='true'] > td:first-child,
+.row-detail > td {
+  box-shadow: inset 2px 0 0 var(--color-accent);
+}
+
+/* -- The expanded panel ---------------------------------------------------- */
+
+/* The <td> is only a container: it carries the tint and the spine, and the
+   padding is applied to the div inside it, where it can be a single value. */
+.row-detail > td {
+  background: var(--color-surface);
+  padding: 0;
+  border-bottom: 1px solid var(--color-rule-strong);
+}
+
+.row-detail-body {
+  /* Vertical padding is generous, horizontal padding matches the gutter the
+     rest of the column already uses — alignment with the row above matters
+     more here than a symmetric box. */
+  padding: var(--space-5) var(--index-gutter);
+}
+
+/* Spacing between the panel's blocks ("Checklists", then "Species"). */
+.detail-group + .detail-group { margin-top: var(--space-6); }
+
+/* -- Checklist links -------------------------------------------------------
+   Formerly a nested table, which meant a second set of column rules inside
+   a panel that already had its own. A checklist entry is a timestamp and a
+   link, so it is a list: timestamp left, link right, hairline between. */
+
+.link-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link-list li {
+  display: grid;
+  grid-template-columns: max-content 1fr;   /* timestamp, then link */
+  align-items: baseline;
+  gap: var(--space-1) var(--space-5);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+/* The first and last entries sit flush with the panel's own padding, so the
+   list's outer edges do not add a second inset on top of it. */
+.link-list li:first-child { padding-top: 0; }
+.link-list li:last-child { padding-bottom: 0; border-bottom: none; }
+
+.link-list a {
+  font-size: var(--size-table);
+  text-decoration: none;
+}
+
+/* Every entry ends in an arrow, so the row still reads as a link without an
+   underline under it; the underline is the hover and keyboard-focus state. */
+.link-list a:hover,
+.link-list a:focus-visible { text-decoration: underline; }
+
+/* -- Nested species table --------------------------------------------------
+   Transparent, so it sits directly on the panel's tint instead of punching a
+   white rectangle through it. Its rules are the faint weight only. */
+
+.table--nested {
+  background: transparent;
+  margin-top: 0;
+}
+
+.table--nested th { border-bottom-color: var(--color-rule); }
+
+.table--nested td { padding: var(--space-2) var(--space-4) var(--space-2) 0; }
+
+.table--nested tbody tr:last-child > td { border-bottom: none; }
+
+
+/* ============================================================================
+   11. COLLAPSIBLE SECTIONS
    Native <details>/<summary>. Two levels:
-     .disclosure         — a whole numbered section (Locations)
+     .disclosure         — a whole section (Locations)
      .disclosure--sub    — a subsection within one (each Media group)
    No JavaScript is involved in opening or closing them.
    ========================================================================= */
@@ -496,31 +748,36 @@ figure { margin: 0; }
 
 .disclosure > summary:focus-visible {
   outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
 }
 
-/* The clickable heading row: numeral, label, then a hint pushed to the right. */
+/* The clickable heading row: label on the left, show/hide hint on the right. */
 .disclosure-heading {
   display: flex;
-  gap: var(--space-3);
+  gap: var(--space-4);
   align-items: baseline;
   font-size: var(--size-section);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--track-tight);
 }
 
-.disclosure-heading .num { min-width: 32px; display: inline-block; }
-
-/* "Show" / "Hide" affordance at the end of the summary line. */
+/* "Show" / "Hide" affordance at the end of the summary line. It states the
+   action only — the count that used to sit here ("Show 22 photos") repeated
+   what the opened section shows anyway. */
 .disclosure-hint {
   margin-left: auto;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--color-accent);
   white-space: nowrap;
   align-self: center;
+  transition: color var(--transition);
 }
+
+.disclosure > summary:hover .disclosure-hint { color: var(--color-accent-hover); }
 
 /* Swap the hint text depending on open state. Both labels are in the markup;
    CSS decides which one is visible. */
@@ -531,59 +788,78 @@ figure { margin: 0; }
 .disclosure-body { margin-top: var(--space-4); }
 
 /* -- Subsection variant (Media groups) ----------------------------------- */
-.disclosure--sub { margin-top: var(--space-4); }
 
-.disclosure--sub > summary { border-bottom: 1px solid var(--color-rule-soft); padding-bottom: var(--space-2); }
+.disclosure--sub { margin-top: 0; }
+
+/* Each subsection is a row in a list, so the hairline belongs to the row, not
+   under the summary text alone. */
+.disclosure--sub > summary {
+  border-bottom: 1px solid var(--color-rule);
+  padding: var(--space-3) 0;
+}
+
+.disclosure--sub[open] > summary { border-bottom-color: transparent; }
 
 .disclosure--sub .disclosure-heading {
   font-size: var(--size-subsection);
-  gap: var(--space-3);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
 }
 
-.disclosure--sub .disclosure-heading .num { min-width: 38px; }
-
-.disclosure--sub .disclosure-body { margin-top: var(--space-3); }
+.disclosure--sub .disclosure-body {
+  margin-top: var(--space-3);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-rule);
+}
 
 /* The metadata line under a subsection heading: date, time, checklist link. */
 .disclosure-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-4);
   align-items: baseline;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--size-data);
   color: var(--color-text-mute);
-  margin-top: var(--space-1);
+  margin: 0 0 var(--space-4);
 }
 
 
 /* ============================================================================
-   11. FORM CONTROLS
+   12. FORM CONTROLS
    ========================================================================= */
 
 .field { position: relative; max-width: 340px; margin-top: var(--space-4); }
 
 .input {
   width: 100%;
-  min-height: 38px;
-  padding: var(--space-2) var(--space-3) var(--space-2) 34px;  /* room for the icon */
-  font-family: var(--font-mono);
-  font-size: 14px;
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3) var(--space-2) 36px;  /* room for icon */
+  font-family: var(--font-body);
+  font-size: var(--size-table);
   color: var(--color-text);
   caret-color: var(--color-accent);
   background: var(--color-bg);
-  border: 1px solid var(--color-rule-soft);
-  border-radius: 0;
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition), box-shadow var(--transition);
 }
 
 .input::placeholder { color: var(--color-text-mute); }
 .input:hover { border-color: var(--color-text-mute); }
-.input:focus-visible { border-color: var(--color-accent); outline: none; }
+
+/* Focus is shown with the border plus a soft accent ring, rather than the
+   browser's default outline, so the control keeps its rounded shape. */
+.input:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash);
+  outline: none;
+}
 
 /* The magnifier sits inside the field, non-interactive. */
 .field-icon {
   position: absolute;
-  left: 10px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--color-text-mute);
@@ -602,43 +878,55 @@ figure { margin: 0; }
 
 
 /* ============================================================================
-   12. MEDIA
+   13. MEDIA
    Photo thumbnails from the Macaulay Library, and the fullscreen viewer.
    ========================================================================= */
 
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: var(--space-4);
 }
 
-/* Each thumbnail is a button so it is keyboard-reachable. */
+/* Each thumbnail is a button so it is keyboard-reachable. The border is a
+   hairline that takes the accent on hover; the image itself lifts slightly,
+   which is the only motion on the page. */
 .media-thumb {
   display: block;
   width: 100%;
   padding: 0;
+  overflow: hidden;
   background: none;
-  border: 1px solid var(--color-rule-soft);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: border-color 120ms ease;
+  transition: border-color var(--transition);
 }
 
 .media-thumb:hover { border-color: var(--color-accent); }
-.media-thumb:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.media-thumb:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
 
 .media-thumb img {
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+  transition: transform var(--transition);
 }
 
+.media-thumb:hover img { transform: scale(1.03); }
+
+/* The caption is the species name alone — the figure numbers it used to carry
+   were never referred to from anywhere. */
 .media-figcaption {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--size-fine);
   color: var(--color-text-mute);
-  margin-top: var(--space-1);
-  line-height: 1.4;
+  margin-top: var(--space-2);
+  line-height: 1.45;
 }
 
 /* -- Lightbox ------------------------------------------------------------- */
@@ -650,7 +938,7 @@ figure { margin: 0; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(32, 30, 29, 0.94);
+  background: var(--color-scrim);
 }
 
 .lightbox-stage {
@@ -668,20 +956,25 @@ figure { margin: 0; }
   max-width: 100%;
   max-height: 78vh;
   object-fit: contain;
+  border-radius: var(--radius-sm);
 }
 
 /* Close / previous / next controls, all on the dark ground. */
 .lightbox-btn {
   position: absolute;
   z-index: 51;
+  display: flex;
   padding: var(--space-2);
   background: none;
   border: none;
+  border-radius: var(--radius-sm);
   color: var(--color-bg);
+  opacity: 0.8;
   cursor: pointer;
+  transition: opacity var(--transition);
 }
 
-.lightbox-btn:hover { color: var(--color-selection); }
+.lightbox-btn:hover { opacity: 1; }
 .lightbox-btn:focus-visible { outline: 2px solid var(--color-bg); outline-offset: 2px; }
 
 .lightbox-btn--close { top: var(--space-4); right: var(--space-4); }
@@ -692,18 +985,27 @@ figure { margin: 0; }
   margin-top: var(--space-4);
   text-align: center;
   color: var(--color-bg);
-  font-family: var(--font-mono);
 }
 
-.lightbox-caption .name { font-size: 14px; margin: 0; }
-/* .sci is dark by default; on the lightbox's dark ground it needs to invert. */
+.lightbox-caption .name { font-size: var(--size-table); margin: 0; }
+/* .sci is muted-dark by default; on the lightbox's dark ground it inverts. */
 .lightbox-caption .sci { color: inherit; opacity: 0.7; }
-.lightbox-caption .meta { font-size: 12px; opacity: 0.75; margin: var(--space-1) 0 0; }
-.lightbox-caption .index { font-size: 11px; opacity: 0.6; margin: var(--space-1) 0 0; }
+.lightbox-caption .meta {
+  font-family: var(--font-mono);
+  font-size: var(--size-fine);
+  opacity: 0.75;
+  margin: var(--space-2) 0 0;
+}
+.lightbox-caption .index {
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  opacity: 0.55;
+  margin: var(--space-1) 0 0;
+}
 
 
 /* ============================================================================
-   13. FIELD NOTES
+   14. FIELD NOTES
    Rendered from Markdown in web/field-notes/. `.note-body` styles the HTML
    that react-markdown emits, since those elements carry no class names.
    ========================================================================= */
@@ -712,73 +1014,111 @@ figure { margin: 0; }
 .note:first-child { margin-top: 0; }
 
 .note-title {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
   font-size: var(--size-subsection);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
+  letter-spacing: var(--track-tight);
   margin: 0;
 }
 
-.note-title .num {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--color-text-mute);
-  min-width: 38px;
-}
-
-/* Frontmatter fields: date, location, conditions, links. */
+/* Frontmatter fields: date, location, conditions, links. A two-column grid of
+   label and value — the labels are the only thing holding the column, so they
+   are sized to their content rather than given a fixed width. */
 .note-meta {
   display: grid;
   grid-template-columns: max-content 1fr;
-  gap: var(--space-1) var(--space-4);
-  font-family: var(--font-mono);
+  gap: var(--space-2) var(--space-5);
   font-size: var(--size-data);
-  border-bottom: 1px solid var(--color-rule-soft);
-  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-rule);
+  padding-bottom: var(--space-4);
   margin: var(--space-3) 0 var(--space-4);
 }
 
 .note-meta dt {
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 11px;
+  letter-spacing: var(--track-label);
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
   color: var(--color-text-mute);
   align-self: baseline;
 }
 
-.note-meta dd { margin: 0; }
-.note-meta dd a { margin-right: var(--space-2); word-break: break-all; }
+.note-meta dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  color: var(--color-text-soft);
+}
 
-.note-body { max-width: var(--measure-text); font-size: var(--size-table); }
+.note-meta dd a { margin-right: var(--space-3); word-break: break-word; }
+
+/* -- Rendered Markdown ----------------------------------------------------- */
+
+.note-body {
+  max-width: var(--measure-text);
+  font-size: var(--size-table);
+  color: var(--color-text-soft);
+}
+
+/* Collapse the outer margins so the block's own spacing governs its edges. */
 .note-body > *:first-child { margin-top: 0; }
 .note-body > *:last-child { margin-bottom: 0; }
-.note-body p { margin: 0 0 var(--space-3); line-height: 1.65; }
+
+.note-body p { margin: 0 0 var(--space-3); line-height: 1.7; }
+
 .note-body h1, .note-body h2, .note-body h3, .note-body h4 {
   font-size: var(--size-table);
-  font-weight: 700;
-  margin: var(--space-4) 0 var(--space-2);
+  font-weight: var(--weight-strong);
+  color: var(--color-text);
+  margin: var(--space-5) 0 var(--space-2);
 }
-.note-body ul, .note-body ol { margin: 0 0 var(--space-3); padding-left: var(--space-5); }
+
+.note-body ul, .note-body ol { margin: 0 0 var(--space-3); padding-left: var(--space-4); }
 .note-body li { margin-bottom: var(--space-1); }
+
 .note-body blockquote {
-  margin: var(--space-3) 0;
+  margin: var(--space-4) 0;
   padding-left: var(--space-4);
-  border-left: 2px solid var(--color-rule-soft);
-  color: var(--color-text-soft);
-  font-style: italic;
+  border-left: 2px solid var(--color-rule-strong);
+  color: var(--color-text-mute);
 }
-.note-body code { background: var(--color-surface); padding: 1px 4px; }
-.note-body table { width: 100%; border-collapse: collapse; font-size: 15px; margin: var(--space-3) 0; }
-.note-body th, .note-body td { text-align: left; padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-rule-soft); }
-.note-body img { margin: var(--space-3) 0; }
-.note-body hr { border: none; border-top: 1px solid var(--color-rule-soft); margin: var(--space-4) 0; }
+
+.note-body code {
+  background: var(--color-surface-hover);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+}
+
+.note-body table {
+  width: 100%;
+  border-collapse: collapse;
+  /* A step under .note-body's own size: a table inside a note is supporting
+     material, not the note's argument. */
+  font-size: 14px;
+  margin: var(--space-4) 0;
+}
+
+.note-body th, .note-body td {
+  text-align: left;
+  padding: var(--space-2) var(--space-4) var(--space-2) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.note-body th { font-weight: var(--weight-medium); }
+
+.note-body img { margin: var(--space-4) 0; border-radius: var(--radius-sm); }
+
+.note-body hr {
+  border: none;
+  border-top: 1px solid var(--color-rule);
+  margin: var(--space-5) 0;
+}
 
 
 /* ============================================================================
-   14. REFERENCES
-   A numbered bibliography: "[N] Label — description."
+   15. REFERENCES
+   A plain list of links with a short description each. Nothing here is
+   numbered and nothing in the prose points at it with a superscript marker:
+   these are further reading, gathered at the foot of the page, not citations
+   that a sentence depends on.
    ========================================================================= */
 
 .reference-list {
@@ -786,29 +1126,41 @@ figure { margin: 0; }
   margin: var(--space-4) 0 0;
   padding: 0;
   font-size: var(--size-table);
-  line-height: 1.7;
 }
 
+/* Each entry is its own row, separated by a hairline, so a long description
+   never runs into the next link. */
 .reference-list li {
-  display: flex;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-rule);
+  line-height: 1.65;
 }
 
-.reference-list li:last-child { margin-bottom: 0; }
+.reference-list li:first-child { padding-top: 0; }
+.reference-list li:last-child { border-bottom: none; }
 
-.reference-list .num {
-  font-family: var(--font-mono);
-  font-size: var(--size-data);
+/* The link is the entry's heading, so it carries the medium weight. */
+.reference-list a {
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.reference-list a:hover { border-bottom-color: var(--color-accent); }
+
+/* The description sits under the link on its own line: side by side, the two
+   compete, and the link stops looking clickable. */
+.reference-list .desc {
+  display: block;
   color: var(--color-text-mute);
-  flex-shrink: 0;
+  font-size: var(--size-caption);
+  margin-top: var(--space-1);
 }
-
-.reference-list .desc { color: var(--color-text-soft); }
 
 
 /* ============================================================================
-   15. CHECKLIST PAGES
+   16. CHECKLIST PAGES
    /checklist/[id] — one submitted eBird checklist rendered as a record.
    ========================================================================= */
 
@@ -816,63 +1168,85 @@ figure { margin: 0; }
 .record {
   display: grid;
   grid-template-columns: max-content 1fr;
-  gap: var(--space-2) var(--space-4);
-  font-family: var(--font-mono);
+  gap: var(--space-2) var(--space-5);
   font-size: var(--size-data);
-  border-top: 1px solid var(--color-rule-soft);
+  border-top: 1px solid var(--color-rule);
   padding-top: var(--space-4);
   margin-top: var(--space-4);
 }
 
 .record dt {
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 11px;
+  letter-spacing: var(--track-label);
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
   color: var(--color-text-mute);
   align-self: baseline;
 }
 
-.record dd { margin: 0; }
+.record dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  color: var(--color-text-soft);
+}
 
-/* A small bordered tag: breeding codes, "Incomplete" status. */
+/* A small tag: breeding codes, "Incomplete" status. A tinted pill rather than
+   an outlined box — at this size a border is most of what the eye sees. */
 .tag {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  padding: 1px 6px;
-  border: 1px solid var(--color-accent);
+  font-size: var(--size-label);
+  letter-spacing: 0.03em;
+  padding: 1px 7px;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-wash);
   color: var(--color-accent);
 }
 
-.tag--neutral { border-color: var(--color-rule-soft); color: var(--color-text-mute); }
+.tag--neutral {
+  background: var(--color-surface-hover);
+  color: var(--color-text-mute);
+  margin-left: var(--space-2);
+}
 
 /* Text button, used to switch a checklist between list and media views. */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-family: var(--font-body);
+  font-size: var(--size-label);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--color-accent);
   background: none;
-  border: 1px solid var(--color-rule-soft);
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-3);
   cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--transition), background-color var(--transition),
+    color var(--transition);
 }
 
-.btn:hover { border-color: var(--color-accent); color: var(--color-accent-hover); }
+.btn:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-wash);
+  color: var(--color-accent-hover);
+}
+
 .btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 /* A back-link above a page masthead. */
 .backlink {
   display: inline-block;
-  font-family: var(--font-mono);
-  font-size: var(--size-data);
-  margin-bottom: var(--space-4);
+  font-size: var(--size-caption);
+  text-decoration: none;
+  margin-bottom: var(--space-5);
 }
+
+.backlink:hover { text-decoration: underline; }
 
 /* Row holding a caption on the left and a control on the right. */
 .toolbar {
@@ -888,24 +1262,28 @@ figure { margin: 0; }
 
 /* -- Rule specimens (design-standards page only) --------------------------- */
 .specimens { margin-top: var(--space-4); }
-.specimen { margin-bottom: var(--space-4); }
+.specimen { margin-bottom: var(--space-5); }
 .specimen:last-child { margin-bottom: 0; }
-.specimen hr { width: 200px; margin: 0; }
+.specimen hr { width: 220px; margin: 0; }
 
 
 /* -- Colour swatches (design-standards page only) -------------------------- */
 .swatches {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
   gap: var(--space-3);
   margin-top: var(--space-4);
 }
 
-.swatch { height: 44px; border: 1px solid var(--color-rule-soft); }
+.swatch {
+  height: 48px;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-sm);
+}
 
 
 /* ============================================================================
-   16. TOP NAVIGATION
+   17. TOP NAVIGATION
    Shown on interior pages only; the homepage uses its table of contents.
    ========================================================================= */
 
@@ -915,48 +1293,42 @@ figure { margin: 0; }
   gap: var(--space-4);
   max-width: var(--measure);
   margin: 0 auto;
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 2px solid var(--color-rule-strong);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-rule-strong);
 }
 
 .nav-brand {
-  font-weight: 700;
-  font-size: 18px;
+  font-weight: var(--weight-strong);
+  font-size: var(--size-table);
+  letter-spacing: var(--track-tight);
   color: var(--color-text);
   text-decoration: none;
   margin-right: auto;
+  transition: color var(--transition);
 }
 
 .nav-brand:hover { color: var(--color-accent); }
 
 .nav a:not(.nav-brand) {
-  font-family: var(--font-mono);
-  font-size: var(--size-data);
+  font-size: var(--size-caption);
+  text-decoration: none;
 }
+
+.nav a:not(.nav-brand):hover { text-decoration: underline; }
 
 
 /* ============================================================================
-   17. COLOPHON
+   18. COLOPHON
    ========================================================================= */
 
 .colophon {
   margin-top: var(--space-7);
   padding-top: var(--space-4);
-  border-top: 2px solid var(--color-rule-strong);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  border-top: 1px solid var(--color-rule-strong);
+  font-size: var(--size-caption);
   line-height: 1.6;
   color: var(--color-text-mute);
 }
-
-
-/* ============================================================================
-   18. UTILITIES
-   ========================================================================= */
-
-.stack { display: flex; flex-direction: column; }
-.stack--tight { gap: var(--space-3); }
-.stack--loose { gap: var(--space-6); }
 
 
 /* ============================================================================
@@ -966,24 +1338,39 @@ figure { margin: 0; }
    ========================================================================= */
 
 @media (max-width: 640px) {
-  .doc { padding: 48px var(--space-3) 80px; }
+  /* Display type steps down by redefining the tokens, so every rule that
+     already reads from them follows without being restated here. Only rules
+     with no token behind them need a line of their own below. */
+  :root {
+    --size-title: 27px;
+    --size-title-record: 22px;
+    --size-section: 20px;
+    --size-subsection: 16px;
+    --doc-pad-top: 44px;
+    --doc-pad-bottom: 80px;
+  }
+
+  .doc { padding: var(--doc-pad-top) var(--space-4) var(--doc-pad-bottom); }
   .doc--interior { padding-top: var(--space-5); }
 
-  .title { font-size: 30px; }
-  .masthead--left .title { font-size: 25px; }
-  .section-heading, .disclosure-heading { font-size: 22px; }
-  .disclosure--sub .disclosure-heading { font-size: 18px; }
+  .nav { padding: var(--space-3) var(--space-4); }
 
-  body { font-size: 17px; }
-  .body-text { font-size: 17px; }
-  .abstract { margin-left: 0; margin-right: 0; }
+  /* The gutter tightens on narrow screens, where 18px on the left costs a
+     meaningful share of the line. Both the rows and the panel follow it. */
+  .table--index { --index-gutter: var(--space-3); }
+
+  /* Headers stop refusing to wrap, so a long column label costs height
+     rather than forcing the whole table to scroll. */
+  .table th { white-space: normal; }
 
   /* Stack label above value instead of side by side. */
   .record, .note-meta { grid-template-columns: 1fr; gap: var(--space-1); }
-  .record dt, .note-meta dt { margin-top: var(--space-2); }
+  .record dt, .note-meta dt { margin-top: var(--space-3); }
+  .record dt:first-child, .note-meta dt:first-child { margin-top: 0; }
 
-  .media-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .media-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
 
-  /* Let wide tables scroll rather than forcing the page to. */
-  .table-scroll { overflow-x: auto; }
+  /* A checklist entry's timestamp and link stack rather than sharing a line
+     too narrow to hold both. */
+  .link-list li { grid-template-columns: 1fr; }
 }

@@ -43,7 +43,10 @@ follows.
 
 The site shares one visual language with its sibling project, [Alexandria
 Library](https://github.com/felipeharker/alexandria_script_library_master): a
-printed technical paper — serif prose, monospace for recorded data, black rules,
-one deep-red accent. It is documented at `/design-standards` on the running
-site, and implemented in two annotated stylesheets,
-`web/src/app/styles_primary.css` and `web/src/app/styles_map.css`.
+quiet, modern document — a neutral sans for headings and prose, a monospace
+reserved for recorded data, hairline rules and whitespace instead of heavy
+bars and boxes, and one deep-red accent that only ever means "interactive or
+selected". Nothing on the site is numbered, and nothing is set bolder than
+600. It is documented at `/design-standards` on the running site, and
+implemented in two annotated stylesheets, `web/src/app/styles_primary.css` and
+`web/src/app/styles_map.css`.

@@ -5,6 +5,7 @@ import { EbirdObservation } from '@/lib/parseEbirdData';
 import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
 import ImageLightbox from './ImageLightbox';
 import { MediaGrid } from './ui/MediaGrid';
+import { Section } from './ui/Section';
 
 interface ChecklistDocumentProps {
   species: EbirdObservation[];
@@ -13,7 +14,8 @@ interface ChecklistDocumentProps {
 
 /**
  * The species table for one checklist, with a toggle to its photos when the
- * checklist has any.
+ * checklist has any. The heading follows the view, so the page always names
+ * what is currently on screen.
  */
 export default function ChecklistDocument({ species, media }: ChecklistDocumentProps) {
   const [viewMode, setViewMode] = useState<'list' | 'media'>('list');
@@ -21,20 +23,19 @@ export default function ChecklistDocument({ species, media }: ChecklistDocumentP
   const hasMedia = media.length > 0;
 
   return (
-    <section className="section">
-      <h2 className="section-heading">
-        <span className="num">1</span>
-        <span>{viewMode === 'list' ? 'Species Observed' : 'Media'}</span>
-      </h2>
-
+    <Section title={viewMode === 'list' ? 'Species Observed' : 'Media'}>
       <div className="toolbar">
         <p className="caption">
           {viewMode === 'list'
-            ? `Table 1 — ${species.length} species recorded.`
+            ? `${species.length} species recorded.`
             : `${media.length} photograph${media.length === 1 ? '' : 's'} from this checklist.`}
         </p>
         {hasMedia && (
-          <button type="button" className="btn" onClick={() => setViewMode(viewMode === 'list' ? 'media' : 'list')}>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => setViewMode(viewMode === 'list' ? 'media' : 'list')}
+          >
             {viewMode === 'list' ? 'View Media' : 'View List'}
           </button>
         )}
@@ -55,7 +56,7 @@ export default function ChecklistDocument({ species, media }: ChecklistDocumentP
                   <td>
                     <div>
                       {obs.CommonName}
-                      {obs.BreedingCode && <span className="tag tag--neutral"> {obs.BreedingCode}</span>}
+                      {obs.BreedingCode && <span className="tag tag--neutral">{obs.BreedingCode}</span>}
                     </div>
                     <div className="sci">{obs.ScientificName}</div>
                     {obs.ObservationDetails && <div className="caption">{obs.ObservationDetails}</div>}
@@ -74,6 +75,6 @@ export default function ChecklistDocument({ species, media }: ChecklistDocumentP
       {lightboxIndex !== null && (
         <ImageLightbox mediaList={media} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
       )}
-    </section>
+    </Section>
   );
 }

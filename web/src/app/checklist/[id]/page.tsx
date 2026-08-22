@@ -6,6 +6,7 @@ import { getSiteOptions } from '@/lib/parseOptions';
 import { formatDate } from '@/lib/formatDate';
 import ChecklistDocument from '@/components/ChecklistDocument';
 import { Nav } from '@/components/ui/Nav';
+import { Masthead } from '@/components/ui/Masthead';
 
 /** One static page per submitted checklist in the observation CSV. */
 export async function generateStaticParams() {
@@ -49,7 +50,7 @@ export default async function ChecklistPage({ params }: { params: Promise<{ id: 
       <>
         <Nav siteTitle={options.title} />
         <article className="doc doc--interior">
-          <h1 className="title">Checklist Not Found</h1>
+          <Masthead align="left" kicker="Not Found" title="Checklist Not Found" />
           <p className="body-text">
             The checklist ID {submissionId} could not be found in the dataset.
           </p>
@@ -79,13 +80,12 @@ export default async function ChecklistPage({ params }: { params: Promise<{ id: 
           ← Back to the location index
         </Link>
 
-        <header className="masthead--left">
-          <p className="kicker">Checklist Report</p>
-          <h1 className="title">{meta.Location}</h1>
-          <p className="dateline">
-            {place} · {formatDate(meta.Date)} · {meta.Time}
-          </p>
-
+        <Masthead
+          align="left"
+          kicker="Checklist Report"
+          title={meta.Location}
+          dateline={`${place} · ${formatDate(meta.Date)} · ${meta.Time}`}
+        >
           <dl className="record">
             <dt>Protocol</dt>
             <dd>{meta.Protocol}</dd>
@@ -112,7 +112,7 @@ export default async function ChecklistPage({ params }: { params: Promise<{ id: 
               </>
             )}
           </dl>
-        </header>
+        </Masthead>
 
         <ChecklistDocument species={checklistData} media={checklistMedia} />
 

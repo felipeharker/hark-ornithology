@@ -102,16 +102,21 @@ terms of them, so changing a token restyles the whole site consistently:
 |---|---|
 | `--color-bg`, `--color-surface` | Page background; the tint behind an expanded location row. |
 | `--color-text`, `--color-text-soft`, `--color-text-mute` | Body copy, secondary prose, captions and labels. |
-| `--color-accent` | Links, section numerals, map pins, disclosure hints. Usually set from `options.csv` instead — see §5. |
-| `--color-rule-strong`, `--color-rule-soft` | The 2px and 1px dividers that carry all page structure. |
-| `--font-body`, `--font-mono` | The serif and monospace faces. To change a family, edit the `next/font` imports in `web/src/app/layout.tsx` too. |
+| `--color-accent` | Links, map pins, the selected location row, disclosure hints. Usually set from `options.csv` instead — see §5. |
+| `--color-rule-strong`, `--color-rule` | The two divider tints. Both are 1px hairlines; they differ in contrast, not thickness. |
+| `--font-body`, `--font-mono` | The sans and monospace faces. To change a family, edit the `next/font` imports in `web/src/app/layout.tsx` too. |
+| `--weight-regular`, `--weight-medium`, `--weight-strong` | 400 / 500 / 600. Nothing on the site is set bolder than 600. |
 | `--size-*` | The type scale: title, section, body, table, data, caption, label. |
+| `--track-*` | Letter-spacing: tight for headings, slightly tight for prose, open for uppercase labels. |
 | `--space-1` … `--space-7` | Every margin, padding, and gap. |
+| `--radius-sm`, `--radius-md` | Corner rounding on controls and panels. Text and tables stay square. |
 | `--measure`, `--measure-text` | Page width, and the width running prose is allowed to reach. |
 
 The rest of the file is 19 numbered, commented sections — masthead, abstract,
-table of contents, tables, collapsible sections, media, field notes,
-references, checklist pages, and so on. The header comment lists them all.
+table of contents, tables, the location index, collapsible sections, media,
+field notes, references, checklist pages, and so on. The header comment lists
+them all. (The stylesheet's own sections are numbered so you can find a rule;
+nothing the *reader* sees on the site is numbered.)
 
 **Rule of thumb:** if you're about to write a pixel value or a hex color into a
 rule, check whether a token already exists for it.
@@ -152,14 +157,22 @@ data file name,ebird-data-latest.csv
 
 **File:** `web/src/components/HomeDocument.tsx`.
 
-- **`SECTIONS`** at the top of the file drives both the table of contents and
-  the section numbering. Reorder or rename entries here and both follow. The
-  `id` of each entry must match the `id` on its `<section>` further down.
-- **`REFERENCES`** is the numbered bibliography in section 5 — label, href, and
-  description per entry.
-- **The masthead** (eyebrow, title, subtitle, byline, dateline) is markup near
-  the top of the returned JSX. The title comes from `options.csv`; the dateline
-  is computed from the most recent date in the observation data.
+- **`SECTIONS`** at the top of the file drives the table of contents. Reorder or
+  rename entries here and the index follows. The `id` of each entry must match
+  the `id` passed to its `<Section>` further down.
+- **`REFERENCES`** is the link list in the Reference section — label, href, and
+  description per entry. It is a plain list: no numbering, and nothing in the
+  prose above points at it with a superscript marker.
+- **The masthead** (eyebrow, title, subtitle, byline, dateline) is the shared
+  `<Masthead>` component near the top of the returned JSX. The title comes from
+  `options.csv`; the dateline is computed from the most recent date in the
+  observation data.
+- **Section blocks** come from `web/src/components/ui/Section.tsx` —
+  `<Section>` for a plain block, `<DisclosureSection>` for one that collapses,
+  `<Disclosure>` for a collapsible subsection. Use these rather than writing the
+  heading markup by hand, so every page stays consistent.
+- **Off-site URLs** (the repository, the eBird profile, Macaulay, Merlin) live
+  in `web/src/lib/siteLinks.ts`, so each is written once.
 
 ## 7. Collapsible sections
 

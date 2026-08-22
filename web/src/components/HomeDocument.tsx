@@ -1,13 +1,17 @@
 'use client';
 
 /**
- * The homepage: one document, five numbered sections.
+ * The homepage: one document, five sections.
  *
- *   1. Map           — every recorded location, plotted from the observation CSV
- *   2. Locations     — collapsible index of sites, each expanding to its detail
- *   3. Media         — Macaulay Library photos, one collapsible group per checklist
- *   4. Field Notes   — Markdown trip reports from web/field-notes/
- *   5. Reference     — numbered bibliography of related links
+ *   Map          — every recorded location, plotted from the observation CSV
+ *   Locations    — collapsible index of sites, each expanding to its detail
+ *   Media        — Macaulay Library photos, one collapsible group per checklist
+ *   Field Notes  — Markdown trip reports from web/field-notes/
+ *   Reference    — links to the project's other homes, gathered at the foot
+ *
+ * Nothing here is numbered. Sections, subsections, figures and references all
+ * used to carry a numeral; none of them was ever referred to by number, so the
+ * numbering was upkeep with no reader on the other end of it.
  *
  * All content arrives as props from src/app/page.tsx, which reads it from the
  * CSV and Markdown files at build time. This component holds interaction state
@@ -26,9 +30,12 @@ import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
 import { FieldNote } from '@/lib/parseFieldNotes';
 import { SiteOptions } from '@/lib/parseOptions';
 import { formatDate } from '@/lib/formatDate';
+import { SITE_LINKS, externalLinkProps } from '@/lib/siteLinks';
 import ImageLightbox from './ImageLightbox';
 import MapView from './Map';
 import { MediaGrid } from './ui/MediaGrid';
+import { Masthead } from './ui/Masthead';
+import { Section, DisclosureSection, Disclosure } from './ui/Section';
 import { SearchIcon } from './ui/Icons';
 
 interface HomeDocumentProps {
@@ -39,8 +46,10 @@ interface HomeDocumentProps {
   options: SiteOptions;
 }
 
-// Section numbering is derived from this list, so reordering it renumbers both
-// the table of contents and the headings.
+/**
+ * The document's sections, in order. The table of contents and the headings
+ * both read from this list, so reordering it reorders the index too.
+ */
 const SECTIONS = [
   { id: 'sec-map', label: 'Map' },
   { id: 'sec-locations', label: 'Locations' },
@@ -49,10 +58,11 @@ const SECTIONS = [
   { id: 'sec-refs', label: 'Reference' },
 ];
 
+/** Further reading, listed plainly at the foot of the page. */
 const REFERENCES = [
   {
     label: 'Github Repository',
-    href: 'https://github.com/felipeharker/hark-ornithology',
+    href: SITE_LINKS.repository,
     desc: 'See underlying project codebase, contribute your own ideas, and host this site locally.',
   },
   {
@@ -62,17 +72,17 @@ const REFERENCES = [
   },
   {
     label: 'eBird Account',
-    href: 'https://ebird.org/profile/ODE0ODA5NQ/world',
+    href: SITE_LINKS.ebirdProfile,
     desc: 'All checklists, locations, observations, and more can also be seen on eBird.',
   },
   {
     label: 'Macaulay Library',
-    href: 'https://media.ebird.org/catalog?unconfirmed=incl&mediaType=photo&userId=USER8148095',
+    href: SITE_LINKS.macaulayLibrary,
     desc: 'Media such as images, audio, and video recordings are cataloged on Macaulay Library.',
   },
   {
     label: 'Merlin Bird ID',
-    href: 'https://merlin.allaboutbirds.org/',
+    href: SITE_LINKS.merlin,
     desc: 'State-of-the-art visual and audio bird identification mobile app. Invaluable resource for any birder.',
   },
 ];
@@ -192,8 +202,7 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
     });
   }, [locationData]);
 
-  // Media grouped by the checklist it was submitted with. `figOffset` lets
-  // figure numbering run continuously across every group on the page.
+  /** Media grouped by the checklist it was submitted with, newest first. */
   const mediaGroups = useMemo(() => {
     const groups: Record<string, { checklistId: string; date: string; time: string; location: string; items: EbirdMediaObservation[] }> = {};
     for (const m of mediaData) {
@@ -208,14 +217,9 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
       }
       groups[m.eBirdChecklistID].items.push(m);
     }
-    const sorted = Object.values(groups).sort(
+    return Object.values(groups).sort(
       (a, b) => b.date.localeCompare(a.date) || b.time.localeCompare(a.time)
     );
-    return sorted.reduce<Array<(typeof sorted)[number] & { figOffset: number }>>((acc, grp) => {
-      const prev = acc[acc.length - 1];
-      acc.push({ ...grp, figOffset: prev ? prev.figOffset + prev.items.length : 0 });
-      return acc;
-    }, []);
   }, [mediaData]);
 
   const latestChecklist = useMemo(() => {
@@ -223,16 +227,15 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
     return dates.length ? formatDate(dates[0]) : '—';
   }, [data]);
 
-  const totalMedia = mediaGroups.reduce((sum, g) => sum + g.items.length, 0);
-
   return (
     <article className="doc">
-      {/* -- Masthead ------------------------------------------------------ */}
-      <p className="kicker">Ornithological Report &middot; eBird Observation Data</p>
-      <h1 className="title">{options.title}</h1>
-      <p className="subtitle">A Record of Field Observations, Checklists, and Media</p>
-      <p className="byline">Felipe Harker</p>
-      <p className="dateline">Data current as of {latestChecklist}</p>
+      <Masthead
+        kicker="Ornithological Report · eBird Observation Data"
+        title={options.title}
+        subtitle="A Record of Field Observations, Checklists, and Media"
+        byline="Felipe Harker"
+        dateline={`Data current as of ${latestChecklist}`}
+      />
       <hr className="rule" />
 
       {/* -- Abstract (text from web/content/abstract.md) ------------------ */}
@@ -250,235 +253,185 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
         </>
       )}
 
-      {/* -- Table of contents --------------------------------------------- */}
+      {/* -- Contents ------------------------------------------------------- */}
       <nav aria-label="Contents">
         <p className="toc-label">Contents</p>
-        <ol className="toc">
-          {SECTIONS.map((s, i) => (
+        <ul className="toc">
+          {SECTIONS.map((s) => (
             <li key={s.id}>
-              <a href={`#${s.id}`}>
-                <span className="num">{i + 1}</span>
-                <span>{s.label}</span>
-              </a>
+              <a href={`#${s.id}`}>{s.label}</a>
             </li>
           ))}
-        </ol>
+        </ul>
       </nav>
 
-      {/* -- 1. Map --------------------------------------------------------- */}
-      <section className="section" id="sec-map">
-        <h2 className="section-heading">
-          <span className="num">1</span>
-          <span>Map</span>
-        </h2>
+      {/* -- Map ------------------------------------------------------------ */}
+      <Section id="sec-map" title="Map">
         <MapView data={data} selectedLocationId={selectedLocationId} onLocationSelect={selectLocation} />
         <p className="caption">
-          Figure 1 — {locations.length} locations plotted from recorded coordinates. Select a pin
-          to open that location below.
+          {locations.length} locations plotted from recorded coordinates. Select a pin to open
+          that location below.
         </p>
 
         {selectedLocation && (
           <div className="selected-note">
             <p className="label">Selected</p>
             <h3 className="selected-note-title">{selectedLocation.name}</h3>
-            <p className="data">
-              {selectedLocation.place} · {selectedLocation.count} observations
-            </p>
+            <p className="data">{selectedLocation.place}</p>
             <p className="selected-note-link">
               <a href="#sec-locations">View in the location index →</a>
             </p>
           </div>
         )}
-      </section>
+      </Section>
 
-      {/* -- 2. Locations ---------------------------------------------------
+      {/* -- Locations -------------------------------------------------------
           The whole section collapses. It holds the longest table on the page,
           so it starts closed unless a location is already selected. */}
-      <section className="section" id="sec-locations">
-        <details
-          className="disclosure"
-          open={locationsOpen}
-          onToggle={(e) => setLocationsOpen((e.currentTarget as HTMLDetailsElement).open)}
-        >
-          <summary>
-            <span className="disclosure-heading">
-              <span className="num">2</span>
-              <span>Locations</span>
-              <span className="disclosure-hint">
-                <span className="hint-closed">Show {locations.length} locations</span>
-                <span className="hint-open">Hide</span>
-              </span>
-            </span>
-          </summary>
+      <DisclosureSection
+        id="sec-locations"
+        title="Locations"
+        open={locationsOpen}
+        onToggle={setLocationsOpen}
+      >
+        <div className="field">
+          <label htmlFor="loc-filter" className="visually-hidden">
+            Filter locations by name
+          </label>
+          <span className="field-icon">
+            <SearchIcon size={15} />
+          </span>
+          <input
+            id="loc-filter"
+            className="input"
+            placeholder="Filter by name…"
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+          />
+        </div>
 
-          <div className="disclosure-body">
-            <div className="field">
-              <label htmlFor="loc-filter" className="visually-hidden">
-                Filter locations by name
-              </label>
-              <span className="field-icon">
-                <SearchIcon size={15} />
-              </span>
-              <input
-                id="loc-filter"
-                className="input"
-                placeholder="Filter by name…"
-                value={locationFilter}
-                onChange={(e) => setLocationFilter(e.target.value)}
-              />
-            </div>
+        <div className="table-scroll">
+          {/* `table--index` opts this table into the location-index rules in
+              section 10 of the stylesheet: the spine gutter and the expanded
+              detail panel. */}
+          <table className="table table--index">
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>Place</th>
+                <th className="num-cell">Obs.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredLocations.map((loc) => {
+                const isSelected = loc.id === selectedLocationId;
+                return (
+                  <React.Fragment key={loc.id}>
+                    <tr
+                      ref={(el) => {
+                        rowRefs.current[loc.id] = el;
+                      }}
+                      className="row-toggle"
+                      data-selected={isSelected}
+                      onClick={() => selectLocation(loc.id)}
+                    >
+                      <td className="row-name">{loc.name}</td>
+                      <td className="data">{loc.place}</td>
+                      <td className="num-cell">{loc.count}</td>
+                    </tr>
 
-            <div className="table-scroll">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Location</th>
-                    <th>Place</th>
-                    <th className="num-cell">Obs.</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredLocations.map((loc) => {
-                    const isSelected = loc.id === selectedLocationId;
-                    return (
-                      <React.Fragment key={loc.id}>
-                        <tr
-                          ref={(el) => {
-                            rowRefs.current[loc.id] = el;
-                          }}
-                          className="row-toggle"
-                          data-selected={isSelected}
-                          onClick={() => selectLocation(loc.id)}
-                        >
-                          <td>
-                            <strong>{loc.name}</strong>
-                          </td>
-                          <td className="data">{loc.place}</td>
-                          <td className="num-cell">{loc.count}</td>
-                        </tr>
+                    {/* The expanded panel. It shares the selected row's tint
+                        and accent spine, so the two read as one object rather
+                        than as a row with a box underneath it. */}
+                    {isSelected && (
+                      <tr className="row-detail">
+                        <td colSpan={3}>
+                          <div className="row-detail-body">
+                            <div className="detail-group">
+                              <p className="label">Checklists</p>
+                              {selectedChecklists.length > 0 ? (
+                                <ul className="link-list">
+                                  {selectedChecklists.map((cl) => (
+                                    <li key={cl.id}>
+                                      <span className="data">
+                                        {cl.date} {cl.time}
+                                      </span>
+                                      <a href={`/checklist/${cl.id}?locationId=${loc.id}`}>
+                                        {cl.hasMedia ? 'Checklist and Media Report →' : 'Checklist Report →'}
+                                      </a>
+                                    </li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <p className="empty">No checklists available.</p>
+                              )}
+                            </div>
 
-                        {isSelected && (
-                          <tr className="row-detail">
-                            <td colSpan={3}>
-                              <div className="row-detail-body">
-                                <p className="label">Checklists</p>
-                                {selectedChecklists.length > 0 ? (
-                                  <table className="table table--nested">
-                                    <tbody>
-                                      {selectedChecklists.map((cl) => (
-                                        <tr key={cl.id}>
-                                          <td className="data">
-                                            {cl.date} {cl.time}
-                                          </td>
-                                          <td>
-                                            <a href={`/checklist/${cl.id}?locationId=${loc.id}`}>
-                                              {cl.hasMedia ? 'Checklist and Media Report →' : 'Checklist Report →'}
-                                            </a>
-                                          </td>
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                ) : (
-                                  <p className="empty">No checklists available.</p>
-                                )}
-
-                                <p className="label label--spaced">Species Observed</p>
-                                <table className="table table--nested">
-                                  <thead>
-                                    <tr>
-                                      <th>Species</th>
-                                      <th className="num-cell">Total</th>
+                            <div className="detail-group">
+                              <p className="label">Species Observed</p>
+                              <table className="table table--nested">
+                                <thead>
+                                  <tr>
+                                    <th>Species</th>
+                                    <th className="num-cell">Total</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {selectedSpecies.map((sp) => (
+                                    <tr key={sp.common}>
+                                      <td>
+                                        <div>{sp.common}</div>
+                                        <div className="sci">{sp.sci}</div>
+                                      </td>
+                                      <td className="num-cell">{sp.onlyX ? 'X' : sp.total}</td>
                                     </tr>
-                                  </thead>
-                                  <tbody>
-                                    {selectedSpecies.map((sp) => (
-                                      <tr key={sp.common}>
-                                        <td>
-                                          <div>{sp.common}</div>
-                                          <div className="sci">{sp.sci}</div>
-                                        </td>
-                                        <td className="num-cell">{sp.onlyX ? 'X' : sp.total}</td>
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
-                                <p className="caption">Table — species totals at {loc.name}.</p>
-                              </div>
-                            </td>
-                          </tr>
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
-            <p className="caption">Table 1 — study locations and total observations recorded.</p>
+        {filteredLocations.length === 0 && (
+          <p className="empty">No locations match &ldquo;{locationFilter}&rdquo;.</p>
+        )}
+      </DisclosureSection>
 
-            {filteredLocations.length === 0 && (
-              <p className="empty">No locations match &ldquo;{locationFilter}&rdquo;.</p>
-            )}
-          </div>
-        </details>
-      </section>
-
-      {/* -- 3. Media -------------------------------------------------------
+      {/* -- Media -----------------------------------------------------------
           The section itself stays open, but each checklist's photos are a
           collapsed subsection, so the page opens as a short index. */}
-      <section className="section" id="sec-media">
-        <h2 className="section-heading">
-          <span className="num">3</span>
-          <span>Media</span>
-        </h2>
-        {mediaGroups.map((grp, i) => (
-          <details className="disclosure disclosure--sub" key={grp.checklistId}>
-            <summary>
-              <span className="disclosure-heading">
-                <span className="num">3.{i + 1}</span>
-                <span>{grp.location}</span>
-                <span className="disclosure-hint">
-                  <span className="hint-closed">
-                    Show {grp.items.length} photo{grp.items.length === 1 ? '' : 's'}
-                  </span>
-                  <span className="hint-open">Hide</span>
-                </span>
+      <Section id="sec-media" title="Media">
+        {mediaGroups.map((grp) => (
+          <Disclosure key={grp.checklistId} title={grp.location}>
+            <p className="disclosure-meta">
+              <span>
+                {grp.date} {grp.time}
               </span>
-            </summary>
-
-            <div className="disclosure-body">
-              <p className="disclosure-meta">
-                <span>
-                  {grp.date} {grp.time}
-                </span>
-                <a href={`/checklist/${grp.checklistId}`}>Checklist Report →</a>
-              </p>
-              <MediaGrid
-                items={grp.items}
-                figOffset={grp.figOffset}
-                onSelect={(idx) => setLightbox({ items: grp.items, index: idx })}
-              />
-            </div>
-          </details>
+              <a href={`/checklist/${grp.checklistId}`}>Checklist Report →</a>
+            </p>
+            <MediaGrid
+              items={grp.items}
+              onSelect={(idx) => setLightbox({ items: grp.items, index: idx })}
+            />
+          </Disclosure>
         ))}
 
         {mediaGroups.length === 0 && <p className="empty">No media available.</p>}
-      </section>
+      </Section>
 
-      {/* -- 4. Field Notes -------------------------------------------------- */}
-      <section className="section" id="sec-notes">
-        <h2 className="section-heading">
-          <span className="num">4</span>
-          <span>Field Notes</span>
-        </h2>
-
-        {fieldNotes.map((note, i) => (
+      {/* -- Field Notes ----------------------------------------------------- */}
+      <Section id="sec-notes" title="Field Notes">
+        {fieldNotes.map((note) => (
           <div className="note" key={note.id}>
-            <h3 className="note-title">
-              <span className="num">4.{i + 1}</span>
-              <span>{note.title}</span>
-            </h3>
+            <h3 className="note-title">{note.title}</h3>
 
             <dl className="note-meta">
               <dt>Date</dt>
@@ -500,7 +453,7 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
                   <dt>Links</dt>
                   <dd>
                     {note.links.map((link) => (
-                      <a key={link} href={link} target="_blank" rel="noopener noreferrer">
+                      <a key={link} href={link} {...externalLinkProps(link)}>
                         {link}
                       </a>
                     ))}
@@ -518,36 +471,28 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
         ))}
 
         {fieldNotes.length === 0 && <p className="empty">No field notes available.</p>}
-      </section>
+      </Section>
 
-      {/* -- 5. Reference ---------------------------------------------------- */}
-      <section className="section" id="sec-refs">
-        <h2 className="section-heading">
-          <span className="num">5</span>
-          <span>Reference</span>
-        </h2>
-        <ol className="reference-list">
-          {REFERENCES.map((ref, i) => (
+      {/* -- Reference --------------------------------------------------------
+          Plain links with a line of description each. Nothing in the prose
+          above points at them with a marker; they are further reading, not
+          citations a sentence depends on. */}
+      <Section id="sec-refs" title="Reference">
+        <ul className="reference-list">
+          {REFERENCES.map((ref) => (
             <li key={ref.href}>
-              <span className="num">[{i + 1}]</span>
-              <span>
-                <a
-                  href={ref.href}
-                  target={ref.href.startsWith('http') ? '_blank' : undefined}
-                  rel="noopener noreferrer"
-                >
-                  {ref.label}
-                </a>
-                <span className="desc"> — {ref.desc}</span>
-              </span>
+              <a href={ref.href} {...externalLinkProps(ref.href)}>
+                {ref.label}
+              </a>
+              <span className="desc">{ref.desc}</span>
             </li>
           ))}
-        </ol>
-      </section>
+        </ul>
+      </Section>
 
       <p className="colophon">
         Data current as of {latestChecklist}. Compiled from eBird checklist exports —{' '}
-        <a href="https://github.com/felipeharker/hark-ornithology" target="_blank" rel="noopener noreferrer">
+        <a href={SITE_LINKS.repository} {...externalLinkProps(SITE_LINKS.repository)}>
           source on GitHub
         </a>
         .
