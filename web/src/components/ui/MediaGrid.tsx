@@ -10,12 +10,17 @@ export function mediaAssetUrl(catalogNumber: string, size: number = 1200): strin
 interface MediaGridProps {
   items: EbirdMediaObservation[];
   onSelect: (index: number) => void;
-  /** Figure numbering offset, so captions continue across groups on one page. */
-  figOffset?: number;
 }
 
-/** Responsive thumbnail grid, shared by the Media section and checklist pages. */
-export function MediaGrid({ items, onSelect, figOffset = 0 }: MediaGridProps) {
+/**
+ * Responsive thumbnail grid, shared by the Media section and checklist pages.
+ *
+ * Each caption is the species name alone. The grid used to number its figures
+ * continuously across the page ("Fig. 37 — Northern Cardinal"), which meant
+ * every group had to be told how many photos preceded it; nothing ever cited
+ * a figure by number, so both the numbering and the offset it needed are gone.
+ */
+export function MediaGrid({ items, onSelect }: MediaGridProps) {
   return (
     <div className="media-grid">
       {items.map((m, idx) => (
@@ -31,9 +36,7 @@ export function MediaGrid({ items, onSelect, figOffset = 0 }: MediaGridProps) {
                 output: 'export' without a custom loader. */}
             <img src={mediaAssetUrl(m.MLCatalogNumber)} alt={m.CommonName} loading="lazy" />
           </button>
-          <figcaption className="media-figcaption">
-            Fig. {figOffset + idx + 1} — {m.CommonName}
-          </figcaption>
+          <figcaption className="media-figcaption">{m.CommonName}</figcaption>
         </figure>
       ))}
     </div>

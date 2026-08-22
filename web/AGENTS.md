@@ -25,7 +25,19 @@ table in [`README.md`](README.md).
   selecting a map pin has to expand it.
 - **The design language is shared with Alexandria Library.** Before changing
   type, color, or rules, check `/design-standards` — a change here is a change
-  to both projects' shared standard.
+  to both projects' shared standard. Its current shape: Inter for headings and
+  prose, IBM Plex Mono for recorded values only, hairline rules rather than
+  heavy ones, three weights (400/500/600) and no bold, and no numbering on
+  sections, subsections, figures or references.
+- **Reuse the primitives in `src/components/ui/`.** `Section`,
+  `DisclosureSection`, `Disclosure` and `Masthead` exist so that every page
+  emits the same markup for the same thing. Assembling a heading or a title
+  block by hand is how the pages drifted apart last time.
+- **The `next/font` variable classes belong on `<html>`, not `<body>`.**
+  `styles_primary.css` composes `--font-body` inside `:root`, and a custom
+  property is substituted against the element it is declared on — put the
+  classes lower and the token resolves to nothing, silently falling the whole
+  site back to the browser's default serif.
 
 ## Verifying
 

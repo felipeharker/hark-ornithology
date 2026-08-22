@@ -36,8 +36,9 @@ src/app/
   page.tsx             reads every content source, hands it to HomeDocument
   checklist/[id]/      one static page per submitted checklist
   design-standards/    the design reference page
-src/components/     HomeDocument, ChecklistDocument, Map, ImageLightbox, ui/
-src/lib/            one parser per content source
+src/components/     HomeDocument, ChecklistDocument, Map, ImageLightbox
+  ui/               shared primitives: Section, Masthead, MediaGrid, Nav, Icons
+src/lib/            one parser per content source, plus siteLinks.ts
 ```
 
 ## Styling
@@ -45,9 +46,9 @@ src/lib/            one parser per content source
 Plain CSS, no framework. Two stylesheets, both imported in `src/app/layout.tsx`:
 
 - **`src/app/styles_primary.css`** — everything except the map. It opens with a
-  block of design tokens (color, type, spacing, measure) and is organised into
-  19 numbered, commented sections. Restyling the site means changing a token,
-  not hunting through rules.
+  block of design tokens (color, type, weight, spacing, radius, measure) and is
+  organised into 19 numbered, commented sections. Restyling the site means
+  changing a token, not hunting through rules.
 - **`src/app/styles_map.css`** — the map frame, the pins, and MapLibre's own
   controls. Its header explains which parts of a MapLibre map are CSS and which
   are not (the basemap itself is a JSON style document, selected by URL in
@@ -58,4 +59,11 @@ one data-driven color swatch on the design-standards page.
 
 The design language is shared with [Alexandria
 Library](https://github.com/felipeharker/alexandria_script_library_master) —
-see `/design-standards` on the running site.
+see `/design-standards` on the running site. In short: Inter for headings and
+prose, IBM Plex Mono for recorded values, hairline rules rather than heavy
+ones, three type weights and no bold, and no numbering on sections, figures or
+references.
+
+Repeated markup goes through the shared primitives in `src/components/ui/` —
+`Section`, `DisclosureSection` and `Disclosure` for blocks, `Masthead` for page
+title blocks — so a page never assembles those by hand.
