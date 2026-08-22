@@ -1,0 +1,991 @@
+/* ============================================================================
+   HARK ORNITHOLOGY — PRIMARY STYLESHEET
+   ----------------------------------------------------------------------------
+   Every visual rule for the site lives in this one file. There is no CSS
+   framework and no build-time style tooling: what you read here is what the
+   browser gets.
+
+   The design language is shared with its sibling project, Alexandria Library
+   (see alexandria_script_library_master/web/assets/style.css). Both read as a
+   printed technical paper: a serif face for prose, a monospace face for
+   recorded data, black rules instead of boxes and shadows, and a single deep
+   red used sparingly.
+
+   Map styling is NOT here — it lives in styles_map.css, which is imported
+   alongside this file in src/app/layout.tsx.
+
+   HOW THIS FILE IS ORGANISED
+     1.  Design tokens ............ every color, font, and spacing value
+     2.  Document skeleton ........ page frame, resets, base elements
+     3.  Masthead ................. title block at the top of each page
+     4.  Abstract ................. summary paragraph + keywords
+     5.  Table of contents ........ the numbered section index
+     6.  Section headings ......... numbered "1. Map", "2. Locations", …
+     7.  Body copy ................ paragraphs, lists, inline prose
+     8.  Rules ..................... the horizontal dividers
+     9.  Tables ..................... data tables and their captions
+    10.  Collapsible sections ...... <details>/<summary> disclosure blocks
+    11.  Form controls ............. the location filter input
+    12.  Media ..................... photo grids and the fullscreen lightbox
+    13.  Field notes ............... rendered Markdown trip reports
+    14.  References ................ the numbered bibliography
+    15.  Checklist pages ........... per-checklist report layout
+    16.  Top navigation ............ the bar on interior pages
+    17.  Colophon .................. page footer
+    18.  Utilities ................. small shared helpers
+    19.  Responsive ................ narrow-screen overrides
+
+   To restyle the whole site, change a token in section 1 rather than editing
+   the rules below — nearly every rule is expressed in terms of those tokens.
+   ========================================================================= */
+
+
+/* ============================================================================
+   1. DESIGN TOKENS
+   Change these, not the rules further down.
+   ========================================================================= */
+
+:root {
+  /* -- Color: surfaces ---------------------------------------------------- */
+  --color-bg: #ffffff;              /* page background */
+  --color-surface: #f7f5f3;         /* inset panels: expanded table rows */
+
+  /* -- Color: text -------------------------------------------------------- */
+  --color-text: #201e1d;            /* body copy and headings */
+  --color-text-soft: #3d3a37;       /* secondary prose: descriptions, notes */
+  --color-text-mute: #5c5854;       /* tertiary: captions, datelines, labels */
+
+  /* -- Color: accent -------------------------------------------------------
+     A single deep red. `--color-accent` can be overridden per-site from
+     public/options.csv (`accent color hex`); layout.tsx sets it inline on
+     <body>, so everything below follows automatically. */
+  --color-accent: #7c1405;
+  --color-selection: #ffe0d9;       /* ::selection highlight */
+  /* --color-accent-hover is derived from --color-accent in the `body` rule in
+     section 2, not here: it has to resolve *after* the inline override, so
+     changing the accent in options.csv darkens the hover state to match. */
+
+  /* -- Color: rules --------------------------------------------------------
+     Only two weights carry all structure on the page. */
+  --color-rule-strong: #201e1d;     /* 2px: between major sections */
+  --color-rule-soft: #d8d4d0;       /* 1px: between rows within a section */
+
+  /* -- Type ----------------------------------------------------------------
+     Both families are loaded by next/font in layout.tsx, which sets
+     --font-stix and --font-courier. The fallbacks apply if fonts fail. */
+  --font-body: var(--font-stix), Georgia, 'Times New Roman', serif;
+  --font-mono: var(--font-courier), 'Courier New', monospace;
+
+  /* -- Type scale ----------------------------------------------------------
+     Serif sizes are generous because the face runs small at a given px size. */
+  --size-title: 40px;               /* page title */
+  --size-section: 27px;             /* numbered section heading */
+  --size-subsection: 21px;          /* collapsible subsection heading */
+  --size-body: 18px;                /* body paragraphs */
+  --size-abstract: 17px;            /* abstract paragraph */
+  --size-table: 16px;               /* table cells */
+  --size-data: 13px;                /* monospace data: dates, counts, coords */
+  --size-caption: 13px;             /* figure/table captions */
+  --size-label: 12px;               /* uppercase eyebrow labels */
+
+  /* -- Spacing -------------------------------------------------------------
+     A coarse scale; prefer these over bare pixel values. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 18px;
+  --space-5: 26px;
+  --space-6: 40px;
+  --space-7: 56px;
+
+  /* -- Measure -------------------------------------------------------------
+     --measure caps the document; --measure-text caps running prose so lines
+     stay readable even when the document itself is wide. */
+  --measure: 1000px;
+  --measure-text: 68ch;
+}
+
+
+/* ============================================================================
+   2. DOCUMENT SKELETON
+   ========================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  /* Derived here rather than in :root — see the note on --color-accent above. */
+  --color-accent-hover: color-mix(in srgb, var(--color-accent) 72%, #000000);
+
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: 1.6;
+}
+
+::selection { background: var(--color-selection); }
+
+a { color: var(--color-accent); text-underline-offset: 3px; }
+a:hover { color: var(--color-accent-hover); }
+a:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+code { font-family: var(--font-mono); font-size: 0.87em; }
+
+img { display: block; max-width: 100%; }
+
+figure { margin: 0; }
+
+/* `.doc` is the single centred column every page sits inside. */
+.doc {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 88px var(--space-4) 120px;
+}
+
+/* Interior pages (checklist, design standards) sit under a nav bar, so they
+   need less headroom than the homepage. */
+.doc--interior { padding-top: var(--space-6); }
+
+
+/* ============================================================================
+   3. MASTHEAD
+   The centred title block: eyebrow, title, subtitle, byline, dateline.
+   Used at the top of the homepage; interior pages use a left-aligned variant.
+   ========================================================================= */
+
+.kicker {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-mute);
+  margin: 0 0 var(--space-4);
+}
+
+.title {
+  text-align: center;
+  font-size: var(--size-title);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 var(--space-3);
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 19px;
+  font-style: italic;
+  color: var(--color-text-soft);
+  margin: 0 0 var(--space-5);
+}
+
+.byline {
+  text-align: center;
+  font-size: 16px;
+  margin: 0 0 var(--space-1);
+}
+
+.dateline {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+  color: var(--color-text-mute);
+  margin: 0 0 var(--space-6);
+}
+
+/* Left-aligned masthead for checklist and design-standards pages, where the
+   page is a record rather than a publication front page. */
+.masthead--left .kicker,
+.masthead--left .title,
+.masthead--left .subtitle,
+.masthead--left .dateline { text-align: left; }
+.masthead--left .title { font-size: 32px; margin-bottom: var(--space-2); }
+.masthead--left .dateline { margin-bottom: 0; }
+
+
+/* ============================================================================
+   4. ABSTRACT
+   Prose is sourced from web/content/abstract.md — edit that file, not markup.
+   ========================================================================= */
+
+.abstract { margin: 0 var(--space-5) var(--space-6); }
+
+.abstract-label {
+  text-align: center;
+  font-size: var(--size-caption);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 var(--space-3);
+}
+
+/* The Markdown renderer emits <p> elements, so style by descendant. */
+.abstract p {
+  font-size: var(--size-abstract);
+  line-height: 1.65;
+  text-align: justify;
+  hyphens: auto;
+  margin: 0 0 var(--space-3);
+}
+
+.abstract p:last-child { margin-bottom: 0; }
+
+.keywords {
+  font-size: 15px;
+  font-style: italic;
+  color: var(--color-text-soft);
+  margin: var(--space-4) 0 0;
+}
+
+
+/* ============================================================================
+   5. TABLE OF CONTENTS
+   ========================================================================= */
+
+.toc-label {
+  font-size: var(--size-caption);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 var(--space-3);
+}
+
+.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 17px;
+  line-height: 1.95;
+}
+
+.toc a {
+  display: flex;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.toc a:hover { text-decoration: underline; }
+
+/* The section numeral, held to a fixed width so the labels align. */
+.toc .num {
+  width: 22px;
+  display: inline-block;
+  color: var(--color-accent);
+}
+
+
+/* ============================================================================
+   6. SECTION HEADINGS
+   "1. Map", "2. Locations" — the numeral sits in its own aligned column.
+   ========================================================================= */
+
+.section-heading {
+  font-size: var(--size-section);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+/* Whatever follows a section heading gets its gap from the heading's own
+   bottom margin, so elements that carry a top margin of their own drop it
+   here rather than doubling up. */
+.section-heading + .caption,
+.section-heading + .reference-list,
+.section-heading + .toolbar,
+.section-heading + .list,
+.section-heading + .table { margin-top: 0; }
+
+.section-heading .num {
+  min-width: 32px;
+  display: inline-block;
+}
+
+/* Each top-level section is separated by a heavy rule. */
+.section {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 2px solid var(--color-rule-strong);
+}
+
+
+/* ============================================================================
+   7. BODY COPY
+   ========================================================================= */
+
+.body-text {
+  font-size: var(--size-body);
+  line-height: 1.65;
+  max-width: var(--measure-text);
+  margin: 0 0 var(--space-4);
+}
+
+/* Justified variant, for standalone blocks of running prose. */
+.body-text--justify { text-align: justify; hyphens: auto; }
+
+.list {
+  font-size: var(--size-table);
+  line-height: 1.65;
+  max-width: var(--measure-text);
+  margin: var(--space-3) 0 0;
+  padding-left: var(--space-5);
+}
+
+.list li { margin-bottom: var(--space-2); }
+.list li:last-child { margin-bottom: 0; }
+
+/* An uppercase monospace eyebrow above a block of content. */
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-mute);
+  margin: 0 0 var(--space-2);
+}
+
+/* Caption under a figure or table. Always sentence case: "Table 1 — …". */
+.caption {
+  font-family: var(--font-mono);
+  font-size: var(--size-caption);
+  color: var(--color-text-mute);
+  margin: var(--space-2) 0 0;
+}
+
+/* Monospace run of recorded data inside prose: dates, counts, coordinates. */
+.data {
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+  color: var(--color-text-mute);
+}
+
+/* Scientific names, always italic monospace so they read as a recorded value. */
+.sci {
+  font-family: var(--font-mono);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--color-text-mute);
+}
+
+/* Extra headroom when a label follows a block of content rather than opening
+   a section. */
+.label--spaced { margin-top: var(--space-5); }
+
+/* An empty-state line where a section has no content to show. */
+.empty {
+  font-family: var(--font-mono);
+  font-size: var(--size-caption);
+  font-style: italic;
+  color: var(--color-text-mute);
+  margin: var(--space-3) 0 0;
+}
+
+
+/* -- Map "currently selected" callout --------------------------------------
+   Appears under the map once a pin is chosen. A soft rule, not a heavy one:
+   it is part of section 1, not a new section. */
+.selected-note {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-rule-soft);
+}
+
+.selected-note-title {
+  font-size: var(--size-subsection);
+  font-weight: 700;
+  margin: var(--space-1) 0 var(--space-2);
+}
+
+.selected-note-link { margin: var(--space-2) 0 0; font-size: var(--size-table); }
+
+
+/* ============================================================================
+   8. RULES
+   Two weights only: 2px for major divisions, 1px for rows within a section.
+   ========================================================================= */
+
+.rule {
+  border: none;
+  border-top: 2px solid var(--color-rule-strong);
+  margin: 0 0 var(--space-6);
+}
+
+.rule-soft {
+  border: none;
+  border-top: 1px solid var(--color-rule-soft);
+  margin: 0 0 var(--space-5);
+}
+
+
+/* ============================================================================
+   9. TABLES
+   ========================================================================= */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-4) 0 0;
+  font-size: var(--size-table);
+}
+
+.table th {
+  text-align: left;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-top: 2px solid var(--color-rule-strong);
+  border-bottom: 1px solid var(--color-rule-strong);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 700;
+}
+
+.table td {
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-rule-soft);
+}
+
+/* Close the table with the same heavy rule that opens it. */
+.table tbody tr:last-child > td { border-bottom: 2px solid var(--color-rule-strong); }
+
+/* Right-align numeric columns and set them in the data face. */
+.table .num-cell {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+  white-space: nowrap;
+}
+
+/* A table nested inside an expanded row sits on the page ground, not the
+   surface tint, so it stays legible against the inset panel. */
+.table--nested { background: var(--color-bg); margin-top: 0; }
+
+/* -- Clickable location rows ---------------------------------------------
+   Rows in the Locations table expand in place. The 2px left border is always
+   present but transparent until selected, so nothing shifts on click. */
+.row-toggle { cursor: pointer; border-left: 2px solid transparent; }
+.row-toggle:hover > td { background: var(--color-surface); }
+.row-toggle[data-selected='true'] { border-left-color: var(--color-accent); }
+.row-toggle[data-selected='true'] > td { background: var(--color-surface); }
+
+/* The expanded detail panel that drops below a selected row. */
+.row-detail > td { background: var(--color-surface); padding: 0; }
+.row-detail-body { padding: var(--space-4) var(--space-3); }
+
+
+/* ============================================================================
+   10. COLLAPSIBLE SECTIONS
+   Native <details>/<summary>. Two levels:
+     .disclosure         — a whole numbered section (Locations)
+     .disclosure--sub    — a subsection within one (each Media group)
+   No JavaScript is involved in opening or closing them.
+   ========================================================================= */
+
+.disclosure { margin: 0; }
+
+.disclosure > summary {
+  cursor: pointer;
+  list-style: none;          /* hide the default triangle … */
+  padding: 2px 0;
+}
+.disclosure > summary::-webkit-details-marker { display: none; }  /* … in Safari */
+
+.disclosure > summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* The clickable heading row: numeral, label, then a hint pushed to the right. */
+.disclosure-heading {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  font-size: var(--size-section);
+  font-weight: 700;
+}
+
+.disclosure-heading .num { min-width: 32px; display: inline-block; }
+
+/* "Show" / "Hide" affordance at the end of the summary line. */
+.disclosure-hint {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  white-space: nowrap;
+  align-self: center;
+}
+
+/* Swap the hint text depending on open state. Both labels are in the markup;
+   CSS decides which one is visible. */
+.disclosure > summary .hint-open { display: none; }
+.disclosure[open] > summary .hint-open { display: inline; }
+.disclosure[open] > summary .hint-closed { display: none; }
+
+.disclosure-body { margin-top: var(--space-4); }
+
+/* -- Subsection variant (Media groups) ----------------------------------- */
+.disclosure--sub { margin-top: var(--space-4); }
+
+.disclosure--sub > summary { border-bottom: 1px solid var(--color-rule-soft); padding-bottom: var(--space-2); }
+
+.disclosure--sub .disclosure-heading {
+  font-size: var(--size-subsection);
+  gap: var(--space-3);
+}
+
+.disclosure--sub .disclosure-heading .num { min-width: 38px; }
+
+.disclosure--sub .disclosure-body { margin-top: var(--space-3); }
+
+/* The metadata line under a subsection heading: date, time, checklist link. */
+.disclosure-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-mute);
+  margin-top: var(--space-1);
+}
+
+
+/* ============================================================================
+   11. FORM CONTROLS
+   ========================================================================= */
+
+.field { position: relative; max-width: 340px; margin-top: var(--space-4); }
+
+.input {
+  width: 100%;
+  min-height: 38px;
+  padding: var(--space-2) var(--space-3) var(--space-2) 34px;  /* room for the icon */
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-text);
+  caret-color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-rule-soft);
+  border-radius: 0;
+}
+
+.input::placeholder { color: var(--color-text-mute); }
+.input:hover { border-color: var(--color-text-mute); }
+.input:focus-visible { border-color: var(--color-accent); outline: none; }
+
+/* The magnifier sits inside the field, non-interactive. */
+.field-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-mute);
+  pointer-events: none;
+}
+
+/* Screen-reader-only text: present for assistive tech, invisible on screen. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+
+/* ============================================================================
+   12. MEDIA
+   Photo thumbnails from the Macaulay Library, and the fullscreen viewer.
+   ========================================================================= */
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-4);
+}
+
+/* Each thumbnail is a button so it is keyboard-reachable. */
+.media-thumb {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--color-rule-soft);
+  cursor: pointer;
+  transition: border-color 120ms ease;
+}
+
+.media-thumb:hover { border-color: var(--color-accent); }
+.media-thumb:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.media-thumb img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.media-figcaption {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-mute);
+  margin-top: var(--space-1);
+  line-height: 1.4;
+}
+
+/* -- Lightbox ------------------------------------------------------------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(32, 30, 29, 0.94);
+}
+
+.lightbox-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1100px;
+  padding: var(--space-4);
+}
+
+.lightbox-stage img {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+}
+
+/* Close / previous / next controls, all on the dark ground. */
+.lightbox-btn {
+  position: absolute;
+  z-index: 51;
+  padding: var(--space-2);
+  background: none;
+  border: none;
+  color: var(--color-bg);
+  cursor: pointer;
+}
+
+.lightbox-btn:hover { color: var(--color-selection); }
+.lightbox-btn:focus-visible { outline: 2px solid var(--color-bg); outline-offset: 2px; }
+
+.lightbox-btn--close { top: var(--space-4); right: var(--space-4); }
+.lightbox-btn--prev { left: var(--space-4); top: 50%; transform: translateY(-50%); }
+.lightbox-btn--next { right: var(--space-4); top: 50%; transform: translateY(-50%); }
+
+.lightbox-caption {
+  margin-top: var(--space-4);
+  text-align: center;
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+}
+
+.lightbox-caption .name { font-size: 14px; margin: 0; }
+/* .sci is dark by default; on the lightbox's dark ground it needs to invert. */
+.lightbox-caption .sci { color: inherit; opacity: 0.7; }
+.lightbox-caption .meta { font-size: 12px; opacity: 0.75; margin: var(--space-1) 0 0; }
+.lightbox-caption .index { font-size: 11px; opacity: 0.6; margin: var(--space-1) 0 0; }
+
+
+/* ============================================================================
+   13. FIELD NOTES
+   Rendered from Markdown in web/field-notes/. `.note-body` styles the HTML
+   that react-markdown emits, since those elements carry no class names.
+   ========================================================================= */
+
+.note { margin-top: var(--space-6); }
+.note:first-child { margin-top: 0; }
+
+.note-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--size-subsection);
+  font-weight: 700;
+  margin: 0;
+}
+
+.note-title .num {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--color-text-mute);
+  min-width: 38px;
+}
+
+/* Frontmatter fields: date, location, conditions, links. */
+.note-meta {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-1) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+  border-bottom: 1px solid var(--color-rule-soft);
+  padding-bottom: var(--space-3);
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.note-meta dt {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+  color: var(--color-text-mute);
+  align-self: baseline;
+}
+
+.note-meta dd { margin: 0; }
+.note-meta dd a { margin-right: var(--space-2); word-break: break-all; }
+
+.note-body { max-width: var(--measure-text); font-size: var(--size-table); }
+.note-body > *:first-child { margin-top: 0; }
+.note-body > *:last-child { margin-bottom: 0; }
+.note-body p { margin: 0 0 var(--space-3); line-height: 1.65; }
+.note-body h1, .note-body h2, .note-body h3, .note-body h4 {
+  font-size: var(--size-table);
+  font-weight: 700;
+  margin: var(--space-4) 0 var(--space-2);
+}
+.note-body ul, .note-body ol { margin: 0 0 var(--space-3); padding-left: var(--space-5); }
+.note-body li { margin-bottom: var(--space-1); }
+.note-body blockquote {
+  margin: var(--space-3) 0;
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--color-rule-soft);
+  color: var(--color-text-soft);
+  font-style: italic;
+}
+.note-body code { background: var(--color-surface); padding: 1px 4px; }
+.note-body table { width: 100%; border-collapse: collapse; font-size: 15px; margin: var(--space-3) 0; }
+.note-body th, .note-body td { text-align: left; padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-rule-soft); }
+.note-body img { margin: var(--space-3) 0; }
+.note-body hr { border: none; border-top: 1px solid var(--color-rule-soft); margin: var(--space-4) 0; }
+
+
+/* ============================================================================
+   14. REFERENCES
+   A numbered bibliography: "[N] Label — description."
+   ========================================================================= */
+
+.reference-list {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  font-size: var(--size-table);
+  line-height: 1.7;
+}
+
+.reference-list li {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.reference-list li:last-child { margin-bottom: 0; }
+
+.reference-list .num {
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+  color: var(--color-text-mute);
+  flex-shrink: 0;
+}
+
+.reference-list .desc { color: var(--color-text-soft); }
+
+
+/* ============================================================================
+   15. CHECKLIST PAGES
+   /checklist/[id] — one submitted eBird checklist rendered as a record.
+   ========================================================================= */
+
+/* Definition-list grid for protocol, effort, observers, comments. */
+.record {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-2) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+  border-top: 1px solid var(--color-rule-soft);
+  padding-top: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.record dt {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+  color: var(--color-text-mute);
+  align-self: baseline;
+}
+
+.record dd { margin: 0; }
+
+/* A small bordered tag: breeding codes, "Incomplete" status. */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 1px 6px;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+}
+
+.tag--neutral { border-color: var(--color-rule-soft); color: var(--color-text-mute); }
+
+/* Text button, used to switch a checklist between list and media views. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  background: none;
+  border: 1px solid var(--color-rule-soft);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+.btn:hover { border-color: var(--color-accent); color: var(--color-accent-hover); }
+.btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* A back-link above a page masthead. */
+.backlink {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+  margin-bottom: var(--space-4);
+}
+
+/* Row holding a caption on the left and a control on the right. */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.toolbar .caption { margin-top: 0; }
+
+
+/* -- Rule specimens (design-standards page only) --------------------------- */
+.specimens { margin-top: var(--space-4); }
+.specimen { margin-bottom: var(--space-4); }
+.specimen:last-child { margin-bottom: 0; }
+.specimen hr { width: 200px; margin: 0; }
+
+
+/* -- Colour swatches (design-standards page only) -------------------------- */
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.swatch { height: 44px; border: 1px solid var(--color-rule-soft); }
+
+
+/* ============================================================================
+   16. TOP NAVIGATION
+   Shown on interior pages only; the homepage uses its table of contents.
+   ========================================================================= */
+
+.nav {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 2px solid var(--color-rule-strong);
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--color-text);
+  text-decoration: none;
+  margin-right: auto;
+}
+
+.nav-brand:hover { color: var(--color-accent); }
+
+.nav a:not(.nav-brand) {
+  font-family: var(--font-mono);
+  font-size: var(--size-data);
+}
+
+
+/* ============================================================================
+   17. COLOPHON
+   ========================================================================= */
+
+.colophon {
+  margin-top: var(--space-7);
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--color-rule-strong);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--color-text-mute);
+}
+
+
+/* ============================================================================
+   18. UTILITIES
+   ========================================================================= */
+
+.stack { display: flex; flex-direction: column; }
+.stack--tight { gap: var(--space-3); }
+.stack--loose { gap: var(--space-6); }
+
+
+/* ============================================================================
+   19. RESPONSIVE
+   One breakpoint. Below it: tighter page padding, smaller display type, and
+   the two-column definition grids collapse to a single column.
+   ========================================================================= */
+
+@media (max-width: 640px) {
+  .doc { padding: 48px var(--space-3) 80px; }
+  .doc--interior { padding-top: var(--space-5); }
+
+  .title { font-size: 30px; }
+  .masthead--left .title { font-size: 25px; }
+  .section-heading, .disclosure-heading { font-size: 22px; }
+  .disclosure--sub .disclosure-heading { font-size: 18px; }
+
+  body { font-size: 17px; }
+  .body-text { font-size: 17px; }
+  .abstract { margin-left: 0; margin-right: 0; }
+
+  /* Stack label above value instead of side by side. */
+  .record, .note-meta { grid-template-columns: 1fr; gap: var(--space-1); }
+  .record dt, .note-meta dt { margin-top: var(--space-2); }
+
+  .media-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+
+  /* Let wide tables scroll rather than forcing the page to. */
+  .table-scroll { overflow-x: auto; }
+}

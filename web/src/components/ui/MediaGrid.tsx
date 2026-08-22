@@ -1,36 +1,37 @@
 import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
 
+/** Macaulay Library serves media by catalog number; 1200 is the long edge. */
+const ML_ASSET_BASE = 'https://cdn.download.ams.birds.cornell.edu/api/v1/asset';
+
+export function mediaAssetUrl(catalogNumber: string, size: number = 1200): string {
+  return `${ML_ASSET_BASE}/${catalogNumber}/${size}`;
+}
+
 interface MediaGridProps {
   items: EbirdMediaObservation[];
   onSelect: (index: number) => void;
-  /** Figure numbering offset so captions can continue across groups on one page. */
+  /** Figure numbering offset, so captions continue across groups on one page. */
   figOffset?: number;
 }
 
-// Consistent responsive thumbnail grid, used for Media and Checklist media views.
+/** Responsive thumbnail grid, shared by the Media section and checklist pages. */
 export function MediaGrid({ items, onSelect, figOffset = 0 }: MediaGridProps) {
   return (
-    <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
+    <div className="media-grid">
       {items.map((m, idx) => (
-        <figure key={m.MLCatalogNumber} className="m-0">
+        <figure key={m.MLCatalogNumber}>
           <button
             type="button"
+            className="media-thumb"
             onClick={() => onSelect(idx)}
-            className="block w-full p-0 cursor-pointer transition-colors"
-            style={{ border: '1px solid var(--color-divider)', background: 'none' }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-divider)'; }}
+            aria-label={`View ${m.CommonName} full size`}
           >
-            <div className="aspect-square overflow-hidden">
-              <img
-                src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${m.MLCatalogNumber}/1200`}
-                alt={m.CommonName}
-                className="object-cover w-full h-full"
-                loading="lazy"
-              />
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element -- remote
+                Macaulay Library assets; next/image is unavailable under
+                output: 'export' without a custom loader. */}
+            <img src={mediaAssetUrl(m.MLCatalogNumber)} alt={m.CommonName} loading="lazy" />
           </button>
-          <figcaption className="hk-figcap mt-1">
+          <figcaption className="media-figcaption">
             Fig. {figOffset + idx + 1} — {m.CommonName}
           </figcaption>
         </figure>

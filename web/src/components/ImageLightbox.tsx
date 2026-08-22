@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { EbirdMediaObservation } from '../lib/parseEbirdMediaData';
 import { CloseIcon, ArrowLeftIcon, ArrowRightIcon } from './ui/Icons';
+import { mediaAssetUrl } from './ui/MediaGrid';
 
 interface ImageLightboxProps {
   mediaList: EbirdMediaObservation[];
@@ -10,16 +11,19 @@ interface ImageLightboxProps {
   onClose: () => void;
 }
 
+/** Fullscreen photo viewer. Escape closes; arrow keys page through the set. */
 export default function ImageLightbox({ mediaList, initialIndex, onClose }: ImageLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
-  const nextImage = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % mediaList.length);
-  }, [mediaList.length]);
+  const nextImage = useCallback(
+    () => setCurrentIndex((prev) => (prev + 1) % mediaList.length),
+    [mediaList.length]
+  );
 
-  const prevImage = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + mediaList.length) % mediaList.length);
-  }, [mediaList.length]);
+  const prevImage = useCallback(
+    () => setCurrentIndex((prev) => (prev - 1 + mediaList.length) % mediaList.length),
+    [mediaList.length]
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -36,8 +40,7 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'color-mix(in srgb, var(--color-neutral-900) 90%, transparent)' }}
+      className="lightbox"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -45,10 +48,12 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
     >
       <button
         type="button"
-        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        className="lightbox-btn lightbox-btn--close"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
         aria-label="Close"
-        className="absolute top-4 right-4 z-50 cursor-pointer p-2"
-        style={{ background: 'none', border: 'none', color: 'var(--color-bg)' }}
       >
         <CloseIcon />
       </button>
@@ -57,44 +62,42 @@ export default function ImageLightbox({ mediaList, initialIndex, onClose }: Imag
         <>
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); prevImage(); }}
+            className="lightbox-btn lightbox-btn--prev"
+            onClick={(e) => {
+              e.stopPropagation();
+              prevImage();
+            }}
             aria-label="Previous image"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-50 cursor-pointer p-2"
-            style={{ background: 'none', border: 'none', color: 'var(--color-bg)' }}
           >
             <ArrowLeftIcon />
           </button>
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); nextImage(); }}
+            className="lightbox-btn lightbox-btn--next"
+            onClick={(e) => {
+              e.stopPropagation();
+              nextImage();
+            }}
             aria-label="Next image"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-50 cursor-pointer p-2"
-            style={{ background: 'none', border: 'none', color: 'var(--color-bg)' }}
           >
             <ArrowRightIcon />
           </button>
         </>
       )}
 
-      <div
-        className="relative w-full h-full max-w-5xl max-h-[85vh] flex flex-col items-center justify-center p-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <img
-          src={`https://cdn.download.ams.birds.cornell.edu/api/v1/asset/${currentMedia.MLCatalogNumber}/1200`}
-          alt={currentMedia.CommonName}
-          className="max-w-full max-h-[80vh] object-contain"
-        />
-        <div className="mt-4 text-center w-full max-w-3xl" style={{ color: 'var(--color-bg)', fontFamily: 'var(--font-mono)' }}>
-          <p style={{ fontSize: 14 }}>
-            {currentMedia.CommonName}{' '}
-            <span style={{ opacity: 0.7, fontStyle: 'italic' }}>{currentMedia.ScientificName}</span>
+      <div className="lightbox-stage" onClick={(e) => e.stopPropagation()}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- remote
+            Macaulay Library asset; see the note in MediaGrid. */}
+        <img src={mediaAssetUrl(currentMedia.MLCatalogNumber)} alt={currentMedia.CommonName} />
+        <div className="lightbox-caption">
+          <p className="name">
+            {currentMedia.CommonName} <span className="sci">{currentMedia.ScientificName}</span>
           </p>
-          <p style={{ fontSize: 12, opacity: 0.75, marginTop: 4 }}>
+          <p className="meta">
             {currentMedia.Locality && `${currentMedia.Locality} · `}
             {currentMedia.Date} {currentMedia.Time} · By {currentMedia.Recordist}
           </p>
-          <p style={{ fontSize: 11, opacity: 0.6, marginTop: 4 }}>
+          <p className="index">
             Image {currentIndex + 1} of {mediaList.length} · ML Catalog #{currentMedia.MLCatalogNumber}
           </p>
         </div>

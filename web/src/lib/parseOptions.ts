@@ -3,14 +3,17 @@ import path from 'path';
 import Papa from 'papaparse';
 
 export interface SiteOptions {
+  /** Site title: browser tab, masthead, and interior-page nav brand. */
   title: string;
-  secondaryColorHex: string;
+  /** Accent colour, applied once as --color-accent on <body> in layout.tsx. */
+  accentColorHex: string;
+  /** Which CSV in observation-data/ to read. */
   dataFileName: string;
 }
 
 const DEFAULT_OPTIONS: SiteOptions = {
   title: 'Ornithological Report',
-  secondaryColorHex: '#ff6361',
+  accentColorHex: '#7c1405',
   dataFileName: 'ebird-data-latest.csv',
 };
 
@@ -45,8 +48,14 @@ export function getSiteOptions(): SiteOptions {
 
       if (item === 'title' || item === 'header') {
         options.title = value;
-      } else if (item === 'secondary color hex' || item === 'location color hex' || item === 'link color hex') {
-        options.secondaryColorHex = value;
+      } else if (
+        item === 'accent color hex' ||
+        // Older spellings, still accepted so an existing options.csv keeps working.
+        item === 'secondary color hex' ||
+        item === 'location color hex' ||
+        item === 'link color hex'
+      ) {
+        options.accentColorHex = value;
       } else if (item === 'data file name') {
         options.dataFileName = value;
       }

@@ -1,0 +1,160 @@
+/* ============================================================================
+   HARK ORNITHOLOGY — MAP STYLESHEET
+   ----------------------------------------------------------------------------
+   Everything visual about the observation map lives here: the frame it sits
+   in, the pins, and MapLibre's own on-map controls. Imported alongside
+   styles_primary.css in src/app/layout.tsx.
+
+   WHAT YOU CAN AND CANNOT CHANGE FROM THIS FILE
+
+   A MapLibre map has two separate layers of appearance, and only one of them
+   is CSS:
+
+     1. THE BASEMAP (roads, water, labels, land colour) is not CSS. It is a
+        MapLibre Style JSON document served by the tile provider, and it is
+        selected by URL in src/components/Map.tsx (the BASEMAP_STYLE_URL
+        constant, currently Carto's "Positron" — a pale grey basemap chosen
+        so the pins and the page read as one document). To change the
+        basemap's own colours you point that constant at a different style
+        URL, or host your own style JSON. There is no CSS hook for it.
+
+     2. EVERYTHING DRAWN ON TOP is ordinary DOM, and that is what this file
+        styles: the pins (rendered as HTML elements by react-map-gl's
+        <Marker>), the frame around the canvas, and the attribution and
+        control widgets MapLibre injects with `.maplibregl-*` class names.
+
+   The map's DATA is separate again from both: pin positions come straight
+   from the Latitude/Longitude columns of the eBird export in
+   observation-data/, parsed by src/lib/parseEbirdData.ts and grouped by
+   Location ID. Nothing about the map is hardcoded to a place.
+   ========================================================================= */
+
+
+/* ============================================================================
+   1. MAP TOKENS
+   The colour tokens default to the site palette from styles_primary.css, so
+   the map follows the rest of the design unless you override them here.
+   ========================================================================= */
+
+:root {
+  --map-height: 480px;                            /* frame height on desktop */
+  --map-height-small: 320px;                      /* … and on narrow screens */
+  --map-border: 1px solid var(--color-rule-soft); /* frame around the canvas */
+
+  --map-pin-size: 26px;                           /* pin height at rest */
+  --map-pin-scale-selected: 1.3;                  /* growth factor when picked */
+  --map-pin-color: var(--color-accent);           /* unselected pin */
+  --map-pin-color-selected: var(--color-text);    /* selected pin */
+  --map-pin-opacity-hover: 0.75;
+
+  --map-control-bg: var(--color-bg);
+  --map-control-border: var(--color-rule-soft);
+  --map-attribution-size: 10px;
+}
+
+
+/* ============================================================================
+   2. FRAME
+   The bordered box the map canvas fills. Sized here rather than inline so the
+   map's proportions are a style decision, not a component decision.
+   ========================================================================= */
+
+.map-frame {
+  position: relative;
+  width: 100%;
+  height: var(--map-height);
+  border: var(--map-border);
+  overflow: hidden;
+}
+
+/* react-map-gl renders its own wrapper div inside; make it fill the frame. */
+.map-frame > div { width: 100%; height: 100%; }
+
+
+/* ============================================================================
+   3. PINS
+   Each pin is a <button> so it is keyboard-reachable and announces itself to
+   screen readers. The SVG inside inherits `color`, which is why setting
+   `color` here is enough to recolour a pin.
+   ========================================================================= */
+
+.map-pin {
+  display: block;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 0;
+  color: var(--map-pin-color);
+  transition: color 120ms ease, transform 120ms ease, opacity 120ms ease;
+}
+
+.map-pin svg { width: var(--map-pin-size); height: var(--map-pin-size); }
+
+.map-pin:hover { opacity: var(--map-pin-opacity-hover); }
+
+.map-pin:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* The selected pin darkens, grows, and lifts above its neighbours. */
+.map-pin[data-selected='true'] {
+  color: var(--map-pin-color-selected);
+  transform: scale(var(--map-pin-scale-selected));
+  position: relative;
+  z-index: 10;
+}
+
+
+/* ============================================================================
+   4. MAPLIBRE CHROME
+   MapLibre injects its own widgets with fixed class names. These overrides
+   bring them in line with the rest of the page: square corners, no shadows,
+   the site's monospace face.
+   ========================================================================= */
+
+/* Attribution credit in the corner of the map. Required by the tile
+   provider's terms — restyle it, but do not hide it. */
+.maplibregl-ctrl-attrib {
+  font-family: var(--font-mono);
+  font-size: var(--map-attribution-size);
+  background: var(--map-control-bg) !important;
+  border-radius: 0 !important;
+}
+
+.maplibregl-ctrl-attrib a { color: var(--color-text-mute); }
+
+/* Zoom / compass buttons. */
+.maplibregl-ctrl-group {
+  background: var(--map-control-bg);
+  border: 1px solid var(--map-control-border);
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.maplibregl-ctrl-group button + button { border-top: 1px solid var(--map-control-border); }
+.maplibregl-ctrl-group button:hover { background: var(--color-surface); }
+
+/* Popups, if any are added later. */
+.maplibregl-popup-content {
+  font-family: var(--font-body);
+  background: var(--map-control-bg);
+  border: 1px solid var(--map-control-border);
+  border-radius: 0;
+  box-shadow: none;
+  padding: var(--space-3);
+}
+
+/* MapLibre's canvas takes focus on click; suppress its default ring in favour
+   of the frame border, which already reads as the map's edge. */
+.maplibregl-canvas:focus { outline: none; }
+
+
+/* ============================================================================
+   5. RESPONSIVE
+   ========================================================================= */
+
+@media (max-width: 640px) {
+  .map-frame { height: var(--map-height-small); }
+}
