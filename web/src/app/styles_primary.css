@@ -226,7 +226,6 @@ figure { margin: 0; }
 .abstract p {
   font-size: var(--size-abstract);
   line-height: 1.65;
-  text-align: justify;
   hyphens: auto;
   margin: 0 0 var(--space-3);
 }
@@ -327,7 +326,6 @@ figure { margin: 0; }
 }
 
 /* Justified variant, for standalone blocks of running prose. */
-.body-text--justify { text-align: justify; hyphens: auto; }
 
 .list {
   font-size: var(--size-table);
