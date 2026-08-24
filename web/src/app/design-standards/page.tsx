@@ -1,14 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getSiteOptions } from '@/lib/parseOptions';
+import { SITE_TITLE } from '@/lib/siteConfig';
 import { Nav } from '@/components/ui/Nav';
 import { Masthead } from '@/components/ui/Masthead';
 import { Section } from '@/components/ui/Section';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const options = getSiteOptions();
-  return { title: `Design Standards | ${options.title}` };
-}
+export const metadata: Metadata = { title: `Design Standards | ${SITE_TITLE}` };
 
 /** Role, family, size — mirrors the type scale tokens in styles_primary.css. */
 const TYPE_ROWS: [string, string, string][] = [
@@ -42,11 +39,9 @@ const SWATCHES: [string, string][] = [
 ];
 
 export default function DesignStandardsPage() {
-  const options = getSiteOptions();
-
   return (
     <>
-      <Nav siteTitle={options.title} />
+      <Nav />
       <article className="doc doc--interior">
         <Link href="/#sec-refs" className="backlink">
           ← Back to Reference
@@ -170,10 +165,10 @@ export default function DesignStandardsPage() {
           <p className="body-text">
             A white ground with one accent, used sparingly and with one meaning: this is
             interactive, or this is selected. Links, the selected map pin, the selected location
-            row and the disclosure hints carry it; nothing else does. The accent is configurable
-            per-site via <code>accent color hex</code> in <code>public/options.csv</code>, and
-            both the hover step and the faint wash behind a selected control are derived from it,
-            so all three move together.
+            row and the disclosure hints carry it; nothing else does. It is set once, as the{' '}
+            <code>--color-accent</code> token in <code>styles_primary.css</code>, and both the
+            hover step and the faint wash behind a selected control are derived from it, so all
+            three move together.
           </p>
           <div className="swatches">
             {SWATCHES.map(([label, color]) => (
@@ -208,14 +203,16 @@ export default function DesignStandardsPage() {
               marker.
             </li>
             <li>
-              Prose and data are sourced from files, never hardcoded: CSV exports for observations
-              and media, Markdown for the abstract and field notes.
+              Observations come from files, never from markup: CSV exports for the records and
+              media, Markdown for the field notes. Only the project&rsquo;s own settings — its
+              title, its abstract, its off-site links — are written in code, in{' '}
+              <code>src/lib/siteConfig.ts</code>.
             </li>
           </ul>
         </Section>
 
         <p className="colophon">
-          Applies to every page in this project — <Link href="/">{options.title}</Link>.
+          Applies to every page in this project — <Link href="/">{SITE_TITLE}</Link>.
         </p>
       </article>
     </>

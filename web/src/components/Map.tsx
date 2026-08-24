@@ -16,7 +16,7 @@
 import { useMemo, useRef, useEffect } from 'react';
 import Map, { Marker, MapRef } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { EbirdObservation } from '../lib/parseEbirdData';
+import { EbirdObservation } from '../lib/parseEbird';
 import { MapPinIcon } from './ui/Icons';
 
 /**

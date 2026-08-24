@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getLatestEbirdData } from '@/lib/parseEbirdData';
-import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
-import { getSiteOptions } from '@/lib/parseOptions';
+import { getObservations, getMedia } from '@/lib/parseEbird';
 import { formatDate } from '@/lib/formatDate';
+import { SITE_TITLE } from '@/lib/siteConfig';
 import ChecklistDocument from '@/components/ChecklistDocument';
 import { Nav } from '@/components/ui/Nav';
 import { Masthead } from '@/components/ui/Masthead';
 
 /** One static page per submitted checklist in the observation CSV. */
 export async function generateStaticParams() {
-  const { data } = getLatestEbirdData();
-  const submissionIds = new Set(data.map((obs) => obs.SubmissionID).filter(Boolean));
+  const submissionIds = new Set(
+    getObservations().map((obs) => obs.SubmissionID).filter(Boolean)
+  );
   return Array.from(submissionIds).map((id) => ({ id: id as string }));
 }
 
@@ -21,34 +21,29 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id: submissionId } = await params;
-  const { data } = getLatestEbirdData();
-  const checklistData = data.filter((obs) => obs.SubmissionID === submissionId);
+  const checklistData = getObservations().filter((obs) => obs.SubmissionID === submissionId);
 
   if (checklistData.length === 0) {
     return { title: 'Checklist Not Found' };
   }
 
   const meta = checklistData[0];
-  const options = getSiteOptions();
   return {
-    title: `${formatDate(meta.Date)} · ${meta.Location} | ${options.title}`,
+    title: `${formatDate(meta.Date)} · ${meta.Location} | ${SITE_TITLE}`,
     description: `${checklistData.length} species recorded at ${meta.Location} on ${formatDate(meta.Date)}.`,
   };
 }
 
 export default async function ChecklistPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: submissionId } = await params;
-  const { data } = getLatestEbirdData();
-  const { data: allMediaData } = getLatestEbirdMediaData();
-  const options = getSiteOptions();
 
-  const checklistData = data.filter((obs) => obs.SubmissionID === submissionId);
-  const checklistMedia = allMediaData.filter((m) => m.eBirdChecklistID === submissionId);
+  const checklistData = getObservations().filter((obs) => obs.SubmissionID === submissionId);
+  const checklistMedia = getMedia().filter((m) => m.eBirdChecklistID === submissionId);
 
   if (checklistData.length === 0) {
     return (
       <>
-        <Nav siteTitle={options.title} />
+        <Nav />
         <article className="doc doc--interior">
           <Masthead align="left" kicker="Not Found" title="Checklist Not Found" />
           <p className="body-text">
@@ -74,7 +69,7 @@ export default async function ChecklistPage({ params }: { params: Promise<{ id: 
 
   return (
     <>
-      <Nav siteTitle={options.title} />
+      <Nav />
       <article className="doc doc--interior">
         <Link href={`/?locationId=${meta.LocationID}`} className="backlink">
           ← Back to the location index

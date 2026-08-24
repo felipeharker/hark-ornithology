@@ -25,7 +25,7 @@
 
    The map's DATA is separate again from both: pin positions come straight
    from the Latitude/Longitude columns of the eBird export in
-   observation-data/, parsed by src/lib/parseEbirdData.ts and grouped by
+   observation-data/, parsed by src/lib/parseEbird.ts and grouped by
    Location ID. Nothing about the map is hardcoded to a place.
    ========================================================================= */
 

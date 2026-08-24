@@ -1,8 +1,13 @@
-import { defineConfig, globalIgnores } from "eslint/config";
+import { defineConfig } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
-const eslintConfig = defineConfig([
+/**
+ * Next's own two configs, plus one house rule. Build output (.next/, out/) and
+ * next-env.d.ts are already ignored by eslint-config-next — this file used to
+ * restate that list, which changed nothing.
+ */
+export default defineConfig([
   ...nextVitals,
   ...nextTs,
   {
@@ -11,14 +16,4 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-unused-vars": ["warn", { caughtErrorsIgnorePattern: "^_" }],
     },
   },
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
 ]);
-
-export default eslintConfig;

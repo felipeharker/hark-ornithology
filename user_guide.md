@@ -15,9 +15,9 @@ editing content and styling, not for developing features.
   `web/src/app/styles_primary.css` (everything) and
   `web/src/app/styles_map.css` (the map). Both open with a block of design
   tokens.
-- **Content:** eBird CSV exports, plus Markdown files for the abstract and the
-  field notes.
-- **Settings:** `public/options.csv` — title, accent color, data file name.
+- **Content:** eBird CSV exports, plus a Markdown file per field note.
+- **Settings:** `web/src/lib/siteConfig.ts` — the site title, subtitle, byline,
+  abstract, and off-site links, as plain constants in code.
 
 Running it locally:
 
@@ -36,9 +36,9 @@ CSV/Markdown need a page refresh in dev, or a rebuild for production.
 |---|---|
 | The observations, locations, species, checklists | `observation-data/ebird-data-latest.csv` |
 | The photos | `observation-data/ebird-media-latest.csv` |
-| The abstract paragraphs | `web/content/abstract.md` |
 | A field note | `web/field-notes/field-note-<N>.md` |
-| Site title, accent color, data file | `public/options.csv` |
+| The title, abstract, or an off-site link | `web/src/lib/siteConfig.ts` |
+| The accent color | `--color-accent` in `web/src/app/styles_primary.css` |
 | Any color, font, size, or spacing | `web/src/app/styles_primary.css` |
 | Anything about the map's appearance | `web/src/app/styles_map.css` |
 | Section names/order, reference links | `web/src/components/HomeDocument.tsx` |
@@ -53,24 +53,27 @@ CSV/Markdown need a page refresh in dev, or a rebuild for production.
   `ebird-media-latest.csv` (photo metadata — powers the Media section and the
   lightboxes).
 - **How to update:** export fresh data from eBird / the Macaulay Library and
-  overwrite these two files. To keep a differently-named file instead, point at
-  it via `data file name` in `public/options.csv` (§5).
-- **Archiving:** old exports can sit in `observation-data/archive/`; files there
-  are never read.
-- **Parsing code:** `web/src/lib/parseEbirdData.ts` and
-  `parseEbirdMediaData.ts` map eBird's column headers (`"Common Name"`,
-  `"Location ID"`) to the field names used throughout the app (`CommonName`,
-  `LocationID`), and cache the result keyed on the file's modification time. A
-  plain data refresh never requires touching them; only a change to eBird's
-  export format does.
+  overwrite these two files, keeping the names. Rebuild and the whole site
+  follows.
+- **Parsing code:** `web/src/lib/parseEbird.ts` maps eBird's column headers
+  (`"Common Name"`, `"Location ID"`) to the field names used throughout the app
+  (`CommonName`, `LocationID`), and caches the result keyed on each file's
+  modification time. A plain data refresh never requires touching it; only a
+  change to eBird's export format does.
 
 ## 2. Editing the abstract
 
-- **File:** `web/content/abstract.md`.
-- **How:** plain Markdown. Blank lines separate paragraphs; `*italic*`,
-  `**bold**`, and `[links](https://example.com)` all work. Save and refresh.
-- **What it affects:** the paragraphs under the title on the homepage, nothing
-  else. Delete the file entirely and the abstract block simply doesn't render.
+- **File:** `web/src/lib/siteConfig.ts`, the `ABSTRACT` constant.
+- **How:** ordinary text between quotes. The long string is split across
+  several lines with `+` purely to keep the source readable — the pieces are
+  joined end to end, so keep a trailing space on each line or the words will
+  run together.
+- **What it affects:** the paragraph under the title on the homepage, nothing
+  else.
+- **Why it is in code:** it was a Markdown file, read by its own parser, so
+  that four sentences could be edited without opening a `.ts` file. In practice
+  it changes about as often as the site's title does, and the parser was more
+  machinery than the text was worth.
 - **A keywords line** used to sit below the abstract. It was removed: it
   repeated the paragraph above it in list form. The abstract block is now the
   label and the prose, nothing else.
@@ -84,7 +87,16 @@ CSV/Markdown need a page refresh in dev, or a rebuild for production.
   body as Markdown below the `---`.
 - **Sorting:** newest first by `<N>` — the number in the filename, not the
   `date` field. Any file that doesn't match `field-note-<N>.md` exactly (like
-  `TEMPLATE.md` or `README.md`) is ignored.
+  `TEMPLATE.md`) is ignored and never published.
+- **Frontmatter fields:**
+
+  | Field | Required | Description |
+  |---|---|---|
+  | `title` | yes | The note's heading in the list. |
+  | `date` | yes | Shown alongside the title; any string works. |
+  | `location` | no | Shown in the note's meta section if present. |
+  | `conditions` | no | Weather, temperature, wind, visibility. |
+  | `links` | no | List of URLs (e.g. eBird checklists), shown below the meta section. |
 - **Formatting:** full GitHub-flavored Markdown. How the rendered output looks
   is set by the `.note-body` rules in §13 of `styles_primary.css`.
 - **Parsing code:** `web/src/lib/parseFieldNotes.ts`.
@@ -103,7 +115,7 @@ terms of them, so changing a token restyles the whole site consistently:
 |---|---|
 | `--color-bg`, `--color-surface` | Page background; the two faint tints behind a hovered map control and an inline code span. |
 | `--color-text`, `--color-text-soft`, `--color-text-mute` | Body copy, secondary prose, captions and labels. |
-| `--color-accent` | Links, map pins, the open location row's name, Show / Hide hints. Usually set from `options.csv` instead — see §5. |
+| `--color-accent` | Links, map pins, the open location row's name, Show / Hide hints. The hover shade and the faint selected-row wash are both derived from it, so changing this one value re-accents the site. |
 | `--color-rule-strong`, `--color-rule` | The two divider tints. Both are 1px hairlines; they differ in contrast, not thickness. |
 | `--font-body`, `--font-mono` | The sans and monospace faces. To change a family, edit the `next/font` imports in `web/src/app/layout.tsx` too. |
 | `--weight-regular`, `--weight-medium`, `--weight-strong` | 400 / 500 / 600. Nothing on the site is set bolder than 600. |
@@ -135,24 +147,30 @@ tile provider, selected by URL in the `BASEMAP_STYLE_URL` constant in
 that constant at a different style URL. Everything drawn *on top* of the
 basemap is ordinary HTML, and that is what `styles_map.css` controls.
 
-## 5. Site options
+## 5. Site settings
 
-Edit `public/options.csv`:
+Edit `web/src/lib/siteConfig.ts`. Everything in it is a plain constant — change
+the text between the quotes and save.
 
-```csv
-item,value
-title,Harker Ornithology Report
-accent color hex,#7c1405
-data file name,ebird-data-latest.csv
-```
+- **`SITE_TITLE`** — the masthead heading, the browser tab, and the brand in
+  the nav bar on interior pages.
+- **`SITE_SUBTITLE`**, **`SITE_AUTHOR`** — the two lines under the homepage
+  title.
+- **`SITE_DESCRIPTION`** — the description search engines and link previews
+  read.
+- **`ABSTRACT`** — the summary paragraph on the homepage (§2).
+- **`SITE_LINKS`** — the repository, eBird profile, Macaulay Library and Merlin
+  URLs. Each is written once here and used in several places, so the navigation
+  bar, the reference list and the colophon can never disagree.
 
-- **`title`** — the masthead heading, the browser tab, and the brand in the nav
-  bar on interior pages.
-- **`accent color hex`** — applied once, as a `--color-accent` override on
-  `<body>` in `web/src/app/layout.tsx`. Every accent on the site follows,
-  including the hover shade, which is derived from it. (The older spellings
-  `secondary color hex`, `location color hex`, and `link color hex` still work.)
-- **`data file name`** — which CSV in `observation-data/` to read.
+The **accent color** is not here: it is the `--color-accent` token at the top of
+`web/src/app/styles_primary.css`, alongside every other color (§4).
+
+These used to live in a `public/options.csv` read at build time. Nothing but
+this project ever wrote that file, and a CSV with three rows in it needed a
+parser, a set of default values, and a list of alternative spellings for its
+keys to stay working. As constants they need none of that, and a typo is caught
+by the build instead of silently falling back to a default.
 
 ## 6. Page structure and section names
 
@@ -165,15 +183,15 @@ data file name,ebird-data-latest.csv
   description per entry. It is a plain list: no numbering, and nothing in the
   prose above points at it with a superscript marker.
 - **The masthead** (eyebrow, title, subtitle, byline, dateline) is the shared
-  `<Masthead>` component near the top of the returned JSX. The title comes from
-  `options.csv`; the dateline is computed from the most recent date in the
-  observation data.
+  `<Masthead>` component near the top of the returned JSX. The title, subtitle
+  and byline come from `siteConfig.ts`; the dateline is computed from the most
+  recent date in the observation data.
 - **Section blocks** come from `web/src/components/ui/Section.tsx` —
   `<Section>` for a plain block, `<Disclosure>` for a row inside one that
   collapses. Use these rather than writing the heading markup by hand, so every
   page stays consistent.
 - **Off-site URLs** (the repository, the eBird profile, Macaulay, Merlin) live
-  in `web/src/lib/siteLinks.ts`, so each is written once.
+  in `web/src/lib/siteConfig.ts`, so each is written once.
 
 ## 7. Collapsible rows
 
@@ -232,9 +250,11 @@ sync automatically.
 
 ## Areas to leave alone unless you know the code
 
-1. **The parsers** (`web/src/lib/parse*.ts`) — they read and cache the CSV and
-   Markdown files. Changing the field-name mappings or the `mtime` caching
-   breaks the site's ability to read your data.
+1. **The parsers** (`web/src/lib/parseEbird.ts`, `parseFieldNotes.ts`) — they
+   read and cache the CSV and Markdown files. Changing the field-name mappings
+   or the `mtime` caching breaks the site's ability to read your data.
+   `parseEbird.ts` reads the filesystem, so only server components may import a
+   function from it; that is why `formatDate.ts` is separate.
 2. **`useMemo` / `useState` blocks** in the components — these compute the
    location counts, species totals, and media grouping. Editing the logic inside
    them corrupts what's displayed.

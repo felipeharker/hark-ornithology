@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { EbirdObservation } from '@/lib/parseEbirdData';
-import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
+import { EbirdObservation, EbirdMediaObservation } from '@/lib/parseEbird';
 import ImageLightbox from './ImageLightbox';
 import { MediaGrid } from './ui/MediaGrid';
 import { Section } from './ui/Section';
