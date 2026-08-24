@@ -3,12 +3,12 @@ import React from 'react';
 /**
  * Section primitives.
  *
- * Every top-level block on the site is one of three things, and all three are
- * declared here so their markup can never drift apart page to page:
+ * Every block on the site is one of two things, and both are declared here so
+ * their markup can never drift apart page to page:
  *
- *   <Section>            a plain block with a heading
- *   <DisclosureSection>  a whole section that collapses (the location index)
- *   <Disclosure>         a subsection that collapses (one media group)
+ *   <Section>     a plain block with a heading
+ *   <Disclosure>  a row inside a section that collapses — one location, one
+ *                 media group
  *
  * Sections are not numbered. The heading and the contents list carry the same
  * name, which is all a reader needs to find their way; a numeral in front of
@@ -41,7 +41,7 @@ export function Section({ id, title, children }: SectionProps) {
  * Both labels are always in the markup; CSS shows whichever matches the
  * disclosure's open state, so no JavaScript is needed to keep them in step.
  * It names the action only — a count here ("Show 22 photos") just repeated
- * what opening the section shows anyway.
+ * what opening the row shows anyway.
  */
 function DisclosureHint() {
   return (
@@ -52,49 +52,33 @@ function DisclosureHint() {
   );
 }
 
-interface DisclosureSectionProps extends SectionProps {
+interface DisclosureProps {
+  title: string;
   /**
-   * Controlled open state. The location index needs this because selecting a
-   * map pin has to expand the section from outside it; every other disclosure
-   * on the site is left to the browser.
+   * Controlled open state. Media groups pass neither prop and are left to the
+   * browser. The location list passes both, because a location also opens
+   * from outside its own row — a map pin, or a ?locationId= link — and only
+   * one location is open at a time.
    */
   open?: boolean;
   onToggle?: (open: boolean) => void;
-}
-
-/** A whole section whose body collapses behind its heading. */
-export function DisclosureSection({ id, title, open, onToggle, children }: DisclosureSectionProps) {
-  return (
-    <section className="section" id={id}>
-      <details
-        className="disclosure"
-        open={open}
-        onToggle={(e) => onToggle?.((e.currentTarget as HTMLDetailsElement).open)}
-      >
-        <summary>
-          <span className="disclosure-heading">
-            <span>{title}</span>
-            <DisclosureHint />
-          </span>
-        </summary>
-        <div className="disclosure-body">{children}</div>
-      </details>
-    </section>
-  );
-}
-
-interface DisclosureProps {
-  title: string;
+  /** Scroll target; React 19 takes a ref on a function component as a prop. */
+  ref?: React.Ref<HTMLDetailsElement>;
   children: React.ReactNode;
 }
 
-/** A subsection within a section — one media group per checklist. */
-export function Disclosure({ title, children }: DisclosureProps) {
+/** One collapsible row within a section. */
+export function Disclosure({ title, open, onToggle, ref, children }: DisclosureProps) {
   return (
-    <details className="disclosure disclosure--sub">
+    <details
+      className="disclosure"
+      ref={ref}
+      open={open}
+      onToggle={(e) => onToggle?.((e.currentTarget as HTMLDetailsElement).open)}
+    >
       <summary>
         <span className="disclosure-heading">
-          <span>{title}</span>
+          <span className="disclosure-title">{title}</span>
           <DisclosureHint />
         </span>
       </summary>

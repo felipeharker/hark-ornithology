@@ -101,20 +101,20 @@ terms of them, so changing a token restyles the whole site consistently:
 
 | Token group | Controls |
 |---|---|
-| `--color-bg`, `--color-surface` | Page background; the tint behind an expanded location row. |
+| `--color-bg`, `--color-surface` | Page background; the two faint tints behind a hovered map control and an inline code span. |
 | `--color-text`, `--color-text-soft`, `--color-text-mute` | Body copy, secondary prose, captions and labels. |
-| `--color-accent` | Links, map pins, the selected location row, disclosure hints. Usually set from `options.csv` instead — see §5. |
+| `--color-accent` | Links, map pins, the open location row's name, Show / Hide hints. Usually set from `options.csv` instead — see §5. |
 | `--color-rule-strong`, `--color-rule` | The two divider tints. Both are 1px hairlines; they differ in contrast, not thickness. |
 | `--font-body`, `--font-mono` | The sans and monospace faces. To change a family, edit the `next/font` imports in `web/src/app/layout.tsx` too. |
 | `--weight-regular`, `--weight-medium`, `--weight-strong` | 400 / 500 / 600. Nothing on the site is set bolder than 600. |
 | `--size-*` | The type scale: title, section, body, table, data, caption, label. |
 | `--track-*` | Letter-spacing: tight for headings, slightly tight for prose, open for uppercase labels. |
 | `--space-1` … `--space-7` | Every margin, padding, and gap. |
-| `--radius-sm`, `--radius-md` | Corner rounding on controls and panels. Text and tables stay square. |
+| `--radius-sm`, `--radius-md` | Corner rounding on controls and thumbnails. Text and tables stay square. |
 | `--measure`, `--measure-text` | Page width, and the width running prose is allowed to reach. |
 
 The rest of the file is 19 numbered, commented sections — masthead, abstract,
-table of contents, tables, the location index, collapsible sections, media,
+table of contents, tables, the location index, collapsible rows, media,
 field notes, references, checklist pages, and so on. The header comment lists
 them all. (The stylesheet's own sections are numbered so you can find a rule;
 nothing the *reader* sees on the site is numbered.)
@@ -169,29 +169,32 @@ data file name,ebird-data-latest.csv
   `options.csv`; the dateline is computed from the most recent date in the
   observation data.
 - **Section blocks** come from `web/src/components/ui/Section.tsx` —
-  `<Section>` for a plain block, `<DisclosureSection>` for one that collapses,
-  `<Disclosure>` for a collapsible subsection. Use these rather than writing the
-  heading markup by hand, so every page stays consistent.
+  `<Section>` for a plain block, `<Disclosure>` for a row inside one that
+  collapses. Use these rather than writing the heading markup by hand, so every
+  page stays consistent.
 - **Off-site URLs** (the repository, the eBird profile, Macaulay, Merlin) live
   in `web/src/lib/siteLinks.ts`, so each is written once.
 
-## 7. Collapsible sections
+## 7. Collapsible rows
 
-Both use the browser's native `<details>`/`<summary>` element — there is no
-JavaScript behind opening and closing them.
+Locations and Media are the same list twice: the section itself stays open and
+lists every entry, and each entry is a row that opens in place. Both are the
+browser's native `<details>`/`<summary>` element.
 
-- **Locations (section 2)** collapses as a whole, and starts **closed** so the
-  page opens short. It opens automatically when you arrive at a
-  `?locationId=…` URL or click a pin on the map. That one behavior is the
-  reason its open state is tracked in React (`locationsOpen`) rather than left
-  entirely to the browser.
-- **Media (section 3)** stays open, but **each checklist's photos** is its own
-  collapsed subsection, so the section reads as an index of checklists until you
-  open one.
+- **Locations** lists every site you have recorded, busiest first. Opening a row
+  shows that site's place and observation count, its checklists, and every
+  species seen there. Only one location is open at a time, because a row can
+  also be opened from outside itself — by arriving at a `?locationId=…` URL, or
+  by clicking a pin on the map. That is the one place where React tracks an open
+  state (`selectedLocationId`) rather than leaving it to the browser, and it is
+  also why the open row's name is set in the accent colour: the map pin and the
+  row have to agree about which location is current.
+- **Media** lists every checklist that has photos, newest first. Opening a row
+  shows the date, a link to the checklist report, and the photo grid. Nothing
+  outside a media row can open it, so the browser handles those on its own.
 
-To change a default, set or remove `open` on the relevant `<details>`. The
-"Show N photos" / "Hide" labels are both present in the markup; CSS decides
-which is visible (`.disclosure-hint` in §10 of `styles_primary.css`).
+The "Show" / "Hide" labels are both present in the markup; CSS decides which is
+visible (`.disclosure-hint` in §11 of `styles_primary.css`).
 
 ## 8. Checklist pages
 

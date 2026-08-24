@@ -29,8 +29,9 @@
       7.  Body copy ................ paragraphs, lists, labels, captions
       8.  Rules .................... the horizontal dividers
       9.  Tables .................... data tables and their captions
-     10.  Location index ........... the expandable locations dashboard
-     11.  Collapsible sections ..... <details>/<summary> disclosure blocks
+     10.  Location index ........... the list of sites and an opened site's panel
+     11.  Collapsible rows ......... the <details>/<summary> row shared by
+                                     Locations and Media
      12.  Form controls ............ the location filter input
      13.  Media .................... photo grids and the fullscreen lightbox
      14.  Field notes .............. rendered Markdown trip reports
@@ -52,13 +53,14 @@
 
 :root {
   /* -- Color: surfaces -----------------------------------------------------
-     Only two grounds exist. `--color-surface` is a barely-there warm tint,
-     used for the one thing on the site that needs to read as "opened": the
-     expanded location panel. It is deliberately close to white — a darker
-     panel would fight the page instead of nesting inside it. */
+     Beyond the page itself there are two grounds, both barely-there warm
+     tints: one for a map control under the pointer, one behind small inline
+     objects — a code span in a field note, a neutral tag. Neither is ever
+     used to shade a region of the page: an opened row is set off by
+     whitespace and one hairline, not by a panel colour. */
   --color-bg: #ffffff;              /* page background */
-  --color-surface: #faf9f7;         /* expanded location panel */
-  --color-surface-hover: #f4f2ef;   /* row hover feedback */
+  --color-surface: #faf9f7;         /* map control hover */
+  --color-surface-hover: #f4f2ef;   /* inline code, neutral tags */
 
   /* -- Color: text ---------------------------------------------------------
      Three steps, in descending emphasis. Anything that is not prose — a
@@ -412,6 +414,7 @@ figure { margin: 0; }
 .section-heading + .reference-list,
 .section-heading + .toolbar,
 .section-heading + .list,
+.section-heading + .field,
 .section-heading + .table { margin-top: 0; }
 
 /* Each top-level section opens with a hairline. The generous top margin, not
@@ -591,59 +594,36 @@ figure { margin: 0; }
 
 /* ============================================================================
    10. LOCATION INDEX
-   The locations dashboard: a table of sites, any one of which expands in
-   place to show its checklists and species.
+   The locations list: one collapsible row per site, opening in place to that
+   site's checklists and species.
 
-   An expanded row is a panel *inside* a table, which is easy to get wrong:
-   the obvious treatments — a coloured bar down the edge, a strong tint, a
-   nested table with its own background — all add another border or another
-   colour to a row that is already sitting inside a bordered structure, and
-   the result reads as clutter rather than as depth.
+   The row is deliberately the same object as a media group — same summary
+   line, same hairline, same Show / Hide hint — so the two halves of the
+   document read as one list twice rather than as a table and a list. Every
+   rule for the row itself therefore lives in section 11, with the rest of the
+   disclosures. What is left here is the list's own spacing, the single thing
+   a location row does that a media row does not, and the panel's contents.
 
-   So this section adds as little as it can. The selected row and its panel
-   share one faint tint and are closed off by one hairline; the row's name
-   takes the accent; and nothing else changes. No coloured spine, no second
-   background, no heavier rule than the table already uses.
+   The list used to be a table whose selected row expanded into a tinted panel
+   beneath it. A panel inside a table is hard to get right — the treatments
+   that mark it out (a spine, a tint, a nested background) each add another
+   colour or border to a row already sitting inside a bordered structure — and
+   none of that is needed once the row is a disclosure and can simply open.
    ========================================================================= */
 
-/* -- The clickable row ---------------------------------------------------- */
+.location-list { margin-top: var(--space-5); }
 
-.row-toggle { cursor: pointer; }
-
-.row-toggle > td { transition: background-color var(--transition); }
-
-.row-toggle:hover > td { background: var(--color-surface-hover); }
-
-/* The location's name. Medium, not bold: it is the primary column, but the
-   table is a list of names and setting all of them bold defeats the point. */
-.row-name { font-weight: var(--weight-medium); color: var(--color-text); }
-
-/* A selected row takes the panel's tint, and its bottom hairline is removed
-   so the row and the panel below it read as one surface rather than as two
-   stacked bands. The accent moves to the name — the one place it costs
-   nothing and says exactly what it means. */
-.row-toggle[data-selected='true'] > td {
-  background: var(--color-surface);
-  border-bottom-color: transparent;
+/* The open row takes the accent, which here means "selected" rather than
+   merely "open": a location is also chosen from the map, and the pin and the
+   row have to agree about which one is current. A media group, which nothing
+   outside it can open, keeps its heading in text colour. */
+.location-list .disclosure[open] > summary .disclosure-title {
+  color: var(--color-accent);
 }
 
-.row-toggle[data-selected='true'] .row-name { color: var(--color-accent); }
+/* -- The open panel --------------------------------------------------------
+   Two blocks inside the row's body: the checklists, then the species. */
 
-/* -- The expanded panel ---------------------------------------------------- */
-
-/* The <td> carries the tint and closes the unit; the padding is applied to
-   the div inside it, where it can be a single value. */
-.row-detail > td {
-  background: var(--color-surface);
-  padding: 0;
-  border-bottom: 1px solid var(--color-rule-strong);
-}
-
-/* Content is inset from the tint's edges on every side. The inset is what
-   separates the panel from the row above it now that no border does. */
-.row-detail-body { padding: var(--space-5) var(--space-4); }
-
-/* Spacing between the panel's blocks ("Checklists", then "Species"). */
 .detail-group + .detail-group { margin-top: var(--space-6); }
 
 /* -- Checklist links -------------------------------------------------------
@@ -682,8 +662,8 @@ figure { margin: 0; }
 .link-list a:focus-visible { text-decoration: underline; }
 
 /* -- Nested species table --------------------------------------------------
-   Transparent, so it sits directly on the panel's tint instead of punching a
-   white rectangle through it. Its rules are the faint weight only. */
+   Transparent, and ruled at the faint weight only, so it reads as part of the
+   open panel rather than as a boxed object dropped inside it. */
 
 .table--nested {
   background: transparent;
@@ -698,21 +678,29 @@ figure { margin: 0; }
 
 
 /* ============================================================================
-   11. COLLAPSIBLE SECTIONS
-   Native <details>/<summary>. Two levels:
-     .disclosure         — a whole section (Locations)
-     .disclosure--sub    — a subsection within one (each Media group)
-   No JavaScript is involved in opening or closing them.
+   11. COLLAPSIBLE ROWS
+   Native <details>/<summary>. There is one kind: a row in a list, which the
+   Locations and Media sections are both made of. Opening and closing is the
+   browser's; the Locations rows additionally have their open state set from
+   React, because a map pin can open one, but they are styled from here like
+   any other row.
    ========================================================================= */
 
 .disclosure { margin: 0; }
 
+/* The hairline belongs to the whole row, not to the summary's text, so the
+   list reads as ruled entries rather than as underlined headings. */
 .disclosure > summary {
   cursor: pointer;
   list-style: none;          /* hide the default triangle … */
-  padding: 2px 0;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-rule);
 }
 .disclosure > summary::-webkit-details-marker { display: none; }  /* … in Safari */
+
+/* An open row's rule moves to the foot of its body, below, so the row and
+   what it opened are closed off once rather than twice. */
+.disclosure[open] > summary { border-bottom-color: transparent; }
 
 .disclosure > summary:focus-visible {
   outline: 2px solid var(--color-accent);
@@ -720,19 +708,21 @@ figure { margin: 0; }
   border-radius: var(--radius-sm);
 }
 
-/* The clickable heading row: label on the left, show/hide hint on the right. */
+/* The clickable heading row: label on the left, show/hide hint on the right.
+   Tracking is neutral rather than the body's slight negative: this is a name
+   — a place, a checklist — not a line of prose. */
 .disclosure-heading {
   display: flex;
   gap: var(--space-4);
   align-items: baseline;
-  font-size: var(--size-section);
-  font-weight: var(--weight-strong);
-  letter-spacing: var(--track-tight);
+  font-size: var(--size-subsection);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
 }
 
 /* "Show" / "Hide" affordance at the end of the summary line. It states the
    action only — the count that used to sit here ("Show 22 photos") repeated
-   what the opened section shows anyway. */
+   what the opened row shows anyway. */
 .disclosure-hint {
   margin-left: auto;
   font-size: var(--size-label);
@@ -753,34 +743,15 @@ figure { margin: 0; }
 .disclosure[open] > summary .hint-open { display: inline; }
 .disclosure[open] > summary .hint-closed { display: none; }
 
-.disclosure-body { margin-top: var(--space-4); }
-
-/* -- Subsection variant (Media groups) ----------------------------------- */
-
-.disclosure--sub { margin-top: 0; }
-
-/* Each subsection is a row in a list, so the hairline belongs to the row, not
-   under the summary text alone. */
-.disclosure--sub > summary {
-  border-bottom: 1px solid var(--color-rule);
-  padding: var(--space-3) 0;
-}
-
-.disclosure--sub[open] > summary { border-bottom-color: transparent; }
-
-.disclosure--sub .disclosure-heading {
-  font-size: var(--size-subsection);
-  font-weight: var(--weight-medium);
-  letter-spacing: 0;
-}
-
-.disclosure--sub .disclosure-body {
+.disclosure-body {
   margin-top: var(--space-3);
   padding-bottom: var(--space-5);
   border-bottom: 1px solid var(--color-rule);
 }
 
-/* The metadata line under a subsection heading: date, time, checklist link. */
+/* The line under a row's heading, in the monospace the site keeps for
+   recorded values: a location's place and observation count, a media group's
+   date, time and checklist link. */
 .disclosure-meta {
   display: flex;
   flex-wrap: wrap;
@@ -1324,10 +1295,6 @@ figure { margin: 0; }
 
   .nav { padding: var(--space-3) var(--doc-pad-x); }
 
-  /* The panel's inset tightens, so its content keeps as much of the line as
-     the narrow screen can give it. */
-  .row-detail-body { padding: var(--space-4) var(--space-3); }
-
   /* Headers stop refusing to wrap, so a long column label costs height
      rather than forcing the whole table to scroll. */
   .table th { white-space: normal; }
@@ -1338,8 +1305,7 @@ figure { margin: 0; }
 
      Note this deliberately does NOT touch the last column: the :last-child
      rule in section 9 is the more specific selector and still wins here, so
-     the trailing gutter that keeps a selected row's count clear of the tint
-     survives on narrow screens too. */
+     a numeric column keeps its trailing gutter on narrow screens too. */
   .table th, .table td { padding-right: var(--space-2); }
 
   /* Stack label above value instead of side by side. */
