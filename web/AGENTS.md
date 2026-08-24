@@ -20,19 +20,21 @@ table in [`README.md`](README.md).
   a paragraph into a component is wrong.
 - **The parsers in `src/lib/` map eBird's column headers to the field names the
   app uses.** Touch them only when eBird changes its export format.
-- **Long sections are native `<details>` disclosures**, not React state — with
-  one exception: the Locations section's `open` state is controlled, because
-  selecting a map pin has to expand it.
+- **Long lists are lists of native `<details>` rows.** Locations and Media are
+  the same list twice: a section that stays open, one collapsible row per
+  entry. Opening is the browser's, not React state — with one exception: a
+  location row's `open` state is controlled, because selecting a map pin has to
+  open it, and only one location is open at a time.
 - **The design language is shared with Alexandria Library.** Before changing
   type, color, or rules, check `/design-standards` — a change here is a change
   to both projects' shared standard. Its current shape: Inter for headings and
   prose, IBM Plex Mono for recorded values only, hairline rules rather than
   heavy ones, three weights (400/500/600) and no bold, and no numbering on
   sections, subsections, figures or references.
-- **Reuse the primitives in `src/components/ui/`.** `Section`,
-  `DisclosureSection`, `Disclosure` and `Masthead` exist so that every page
-  emits the same markup for the same thing. Assembling a heading or a title
-  block by hand is how the pages drifted apart last time.
+- **Reuse the primitives in `src/components/ui/`.** `Section`, `Disclosure`
+  and `Masthead` exist so that every page emits the same markup for the same
+  thing. Assembling a heading or a title block by hand is how the pages drifted
+  apart last time.
 - **The `next/font` variable classes belong on `<html>`, not `<body>`.**
   `styles_primary.css` composes `--font-body` inside `:root`, and a custom
   property is substituted against the element it is declared on — put the

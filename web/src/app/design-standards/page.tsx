@@ -193,9 +193,10 @@ export default function DesignStandardsPage() {
               carry the same name, which is all a reader needs to navigate by.
             </li>
             <li>
-              A section whose content is long — the location index, a checklist&rsquo;s photos —
-              is a native <code>&lt;details&gt;</code> disclosure that opens on click, so the page
-              starts short. Its Show / Hide control names the action only, never a count.
+              A long list — the locations, the checklists with photos — is a list of rows, each
+              a native <code>&lt;details&gt;</code> disclosure that opens in place, so the page
+              starts as an index. A row&rsquo;s Show / Hide control names the action only, never
+              a count.
             </li>
             <li>
               A figure or table carries a caption below it when the caption says something the

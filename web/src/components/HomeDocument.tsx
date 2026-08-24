@@ -4,14 +4,20 @@
  * The homepage: one document, five sections.
  *
  *   Map          — every recorded location, plotted from the observation CSV
- *   Locations    — collapsible index of sites, each expanding to its detail
- *   Media        — Macaulay Library photos, one collapsible group per checklist
+ *   Locations    — every site, one collapsible row each, expanding to its detail
+ *   Media        — Macaulay Library photos, one collapsible row per checklist
  *   Field Notes  — Markdown trip reports from web/field-notes/
  *   Reference    — links to the project's other homes, gathered at the foot
  *
  * Nothing here is numbered. Sections, subsections, figures and references all
  * used to carry a numeral; none of them was ever referred to by number, so the
  * numbering was upkeep with no reader on the other end of it.
+ *
+ * Locations and Media are the same list twice: a section of rows, each a
+ * disclosure that opens in place. The difference is that a location can also
+ * be opened from outside its own row — by a map pin or a ?locationId= link —
+ * so those rows are controlled and only one of them is open at a time, where
+ * the media rows are plain browser <details>.
  *
  * All content arrives as props from src/app/page.tsx, which reads it from the
  * CSV and Markdown files at build time. This component holds interaction state
@@ -35,7 +41,7 @@ import ImageLightbox from './ImageLightbox';
 import MapView from './Map';
 import { MediaGrid } from './ui/MediaGrid';
 import { Masthead } from './ui/Masthead';
-import { Section, DisclosureSection, Disclosure } from './ui/Section';
+import { Section, Disclosure } from './ui/Section';
 import { SearchIcon } from './ui/Icons';
 
 interface HomeDocumentProps {
@@ -95,27 +101,33 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
   const [locationFilter, setLocationFilter] = useState('');
   const [lightbox, setLightbox] = useState<{ items: EbirdMediaObservation[]; index: number } | null>(null);
 
-  // The Locations section is a <details> that starts closed to keep the page
-  // short. Arriving with ?locationId=… — or clicking a map pin — has to open it,
-  // so its `open` state is controlled rather than left to the browser.
-  const [locationsOpen, setLocationsOpen] = useState(Boolean(initialLocationId));
-  const rowRefs = useRef<{ [key: string]: HTMLTableRowElement | null }>({});
+  const locationRefs = useRef<{ [key: string]: HTMLDetailsElement | null }>({});
 
-  // Scroll a newly selected location's row into view, once the section has had
-  // a frame to expand.
+  // Bring a newly selected location's row into view — it may have been chosen
+  // from the map, well above the list. The delay gives the row a frame to open
+  // first, so the scroll lands on its full height rather than on the summary.
   useEffect(() => {
     if (!selectedLocationId) return;
     const timer = setTimeout(() => {
-      rowRefs.current[selectedLocationId]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      locationRefs.current[selectedLocationId]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 120);
     return () => clearTimeout(timer);
-  }, [selectedLocationId, locationsOpen]);
+  }, [selectedLocationId]);
 
+  /** Select a location, or clear the selection if it is already the open one. */
   const selectLocation = (id: string | null) => {
     const next = selectedLocationId === id ? null : id;
     setSelectedLocationId(next);
-    if (next) setLocationsOpen(true);
     window.history.pushState({}, '', next ? `?locationId=${next}` : window.location.pathname);
+  };
+
+  // A location row reports its own open state, and the browser fires that
+  // event for openings this component asked for too — closing the previously
+  // open row, or opening the row a map pin just selected. Since selectLocation
+  // toggles, act only when the row and the selection actually disagree;
+  // otherwise the echo would immediately undo the selection.
+  const setLocationOpen = (id: string, open: boolean) => {
+    if (open ? selectedLocationId !== id : selectedLocationId === id) selectLocation(id);
   };
 
   // -- Derived data --------------------------------------------------------
@@ -138,20 +150,16 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
     return Array.from(map.values());
   }, [data]);
 
+  // Busiest site first, then alphabetically. The order does not change when a
+  // location is opened: a row that jumps to the top of the list as you click
+  // it takes the page out from under the reader, and the selected row is
+  // scrolled into view anyway.
   const filteredLocations = useMemo(() => {
     const query = locationFilter.trim().toLowerCase();
     return locations
       .filter((l) => l.name.toLowerCase().includes(query))
-      .sort((a, b) => {
-        // Keep the selected location pinned to the top while it is expanded.
-        if (selectedLocationId) {
-          if (a.id === selectedLocationId) return -1;
-          if (b.id === selectedLocationId) return 1;
-        }
-        if (b.count !== a.count) return b.count - a.count;
-        return a.name.localeCompare(b.name);
-      });
-  }, [locations, locationFilter, selectedLocationId]);
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  }, [locations, locationFilter]);
 
   const selectedLocation = useMemo(
     () => locations.find((l) => l.id === selectedLocationId) || null,
@@ -278,14 +286,13 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
       </Section>
 
       {/* -- Locations -------------------------------------------------------
-          The whole section collapses. It holds the longest table on the page,
-          so it starts closed unless a location is already selected. */}
-      <DisclosureSection
-        id="sec-locations"
-        title="Locations"
-        open={locationsOpen}
-        onToggle={setLocationsOpen}
-      >
+          Every site, listed in the same shape as Media below it: a row per
+          location, opening in place to its checklists and species. The rows
+          are controlled rather than plain <details> because a map pin and a
+          ?locationId= link both open one from outside, and because only one
+          location is open at a time — the panel is built from the selection,
+          not from the row. */}
+      <Section id="sec-locations" title="Locations">
         <div className="field">
           <label htmlFor="loc-filter" className="visually-hidden">
             Filter locations by name
@@ -302,101 +309,89 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
           />
         </div>
 
-        <div className="table-scroll">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Location</th>
-                <th>Place</th>
-                <th className="num-cell">Obs.</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredLocations.map((loc) => {
-                const isSelected = loc.id === selectedLocationId;
-                return (
-                  <React.Fragment key={loc.id}>
-                    <tr
-                      ref={(el) => {
-                        rowRefs.current[loc.id] = el;
-                      }}
-                      className="row-toggle"
-                      data-selected={isSelected}
-                      onClick={() => selectLocation(loc.id)}
-                    >
-                      <td className="row-name">{loc.name}</td>
-                      <td className="data">{loc.place}</td>
-                      <td className="num-cell">{loc.count}</td>
-                    </tr>
+        <div className="location-list">
+          {filteredLocations.map((loc) => (
+            <Disclosure
+              key={loc.id}
+              title={loc.name}
+              open={loc.id === selectedLocationId}
+              onToggle={(open) => setLocationOpen(loc.id, open)}
+              ref={(el) => {
+                locationRefs.current[loc.id] = el;
+              }}
+            >
+              {/* Place and observation count were the table's other two
+                  columns; they read as the row's metadata line, exactly as
+                  a media group's date and time do. */}
+              <p className="disclosure-meta">
+                {loc.place && <span>{loc.place}</span>}
+                <span>
+                  {loc.count} {loc.count === 1 ? 'observation' : 'observations'}
+                </span>
+              </p>
 
-                    {/* The expanded panel. It shares the selected row's tint
-                        and accent spine, so the two read as one object rather
-                        than as a row with a box underneath it. */}
-                    {isSelected && (
-                      <tr className="row-detail">
-                        <td colSpan={3}>
-                          <div className="row-detail-body">
-                            <div className="detail-group">
-                              <p className="label">Checklists</p>
-                              {selectedChecklists.length > 0 ? (
-                                <ul className="link-list">
-                                  {selectedChecklists.map((cl) => (
-                                    <li key={cl.id}>
-                                      <span className="data">
-                                        {cl.date} {cl.time}
-                                      </span>
-                                      <a href={`/checklist/${cl.id}?locationId=${loc.id}`}>
-                                        {cl.hasMedia ? 'Checklist and Media Report →' : 'Checklist Report →'}
-                                      </a>
-                                    </li>
-                                  ))}
-                                </ul>
-                              ) : (
-                                <p className="empty">No checklists available.</p>
-                              )}
-                            </div>
-
-                            <div className="detail-group">
-                              <p className="label">Species Observed</p>
-                              <table className="table table--nested">
-                                <thead>
-                                  <tr>
-                                    <th>Species</th>
-                                    <th className="num-cell">Total</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {selectedSpecies.map((sp) => (
-                                    <tr key={sp.common}>
-                                      <td>
-                                        <div>{sp.common}</div>
-                                        <div className="sci">{sp.sci}</div>
-                                      </td>
-                                      <td className="num-cell">{sp.onlyX ? 'X' : sp.total}</td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
+              {/* Only the open row's panel is built, so the two tables below
+                  can read from the current selection rather than being
+                  recomputed for every location in the list. */}
+              {loc.id === selectedLocationId && (
+                <>
+                  <div className="detail-group">
+                    <p className="label">Checklists</p>
+                    {selectedChecklists.length > 0 ? (
+                      <ul className="link-list">
+                        {selectedChecklists.map((cl) => (
+                          <li key={cl.id}>
+                            <span className="data">
+                              {cl.date} {cl.time}
+                            </span>
+                            <a href={`/checklist/${cl.id}?locationId=${loc.id}`}>
+                              {cl.hasMedia ? 'Checklist and Media Report →' : 'Checklist Report →'}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="empty">No checklists available.</p>
                     )}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
+                  </div>
+
+                  <div className="detail-group">
+                    <p className="label">Species Observed</p>
+                    <table className="table table--nested">
+                      <thead>
+                        <tr>
+                          <th>Species</th>
+                          <th className="num-cell">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedSpecies.map((sp) => (
+                          <tr key={sp.common}>
+                            <td>
+                              <div>{sp.common}</div>
+                              <div className="sci">{sp.sci}</div>
+                            </td>
+                            <td className="num-cell">{sp.onlyX ? 'X' : sp.total}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </Disclosure>
+          ))}
         </div>
 
         {filteredLocations.length === 0 && (
           <p className="empty">No locations match &ldquo;{locationFilter}&rdquo;.</p>
         )}
-      </DisclosureSection>
+      </Section>
 
       {/* -- Media -----------------------------------------------------------
-          The section itself stays open, but each checklist's photos are a
-          collapsed subsection, so the page opens as a short index. */}
+          The same list as Locations above: the section stays open, and each
+          checklist's photos are a collapsed row, so the page reads as an
+          index until a row is opened. */}
       <Section id="sec-media" title="Media">
         {mediaGroups.map((grp) => (
           <Disclosure key={grp.checklistId} title={grp.location}>

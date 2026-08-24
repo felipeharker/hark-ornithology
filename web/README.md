@@ -65,5 +65,5 @@ ones, three type weights and no bold, and no numbering on sections, figures or
 references.
 
 Repeated markup goes through the shared primitives in `src/components/ui/` —
-`Section`, `DisclosureSection` and `Disclosure` for blocks, `Masthead` for page
-title blocks — so a page never assembles those by hand.
+`Section` and `Disclosure` for blocks, `Masthead` for page title blocks — so a
+page never assembles those by hand.
