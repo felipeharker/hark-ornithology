@@ -22,9 +22,10 @@ table in [`README.md`](README.md).
   app uses.** Touch them only when eBird changes its export format.
 - **Long lists are lists of native `<details>` rows.** Locations and Media are
   the same list twice: a section that stays open, one collapsible row per
-  entry. Opening is the browser's, not React state — with one exception: a
-  location row's `open` state is controlled, because selecting a map pin has to
-  open it, and only one location is open at a time.
+  place — Media groups by location and then by checklist inside the row, so a
+  place appears once in both lists. Opening is the browser's, not React state
+  — with one exception: a location row's `open` state is controlled, because
+  selecting a map pin has to open it, and only one location is open at a time.
 - **The design language is shared with Alexandria Library.** Before changing
   type, color, or rules, check `/design-standards` — a change here is a change
   to both projects' shared standard. Its current shape: Inter for headings and
