@@ -178,8 +178,8 @@ data file name,ebird-data-latest.csv
 ## 7. Collapsible rows
 
 Locations and Media are the same list twice: the section itself stays open and
-lists every entry, and each entry is a row that opens in place. Both are the
-browser's native `<details>`/`<summary>` element.
+lists every place once, and each place is a row that opens in place. Both are
+the browser's native `<details>`/`<summary>` element.
 
 - **Locations** lists every site you have recorded, busiest first. Opening a row
   shows that site's place and observation count, its checklists, and every
@@ -189,9 +189,11 @@ browser's native `<details>`/`<summary>` element.
   state (`selectedLocationId`) rather than leaving it to the browser, and it is
   also why the open row's name is set in the accent colour: the map pin and the
   row have to agree about which location is current.
-- **Media** lists every checklist that has photos, newest first. Opening a row
-  shows the date, a link to the checklist report, and the photo grid. Nothing
-  outside a media row can open it, so the browser handles those on its own.
+- **Media** lists every place you have photographed birds, most recently
+  visited first. Opening a row shows that place's photos, kept apart by the
+  visit they came from: one block per checklist, each with its date, a link to
+  its checklist report, and its own grid. Nothing outside a media row can open
+  it, so the browser handles those on its own.
 
 The "Show" / "Hide" labels are both present in the markup; CSS decides which is
 visible (`.disclosure-hint` in §11 of `styles_primary.css`).
@@ -215,7 +217,8 @@ data are omitted rather than rendered empty. A checklist with photos gets a
   number — there are no image files in this repository. The URL is built by
   `mediaAssetUrl()` in `MediaGrid.tsx`.
 - **Lightbox:** `web/src/components/ImageLightbox.tsx`. Escape closes it; arrow
-  keys page through the set.
+  keys page through the set — the set being the grid you clicked in, so a
+  location visited twice pages through one visit at a time.
 
 ## 10. Design standards page
 

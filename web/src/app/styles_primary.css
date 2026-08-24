@@ -600,9 +600,10 @@ figure { margin: 0; }
    The row is deliberately the same object as a media group — same summary
    line, same hairline, same Show / Hide hint — so the two halves of the
    document read as one list twice rather than as a table and a list. Every
-   rule for the row itself therefore lives in section 11, with the rest of the
+   rule a media row shares therefore lives in section 11, with the rest of the
    disclosures. What is left here is the list's own spacing, the single thing
-   a location row does that a media row does not, and the panel's contents.
+   a location row does that a media row does not, and the two blocks that only
+   an opened location contains.
 
    The list used to be a table whose selected row expanded into a tinted panel
    beneath it. A panel inside a table is hard to get right — the treatments
@@ -620,11 +621,6 @@ figure { margin: 0; }
 .location-list .disclosure[open] > summary .disclosure-title {
   color: var(--color-accent);
 }
-
-/* -- The open panel --------------------------------------------------------
-   Two blocks inside the row's body: the checklists, then the species. */
-
-.detail-group + .detail-group { margin-top: var(--space-6); }
 
 /* -- Checklist links -------------------------------------------------------
    Formerly a nested table, which meant a second set of column rules inside
@@ -748,6 +744,12 @@ figure { margin: 0; }
   padding-bottom: var(--space-5);
   border-bottom: 1px solid var(--color-rule);
 }
+
+/* An open row's body is a stack of blocks — a location's checklists and then
+   its species, a media row's one block per visit — and this is the air
+   between them. Nothing divides them but that gap: a rule here would be the
+   third hairline in a row that already has two. */
+.detail-group + .detail-group { margin-top: var(--space-6); }
 
 /* The line under a row's heading, in the monospace the site keeps for
    recorded values: a location's place and observation count, a media group's

@@ -5,7 +5,7 @@
  *
  *   Map          — every recorded location, plotted from the observation CSV
  *   Locations    — every site, one collapsible row each, expanding to its detail
- *   Media        — Macaulay Library photos, one collapsible row per checklist
+ *   Media        — Macaulay Library photos, one collapsible row per location
  *   Field Notes  — Markdown trip reports from web/field-notes/
  *   Reference    — links to the project's other homes, gathered at the foot
  *
@@ -13,11 +13,11 @@
  * used to carry a numeral; none of them was ever referred to by number, so the
  * numbering was upkeep with no reader on the other end of it.
  *
- * Locations and Media are the same list twice: a section of rows, each a
- * disclosure that opens in place. The difference is that a location can also
- * be opened from outside its own row — by a map pin or a ?locationId= link —
- * so those rows are controlled and only one of them is open at a time, where
- * the media rows are plain browser <details>.
+ * Locations and Media are the same list twice: a section of rows, one row per
+ * place, each a disclosure that opens in place. The difference is that a
+ * location row can also be opened from outside itself — by a map pin or a
+ * ?locationId= link — so those rows are controlled and only one of them is
+ * open at a time, where the media rows are plain browser <details>.
  *
  * All content arrives as props from src/app/page.tsx, which reads it from the
  * CSV and Markdown files at build time. This component holds interaction state
@@ -210,25 +210,57 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
     });
   }, [locationData]);
 
-  /** Media grouped by the checklist it was submitted with, newest first. */
+  /**
+   * Media grouped by place, and within a place by the checklist it was
+   * submitted with. Both levels run newest first — a location by its most
+   * recent visit.
+   *
+   * The list used to be one row per checklist, which meant a place visited
+   * three times appeared three times in it; the Locations section above says
+   * a place once, and this says it once too.
+   */
   const mediaGroups = useMemo(() => {
-    const groups: Record<string, { checklistId: string; date: string; time: string; location: string; items: EbirdMediaObservation[] }> = {};
-    for (const m of mediaData) {
-      if (!groups[m.eBirdChecklistID]) {
-        groups[m.eBirdChecklistID] = {
-          checklistId: m.eBirdChecklistID,
-          date: m.Date,
-          time: m.Time,
-          location: m.Locality,
-          items: [],
-        };
+    // The media export names a checklist and a locality but no location ID, so
+    // the observation data is what says which media belong to the same place:
+    // two eBird pins can carry the same name, and only the ID separates them.
+    // A checklist missing from the observation data falls back to its locality.
+    const placeOf = new Map<string, { id: string; name: string }>();
+    for (const obs of data) {
+      if (obs.SubmissionID && obs.LocationID && !placeOf.has(obs.SubmissionID)) {
+        placeOf.set(obs.SubmissionID, { id: obs.LocationID, name: obs.Location });
       }
-      groups[m.eBirdChecklistID].items.push(m);
     }
-    return Object.values(groups).sort(
-      (a, b) => b.date.localeCompare(a.date) || b.time.localeCompare(a.time)
-    );
-  }, [mediaData]);
+
+    type Checklist = { checklistId: string; date: string; time: string; items: EbirdMediaObservation[] };
+    const groups = new Map<string, { key: string; location: string; checklists: Map<string, Checklist> }>();
+
+    for (const m of mediaData) {
+      const place = placeOf.get(m.eBirdChecklistID);
+      const key = place?.id || m.Locality;
+      let group = groups.get(key);
+      if (!group) {
+        group = { key, location: place?.name || m.Locality, checklists: new Map() };
+        groups.set(key, group);
+      }
+      let checklist = group.checklists.get(m.eBirdChecklistID);
+      if (!checklist) {
+        checklist = { checklistId: m.eBirdChecklistID, date: m.Date, time: m.Time, items: [] };
+        group.checklists.set(m.eBirdChecklistID, checklist);
+      }
+      checklist.items.push(m);
+    }
+
+    const newestFirst = (a: { date: string; time: string }, b: { date: string; time: string }) =>
+      b.date.localeCompare(a.date) || b.time.localeCompare(a.time);
+
+    return Array.from(groups.values())
+      .map((g) => ({
+        key: g.key,
+        location: g.location,
+        checklists: Array.from(g.checklists.values()).sort(newestFirst),
+      }))
+      .sort((a, b) => newestFirst(a.checklists[0], b.checklists[0]));
+  }, [data, mediaData]);
 
   const latestChecklist = useMemo(() => {
     const dates = data.map((obs) => obs.Date).filter(Boolean).sort().reverse();
@@ -389,22 +421,27 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
       </Section>
 
       {/* -- Media -----------------------------------------------------------
-          The same list as Locations above: the section stays open, and each
-          checklist's photos are a collapsed row, so the page reads as an
-          index until a row is opened. */}
+          The same list as Locations above: the section stays open, one row per
+          place, and the page reads as an index until a row is opened. Inside a
+          row the photos are still kept apart by the visit they came from —
+          each block is one checklist, with its date and a link to its report. */}
       <Section id="sec-media" title="Media">
         {mediaGroups.map((grp) => (
-          <Disclosure key={grp.checklistId} title={grp.location}>
-            <p className="disclosure-meta">
-              <span>
-                {grp.date} {grp.time}
-              </span>
-              <a href={`/checklist/${grp.checklistId}`}>Checklist Report →</a>
-            </p>
-            <MediaGrid
-              items={grp.items}
-              onSelect={(idx) => setLightbox({ items: grp.items, index: idx })}
-            />
+          <Disclosure key={grp.key} title={grp.location}>
+            {grp.checklists.map((cl) => (
+              <div className="detail-group" key={cl.checklistId}>
+                <p className="disclosure-meta">
+                  <span>
+                    {cl.date} {cl.time}
+                  </span>
+                  <a href={`/checklist/${cl.checklistId}`}>Checklist Report →</a>
+                </p>
+                <MediaGrid
+                  items={cl.items}
+                  onSelect={(idx) => setLightbox({ items: cl.items, index: idx })}
+                />
+              </div>
+            ))}
           </Disclosure>
         ))}
 

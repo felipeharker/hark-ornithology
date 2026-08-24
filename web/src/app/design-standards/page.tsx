@@ -193,7 +193,7 @@ export default function DesignStandardsPage() {
               carry the same name, which is all a reader needs to navigate by.
             </li>
             <li>
-              A long list — the locations, the checklists with photos — is a list of rows, each
+              A long list — the locations, the places with photos — is a list of rows, each
               a native <code>&lt;details&gt;</code> disclosure that opens in place, so the page
               starts as an index. A row&rsquo;s Show / Hide control names the action only, never
               a count.
