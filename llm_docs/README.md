@@ -12,8 +12,10 @@ that.
 
 The site now shares one visual language with its sibling project, [Alexandria
 Library](https://github.com/felipeharker/alexandria_script_library_master) — a
-printed technical paper: STIX Two Text for prose, Courier Prime for recorded
-data, black rules, one deep-red accent.
+quiet, modern document: Inter for headings and prose, IBM Plex Mono for recorded
+values, hairline rules rather than heavy ones, three type weights and no bold,
+one deep-red accent that only ever means "interactive or selected", and no
+numbering on sections, figures or references.
 
 The authoritative sources for it, in order:
 
@@ -21,7 +23,9 @@ The authoritative sources for it, in order:
    weights, and document conventions, rendered in the design itself.
 2. **`web/src/app/styles_primary.css`** and **`web/src/app/styles_map.css`** —
    the implementation. Both open with a block of design tokens.
-3. **Alexandria Library's `web/assets/style.css`** — the shared reference
-   implementation both projects follow.
+3. **Alexandria Library's `web/design-standards.html` and
+   `web/assets/style.css`** — the same design implemented in static HTML. Token
+   and class names are deliberately shared, so a change made in one project can
+   be read straight across into the other.
 
 Do not restyle anything from `ref_hark_web_styles/`.
