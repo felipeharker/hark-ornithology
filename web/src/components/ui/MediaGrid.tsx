@@ -1,4 +1,4 @@
-import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
+import { EbirdMediaObservation } from '@/lib/parseEbird';
 
 /** Macaulay Library serves media by catalog number; 1200 is the long edge. */
 const ML_ASSET_BASE = 'https://cdn.download.ams.birds.cornell.edu/api/v1/asset';

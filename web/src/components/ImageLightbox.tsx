@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState, useEffect } from 'react';
-import { EbirdMediaObservation } from '../lib/parseEbirdMediaData';
+import { EbirdMediaObservation } from '../lib/parseEbird';
 import { CloseIcon, ArrowLeftIcon, ArrowRightIcon } from './ui/Icons';
 import { mediaAssetUrl } from './ui/MediaGrid';
 

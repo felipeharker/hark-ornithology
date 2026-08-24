@@ -71,16 +71,14 @@
   --color-text-mute: #7a746e;       /* tertiary: captions, datelines, labels */
 
   /* -- Color: accent -------------------------------------------------------
-     A single deep red. `--color-accent` can be overridden per-site from
-     public/options.csv (`accent color hex`); layout.tsx sets it inline on
-     <body>, so everything below follows automatically. */
+     A single deep red, and the only accent on the site. The hover step and
+     the faint wash behind a selected control are derived from it, so setting
+     --color-accent alone re-accents everything. */
   --color-accent: #7c1405;
+  --color-accent-hover: color-mix(in srgb, var(--color-accent) 72%, #000000);
+  --color-accent-wash: color-mix(in srgb, var(--color-accent) 5%, #ffffff);
   --color-selection: #ffe0d9;       /* ::selection highlight */
   --color-scrim: rgba(20, 19, 18, 0.95);  /* ground behind the lightbox */
-  /* --color-accent-hover and --color-accent-wash are derived from
-     --color-accent in the `body` rule in section 2, not here: they have to
-     resolve *after* the inline override, so changing the accent in
-     options.csv carries the derived tints with it. */
 
   /* -- Color: rules --------------------------------------------------------
      Structure is hairlines, not bars. Both weights are 1px; they differ only
@@ -184,12 +182,6 @@ html {
 }
 
 body {
-  /* Derived here rather than in :root — see the note on --color-accent above.
-     --color-accent-wash is the faintest possible accent tint, used for the
-     selected row in the location index. */
-  --color-accent-hover: color-mix(in srgb, var(--color-accent) 72%, #000000);
-  --color-accent-wash: color-mix(in srgb, var(--color-accent) 5%, #ffffff);
-
   margin: 0;
   background: var(--color-bg);
   color: var(--color-text);
@@ -323,7 +315,7 @@ figure { margin: 0; }
 
 /* ============================================================================
    4. ABSTRACT
-   Prose is sourced from web/content/abstract.md — edit that file, not markup.
+   Prose is the ABSTRACT constant in src/lib/siteConfig.ts — edit it there.
    The block is the paragraph and its label; a keyword list used to follow it,
    and was removed as one more line of text that told a reader nothing the
    paragraph above had not already said.
@@ -344,7 +336,6 @@ figure { margin: 0; }
   margin: 0 0 var(--space-3);
 }
 
-/* The Markdown renderer emits <p> elements, so style by descendant. */
 .abstract p {
   font-size: var(--size-abstract);
   line-height: 1.7;

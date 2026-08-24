@@ -1,8 +1,5 @@
-import { getLatestEbirdData } from '@/lib/parseEbirdData';
-import { getLatestEbirdMediaData } from '@/lib/parseEbirdMediaData';
+import { getObservations, getMedia } from '@/lib/parseEbird';
 import { getFieldNotes } from '@/lib/parseFieldNotes';
-import { getSiteOptions } from '@/lib/parseOptions';
-import { getAbstract } from '@/lib/parseAbstract';
 import HomeDocument from '@/components/HomeDocument';
 
 /**
@@ -11,23 +8,17 @@ import HomeDocument from '@/components/HomeDocument';
  *   observation-data/ebird-data-latest.csv   → map pins, locations, species
  *   observation-data/ebird-media-latest.csv  → the Media section
  *   web/field-notes/*.md                     → Field Notes
- *   web/content/abstract.md                  → the abstract
- *   public/options.csv                       → title, accent colour, data file
+ *
+ * The title, abstract and off-site links are project settings rather than
+ * observations, so they come from src/lib/siteConfig.ts and are imported
+ * where they are used rather than threaded through here.
  */
 export default function Home() {
-  const { data } = getLatestEbirdData();
-  const { data: mediaData } = getLatestEbirdMediaData();
-  const fieldNotes = getFieldNotes();
-  const abstract = getAbstract();
-  const options = getSiteOptions();
-
   return (
     <HomeDocument
-      data={data}
-      mediaData={mediaData}
-      fieldNotes={fieldNotes}
-      abstract={abstract}
-      options={options}
+      data={getObservations()}
+      mediaData={getMedia()}
+      fieldNotes={getFieldNotes()}
     />
   );
 }

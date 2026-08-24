@@ -19,9 +19,11 @@
  * ?locationId= link — so those rows are controlled and only one of them is
  * open at a time, where the media rows are plain browser <details>.
  *
- * All content arrives as props from src/app/page.tsx, which reads it from the
- * CSV and Markdown files at build time. This component holds interaction state
- * only — which location is selected, and the filter text.
+ * Observations, media and field notes arrive as props from src/app/page.tsx,
+ * which reads them from the CSV and Markdown files at build time; the title,
+ * abstract and off-site links come from src/lib/siteConfig.ts. This component
+ * holds interaction state only — which location is selected, and the filter
+ * text.
  *
  * Styling lives entirely in src/app/styles_primary.css (and styles_map.css for
  * the map); there are no inline style objects here.
@@ -31,12 +33,17 @@ import React, { useState, useMemo, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { EbirdObservation } from '@/lib/parseEbirdData';
-import { EbirdMediaObservation } from '@/lib/parseEbirdMediaData';
+import { EbirdObservation, EbirdMediaObservation } from '@/lib/parseEbird';
 import { FieldNote } from '@/lib/parseFieldNotes';
-import { SiteOptions } from '@/lib/parseOptions';
 import { formatDate } from '@/lib/formatDate';
-import { SITE_LINKS, externalLinkProps } from '@/lib/siteLinks';
+import {
+  ABSTRACT,
+  SITE_AUTHOR,
+  SITE_LINKS,
+  SITE_SUBTITLE,
+  SITE_TITLE,
+  externalLinkProps,
+} from '@/lib/siteConfig';
 import ImageLightbox from './ImageLightbox';
 import MapView from './Map';
 import { MediaGrid } from './ui/MediaGrid';
@@ -48,8 +55,6 @@ interface HomeDocumentProps {
   data: EbirdObservation[];
   mediaData: EbirdMediaObservation[];
   fieldNotes: FieldNote[];
-  abstract: string;
-  options: SiteOptions;
 }
 
 /**
@@ -93,7 +98,7 @@ const REFERENCES = [
   },
 ];
 
-function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: HomeDocumentProps) {
+function HomeDocumentInner({ data, mediaData, fieldNotes }: HomeDocumentProps) {
   const searchParams = useSearchParams();
   const initialLocationId = searchParams.get('locationId');
 
@@ -271,23 +276,19 @@ function HomeDocumentInner({ data, mediaData, fieldNotes, abstract, options }: H
     <article className="doc">
       <Masthead
         kicker="Ornithological Report · eBird Observation Data"
-        title={options.title}
-        subtitle="A Record of Field Observations, Checklists, and Media"
-        byline="Felipe Harker"
+        title={SITE_TITLE}
+        subtitle={SITE_SUBTITLE}
+        byline={SITE_AUTHOR}
         dateline={`Data current as of ${latestChecklist}`}
       />
       <hr className="rule" />
 
-      {/* -- Abstract (text from web/content/abstract.md) ------------------ */}
-      {abstract && (
-        <>
-          <div className="abstract">
-            <p className="abstract-label">Abstract</p>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{abstract}</ReactMarkdown>
-          </div>
-          <hr className="rule-soft" />
-        </>
-      )}
+      {/* -- Abstract (text from src/lib/siteConfig.ts) -------------------- */}
+      <div className="abstract">
+        <p className="abstract-label">Abstract</p>
+        <p>{ABSTRACT}</p>
+      </div>
+      <hr className="rule-soft" />
 
       {/* -- Contents ------------------------------------------------------- */}
       <nav aria-label="Contents">

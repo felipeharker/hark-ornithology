@@ -4,7 +4,7 @@
 
 Next.js App Router, exported statically (`output: 'export'`). No server, no
 database, no CSS framework. Content comes from files at build time — see the
-table in [`README.md`](README.md).
+table in [`../README.md`](../README.md).
 
 ## Rules
 
@@ -14,12 +14,21 @@ table in [`README.md`](README.md).
   relevant numbered section of the stylesheet instead.
 - **Design tokens first.** Both stylesheets open with a `:root` block. Prefer
   changing or adding a token over hardcoding a color, size, or spacing value.
-- **Never hardcode content.** Observations and media come from the CSVs in
-  `../observation-data/`, prose from `content/` and `field-notes/`, and site
-  settings from `../public/options.csv`. A change that bakes a bird, a place, or
-  a paragraph into a component is wrong.
-- **The parsers in `src/lib/` map eBird's column headers to the field names the
-  app uses.** Touch them only when eBird changes its export format.
+- **Observations are never hardcoded; the project's own settings always are.**
+  Birds, places, counts, dates and media come from the CSVs in
+  `../observation-data/`, and prose from `field-notes/`. A change that bakes one
+  of those into a component is wrong. The site's title, subtitle, byline,
+  abstract and off-site links are different in kind — they describe the project
+  rather than record an observation — and they belong in `src/lib/siteConfig.ts`
+  as plain exported constants. They were CSV and Markdown files once; reading
+  them from disk bought nothing and cost a parser each.
+- **`src/lib/parseEbird.ts` touches the filesystem, so only server components
+  may import a *value* from it.** Importing the row types is fine — types are
+  erased before bundling — but pulling a function out of it into a `'use client'`
+  component drags `fs` into the browser bundle and fails the build. That is why
+  `formatDate` sits in its own module: client components format dates too.
+- **The field-name maps in `parseEbird.ts` are the only place eBird's column
+  headers appear.** Touch them only when eBird changes its export format.
 - **Long lists are lists of native `<details>` rows.** Locations and Media are
   the same list twice: a section that stays open, one collapsible row per
   place — Media groups by location and then by checklist inside the row, so a
@@ -41,6 +50,8 @@ table in [`README.md`](README.md).
   property is substituted against the element it is declared on — put the
   classes lower and the token resolves to nothing, silently falling the whole
   site back to the browser's default serif.
+- **`tsconfig.json` is rewritten by `next build`.** It re-adds `allowJs` and
+  reformats the file; edits that fight it are churn, not cleanup.
 
 ## Verifying
 
