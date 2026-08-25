@@ -241,10 +241,9 @@ data are omitted rather than rendered empty. A checklist with photos gets a
 ## 10. Design standards page
 
 `/design-standards`, from `web/src/app/design-standards/page.tsx`. It documents
-the type scale, color, rule weights, and document conventions the site follows —
-which are shared with the Alexandria Library site. If you change a token in
-`styles_primary.css`, update the corresponding row there; nothing keeps them in
-sync automatically.
+the type scale, color, rule weights, and document conventions the site follows.
+If you change a token in `styles_primary.css`, update the corresponding row
+there; nothing keeps them in sync automatically.
 
 ---
 

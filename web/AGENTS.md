@@ -35,12 +35,12 @@ table in [`../README.md`](../README.md).
   place appears once in both lists. Opening is the browser's, not React state
   — with one exception: a location row's `open` state is controlled, because
   selecting a map pin has to open it, and only one location is open at a time.
-- **The design language is shared with Alexandria Library.** Before changing
-  type, color, or rules, check `/design-standards` — a change here is a change
-  to both projects' shared standard. Its current shape: Inter for headings and
-  prose, IBM Plex Mono for recorded values only, hairline rules rather than
-  heavy ones, three weights (400/500/600) and no bold, and no numbering on
-  sections, subsections, figures or references.
+- **`/design-standards` states the design language.** Before changing type,
+  color, or rules, check it — a change here is a change to the standard the
+  whole site follows. Its current shape: Inter for headings and prose, IBM
+  Plex Mono for recorded values only, hairline rules rather than heavy ones,
+  three weights (400/500/600) and no bold, and no numbering on sections,
+  subsections, figures or references.
 - **Reuse the primitives in `src/components/ui/`.** `Section`, `Disclosure`
   and `Masthead` exist so that every page emits the same markup for the same
   thing. Assembling a heading or a title block by hand is how the pages drifted

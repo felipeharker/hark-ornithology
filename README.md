@@ -73,12 +73,11 @@ web/
 
 ## Design
 
-The site shares one visual language with its sibling project, [Alexandria
-Library](https://github.com/felipeharker/alexandria_script_library_master): a
-quiet, modern document — Inter for headings and prose, IBM Plex Mono reserved
-for recorded data, hairline rules and whitespace instead of heavy bars and
-boxes, three type weights and no bold, and one deep-red accent that only ever
-means "interactive or selected". Nothing on the site is numbered.
+The site is one visual language: a quiet, modern document — Inter for headings
+and prose, IBM Plex Mono reserved for recorded data, hairline rules and
+whitespace instead of heavy bars and boxes, three type weights and no bold, and
+one deep-red accent that only ever means "interactive or selected". Nothing on
+the site is numbered.
 
 It is documented at `/design-standards` on the running site, and implemented in
 two annotated stylesheets, `web/src/app/styles_primary.css` and
