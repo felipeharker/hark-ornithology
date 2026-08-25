@@ -54,19 +54,18 @@ export default function DesignStandardsPage() {
           dateline="Type, color, spacing and document conventions used site-wide."
         />
 
-        <Section title="Shared Language">
+        <Section title="Visual Language">
           <p className="body-text">
-            This site and its sibling project, <i>Alexandria Library</i>, share one visual
-            language: a quiet, modern document. A neutral sans carries every heading and every
-            line of prose; a monospace face is reserved for recorded values, where column
-            alignment matters and a reader benefits from seeing at a glance that something is
-            data rather than a sentence. Structure comes from hairline rules and whitespace
-            rather than heavy bars, boxes or shadows, and a single deep red is the only accent.
+            This site is one visual language: a quiet, modern document. A neutral sans carries
+            every heading and every line of prose; a monospace face is reserved for recorded
+            values, where column alignment matters and a reader benefits from seeing at a glance
+            that something is data rather than a sentence. Structure comes from hairline rules
+            and whitespace rather than heavy bars, boxes or shadows, and a single deep red is
+            the only accent.
           </p>
           <p className="body-text">
-            Where this site has a component the other does not — the map, the media grids, the
-            checklist records — that component is styled to the same rules rather than
-            introducing a second idiom.
+            The pieces particular to this site — the map, the media grids, the checklist
+            records — are styled to those same rules rather than introducing a second idiom.
           </p>
           <p className="body-text">
             Every rule lives in two annotated stylesheets: <code>src/app/styles_primary.css</code>{' '}
