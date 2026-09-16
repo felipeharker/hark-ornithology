@@ -6,3 +6,4 @@
 - pack list (camera, clothes, packs) y
 - excursions y
 - dinners on board 
+- print baggage tags
