@@ -6,7 +6,9 @@ S336423761,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,X,US-TX,Montg
 S326808768,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,20,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731355 656731382 656731383 656731384 656731385 656731387 656731389 656731483
 S336433698,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
 S314159734,Black-bellied Whistling-Duck,Dendrocygna autumnalis,243,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
-S345797347,Black Swan,Cygnus atratus,379,1,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,Nesting on bank of small pond.
+S390463425,Canada Goose,Branta canadensis,342,5,US-WA,King,L4045629,Lake Union Park,47.6265,-122.3379028,2026-09-06,11:19 AM,eBird - Traveling Count,21,0,.44,,2,,,Union Lake walk. Lots of gulls and water birds we couldn’t positively ID.
+S391424661,Canada Goose,Branta canadensis,342,5,CA-YT,Yukon,L76949237,Yukon Railway/White Pass,60.719723,-135.051284,2026-09-09,03:25 PM,eBird - Casual Observation,,0,,,2
+S345797347,Black Swan,Cygnus atratus,379,1,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,Nesting on bank of small pond.,,659028508
 S289207764,Trumpeter Swan,Cygnus buccinator,382,25,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
 S326808768,Egyptian Goose,Alopochen aegyptiaca,417,5,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731475
 S345737602,Muscovy Duck,Cairina moschata,445,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
@@ -15,9 +17,13 @@ S296601317,Muscovy Duck (Domestic type),Cairina moschata (Domestic type),446,1,U
 S314516825,Wood Duck,Aix sponsa,455,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S312570745,Blue-winged Teal,Spatula discors,485,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-23,06:35 PM,eBird - Traveling Count,60,0,1.609,,1
 S289207764,Mallard,Anas platyrhynchos,545,12,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
+S391424144,Mallard,Anas platyrhynchos,545,5,US-AK,Juneau City and Borough,L76949144,Juneau Port,58.296108,-134.400431,2026-09-08,02:30 PM,eBird - Stationary Count,60,0,,,2
 S296601317,Mallard,Anas platyrhynchos,545,6,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,eBird - Stationary Count,30,1,,,2
+S388081995,Mallard,Anas platyrhynchos,545,20,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-08-29,05:38 PM,eBird - Traveling Count,6,1,.147,,2,,,Pre-dinner walk
 S345797347,Mallard,Anas platyrhynchos,545,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,Seen at a small pond,,659026056 659026057 659026058 659026059 659026060
+S391424661,Mallard,Anas platyrhynchos,545,5,CA-YT,Yukon,L76949237,Yukon Railway/White Pass,60.719723,-135.051284,2026-09-09,03:25 PM,eBird - Casual Observation,,0,,,2
 S345804797,Rusty-margined Guan,Penelope superciliaris,888,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967714
+S390150407,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,1,US-WA,King,L76750692,Moxy Seattle,47.618517,-122.33084,2026-09-05,06:06 PM,eBird - Casual Observation,,0,,,2
 S314516825,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S345796329,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L67605826,General Osorio,-22.983045,-43.196387,2026-05-22,12:34 PM,eBird - Traveling Count,15,1,.966,,2
 S342799943,Rock Pigeon (Feral Pigeon),Columba livia (Feral Pigeon),1868,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
@@ -101,10 +107,15 @@ S321692354,Black-chinned Hummingbird,Archilochus alexandri,4803,X,US-TX,Bandera,
 S345804797,Violet-capped Woodnymph,Thalurania glaucopis,4974,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967116 658967330
 S342800778,Swallow-tailed Hummingbird,Eupetomena macroura,5032,X,BR-RJ,Rio de Janeiro,L66969241,Largo da Carioca,-22.90651,-43.177205,2026-05-17,04:28 PM,eBird - Casual Observation,,0,,,2
 S296601317,American Coot,Fulica americana,5500,24,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,eBird - Stationary Count,30,1,,,2
+S354320286,Killdeer,Charadrius vociferus,5827,1,US-TX,Montgomery,L69420974,"449 S Loop 336 W, Conroe, TX",30.278286,-95.46723,2026-06-07,08:52 PM,eBird - Casual Observation,,0,,,1
 S336423761,Killdeer,Charadrius vociferus,5827,X,US-TX,Montgomery,L65424399,"508 Greenleaf Cir, Conroe TX 77302",30.256693,-95.436197,2026-05-10,08:54 AM,eBird - Traveling Count,65,1,1.7,,2
 S345673323,Southern Lapwing,Vanellus chilensis,5896,2,BR-RJ,Rio de Janeiro,L4736564,Praia do Flamengo,-22.9276827,-43.1728363,2026-05-23,08:37 AM,eBird - Traveling Count,75,1,2.414,,2
+S391600593,Black-legged Kittiwake,Rissa tridactyla,6449,100,US-AK,Hoonah-Angoon Census Area,L76978209,Glacier Bay National Park,58.845887,-137.104059,2026-09-10,10:21 AM,eBird - Stationary Count,60,0,,,2,,Glacier Bay!
 S327404344,Laughing Gull,Leucophaeus atricilla,6490,1,US-TX,Harris,L63941960,"4602 Davenport St, Houston, TX 77051",29.666342,-95.358695,2026-04-25,05:34 PM,eBird - Casual Observation,,0,,,1
 S342799943,Kelp Gull,Larus dominicanus,6533,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
+S390821589,Glaucous-winged Gull,Larus glaucescens,6596,10,US-WA,King,L4033311,Belltown Cottage Park,47.6139634,-122.3510349,2026-09-06,12:52 PM,eBird - Stationary Count,10,0,,,2,,,Awaiting cruise boarding at Edgewater Hotel.
+S391424384,Glaucous-winged Gull,Larus glaucescens,6596,10,US-AK,Skagway Municipality,L76949182,Skagway Port,59.452656,-135.321448,2026-09-09,07:03 PM,eBird - Traveling Count,30,0,1.207,,2
+S390822535,Short-tailed Albatross,Phoebastria albatrus,6990,1,CA-BC,Mount Waddington,L76856867,North Pacific Ocean,50.581592,-129.273448,2026-09-07,09:16 AM,eBird - Casual Observation,,0,,,2,,Seen fishing off the Norwegian Encore,Aboard the Norwegian Encore
 S342799943,Magnificent Frigatebird,Fregata magnificens,7315,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
 S352017523,Magnificent Frigatebird,Fregata magnificens,7315,X,BR-RJ,Rio de Janeiro,L66786659,Largo do Machado,-22.930838,-43.177671,2026-05-20,05:17 PM,eBird - Casual Observation,,0,,,2,,,,659024054
 S342078667,Brown Booby,Sula leucogaster,7342,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-16,03:45 PM,eBird - Casual Observation,,0,,,2
@@ -113,12 +124,15 @@ S298917800,White Ibis,Eudocimus albus,7462,5,US-TX,Harris,L51937682,Fall Creek S
 S314843167,Yellow-crowned Night Heron,Nyctanassa violacea,7591,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-03-30,01:25 PM,eBird - Casual Observation,,0,,,1
 S318472448,Yellow-crowned Night Heron,Nyctanassa violacea,7591,4,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-07,07:45 AM,eBird - Casual Observation,,0,,,1
 S329523506,Yellow-crowned Night Heron,Nyctanassa violacea,7591,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-29,01:31 PM,eBird - Casual Observation,,0,,,1,,,Outside office
+S352379170,Yellow-crowned Night Heron,Nyctanassa violacea,7591,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-06-04,12:50 PM,eBird - Casual Observation,,0,,,1
 S342078580,Black-crowned Night Heron,Nycticorax nycticorax,7600,1,BR-RJ,Rio de Janeiro,L66826952,Copacabana,-22.984184,-43.189353,2026-05-15,12:20 PM,eBird - Casual Observation,,0,,,2
+S363823239,Snowy Egret,Egretta thula,7645,1,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-06-26,05:28 PM,eBird - Casual Observation,,0,,,1
 S269003690,Green Heron,Butorides virescens,7704,1,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2025-08-23,10:07 AM,eBird - Traveling Count,41,0,.964,,2
 S318119330,Western Cattle-Egret,Ardea ibis,7724,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
 S314516825,Western Cattle-Egret,Ardea ibis,7724,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S350586590,Great Egret,Ardea alba,7729,X,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-05-31,04:42 PM,eBird - Traveling Count,20,0,.518,,2,,,"Hot, humid day. Extremely sunny. Cooler temps under the tree canopy/shaded trail. New disc golf course at the park has created additional available walking paths along the bayou. Insect repellent, more water needed."
 S296601317,Great Egret,Ardea alba,7729,24,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-01-17,12:00 PM,eBird - Stationary Count,30,1,,,2
+S388081995,Great Egret,Ardea alba,7729,1,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-08-29,05:38 PM,eBird - Traveling Count,6,1,.147,,2,,,Pre-dinner walk
 S326808768,Great Egret,Ardea alba,7729,3,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1,,,,656731471 656731472
 S336433698,Great Egret,Ardea alba,7729,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
 S321692354,Great Blue Heron,Ardea herodias,7753,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
@@ -127,6 +141,7 @@ S289207764,Great Blue Heron,Ardea herodias,7753,2,US-WA,Clark,L3402877,Salmon Cr
 S312570745,Great Blue Heron,Ardea herodias,7753,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-23,06:35 PM,eBird - Traveling Count,60,0,1.609,,1
 S312854498,Great Blue Heron,Ardea herodias,7753,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-24,06:13 PM,eBird - Traveling Count,65,0,2.38,,1
 S311655274,Great Blue Heron,Ardea herodias,7753,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-21,10:38 AM,eBird - Traveling Count,68,0,1.664,,2
+S388081995,Great Blue Heron,Ardea herodias,7753,1,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-08-29,05:38 PM,eBird - Traveling Count,6,1,.147,,2,,,Pre-dinner walk
 S272084069,Great Blue Heron,Ardea herodias,7753,1,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2025-09-07,12:43 PM,eBird - Traveling Count,72,0,2.239,,2
 S326808768,Great Blue Heron,Ardea herodias,7753,3,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
 S314159734,Great Blue Heron,Ardea herodias,7753,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
@@ -144,7 +159,9 @@ S312854498,Turkey Vulture,Cathartes aura,7815,X,US-TX,Harris,L51937682,Fall Cree
 S336800356,Swallow-tailed Kite,Elanoides forficatus,7921,1,US-TX,Montgomery,L65800755,Pinecroft Shopping Center,30.168608,-95.454336,2026-05-10,04:50 PM,eBird - Casual Observation,,0,,,2,,,Parking lot leaving store
 S281346134,Cooper's Hawk,Astur cooperii,8278,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-25,05:06 PM,eBird - Traveling Count,24,0,.906,,2
 S302546158,Bald Eagle,Haliaeetus leucocephalus,8367,1,US-TX,Harris,L58916753,"12301–12331 John F Kennedy Blvd, Houston US-TX (29.90253, -95.33249)",29.902526,-95.332492,2026-02-20,05:55 PM,eBird - Casual Observation,,0,,,1
+S391424144,Bald Eagle,Haliaeetus leucocephalus,8367,1,US-AK,Juneau City and Borough,L76949144,Juneau Port,58.296108,-134.400431,2026-09-08,02:30 PM,eBird - Stationary Count,60,0,,,2
 S276172030,Mississippi Kite,Ictinia mississippiensis,8388,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-09-28,05:12 PM,eBird - Traveling Count,30,0,.984,,2
+S354321092,Mississippi Kite,Ictinia mississippiensis,8388,1,US-TX,Montgomery,L58620920,Wedgewood Park,30.166632,-95.49388,2026-06-07,11:16 AM,eBird - Casual Observation,,0,,,1
 S343523220,Harris's Hawk,Parabuteo unicinctus,8445,1,BR-RJ,Rio de Janeiro,L66826952,Copacabana,-22.984184,-43.189353,2026-05-21,02:52 PM,eBird - Casual Observation,,0,,,2
 S300057008,Red-shouldered Hawk,Buteo lineatus,8487,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
 S292237383,Red-shouldered Hawk,Buteo lineatus,8487,1,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-01-03,04:19 PM,eBird - Traveling Count,44,0,1.492,,2
@@ -189,6 +206,7 @@ S314159734,Downy Woodpecker,Dryobates pubescens,11400,X,US-TX,Montgomery,L129118
 S269003690,Pileated Woodpecker,Dryocopus pileatus,11762,1,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2025-08-23,10:07 AM,eBird - Traveling Count,41,0,.964,,2
 S314516825,Pileated Woodpecker,Dryocopus pileatus,11762,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S314159734,Pileated Woodpecker,Dryocopus pileatus,11762,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
+S367075335,Crested Caracara,Caracara plancus,11962,1,US-TX,Gonzales,L72286814,"IH-10 W, Waelder US-TX 29.66685, -97.33360",29.666852,-97.3336,2026-07-03,11:44 AM,eBird - Casual Observation,,0,,,2
 S345673323,Monk Parakeet,Myiopsitta monachus,12819,X,BR-RJ,Rio de Janeiro,L4736564,Praia do Flamengo,-22.9276827,-43.1728363,2026-05-23,08:37 AM,eBird - Traveling Count,75,1,2.414,,2
 S345804797,Plain Parakeet,Brotogeris tirica,12828,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
 S342802355,Plain Parakeet,Brotogeris tirica,12828,X,BR-RJ,Rio de Janeiro,L66786659,Largo do Machado,-22.930838,-43.177671,2026-05-19,10:15 AM,eBird - Stationary Count,25,1,,,2
@@ -219,8 +237,8 @@ S345804797,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L494
 S342800778,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L66969241,Largo da Carioca,-22.90651,-43.177205,2026-05-17,04:28 PM,eBird - Casual Observation,,0,,,2
 S345766711,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L67598567,Maracana Stadium,-22.912991,-43.231055,2026-05-20,11:40 AM,eBird - Casual Observation,,0,,,2
 S345737602,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
-S345797347,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
-S345797347,Boat-billed Flycatcher,Megarynchus pitangua,17379,1,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659027072 659027073 659027074 659027075
+S345797347,Great Kiskadee,Pitangus sulphuratus,17368,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2,,,,659027072 659027073 659027074 659027075
+S345797347,Boat-billed Flycatcher,Megarynchus pitangua,17379,1,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-21,10:27 AM,eBird - Traveling Count,35,0,1.609,,2
 S345804797,Rusty-margined Flycatcher,Myiozetetes cayanensis,17387,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
 S345804797,Social Flycatcher,Myiozetetes similis,17392,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2,,,,658967860 658967861 658967862 658967863 658967973
 S345737602,Social Flycatcher,Myiozetetes similis,17392,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
@@ -229,6 +247,7 @@ S345804797,Tropical Kingbird,Tyrannus melancholicus,17452,1,BR-RJ,Rio de Janeiro
 S345737602,Tropical Kingbird,Tyrannus melancholicus,17452,X,BR-RJ,Rio de Janeiro,L11532167,Parque Eduardo Guinle,-22.9309128,-43.1831111,2026-05-19,10:50 AM,eBird - Traveling Count,60,1,2.012,,2
 S321697386,Couch's Kingbird,Tyrannus couchii,17459,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
 S321697386,Scissor-tailed Flycatcher,Tyrannus forficatus,17489,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
+S354240885,Scissor-tailed Flycatcher,Tyrannus forficatus,17489,1,US-TX,Montgomery,L69404089,Portofino Shopping Center,30.188319,-95.452075,2026-06-07,05:20 PM,eBird - Casual Observation,,0,,,1
 S345804797,Rufous-browed Peppershrike,Cyclarhis gujanensis,19051,X,BR-RJ,Rio de Janeiro,L494684,Jardim Botânico do Rio de Janeiro,-22.9674422,-43.2241201,2026-05-16,07:59 AM,eBird - Traveling Count,115,1,1.819,,2
 S321692354,White-eyed Vireo,Vireo griseus,19165,X,US-TX,Bandera,L55523150,Pipe Creek (private),29.698248,-98.973629,2026-04-12,11:58 AM,eBird - Stationary Count,90,0,,,2
 S311655274,White-eyed Vireo,Vireo griseus,19165,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-03-21,10:38 AM,eBird - Traveling Count,68,0,1.664,,2
@@ -241,6 +260,7 @@ S311655274,Blue-headed Vireo,Vireo solitarius,19226,X,US-TX,Harris,L128996,Jesse
 S336433698,Eastern Warbling Vireo,Vireo gilvus,19245,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
 S333500962,Red-eyed Vireo,Vireo olivaceus,19267,X,US-TX,Harris,L128996,Jesse H. Jones County Park (UTC 038),30.024,-95.295,2026-05-02,10:02 AM,eBird - Traveling Count,137,1,2.091,,1
 S289207764,Steller's Jay,Cyanocitta stelleri,21274,2,US-WA,Clark,L3402877,Salmon Creek Greenway Trail,45.7122376,-122.6851518,2025-12-19,08:59 AM,eBird - Traveling Count,57,0,.799,,2
+S391424384,Steller's Jay,Cyanocitta stelleri,21274,1,US-AK,Skagway Municipality,L76949182,Skagway Port,59.452656,-135.321448,2026-09-09,07:03 PM,eBird - Traveling Count,30,0,1.207,,2
 S300057008,Blue Jay,Cyanocitta cristata,21294,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-02-13,10:57 AM,eBird - Traveling Count,32,0,1.035,,2
 S292777369,Blue Jay,Cyanocitta cristata,21294,1,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-01-06,09:22 AM,eBird - Casual Observation,,0,,,1
 S334123881,Blue Jay,Cyanocitta cristata,21294,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-05-07,01:07 PM,eBird - Stationary Count,5,1,,,1
@@ -276,10 +296,13 @@ S279245275,American Crow,Corvus brachyrhynchos,21557,1,US-TX,Harris,L51937682,Fa
 S298682402,American Crow,Corvus brachyrhynchos,21557,8,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-02-07,12:05 PM,eBird - Traveling Count,66,0,3.567,,2
 S312854498,American Crow,Corvus brachyrhynchos,21557,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-24,06:13 PM,eBird - Traveling Count,65,0,2.38,,1
 S333756698,American Crow,Corvus brachyrhynchos,21557,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-05-06,06:02 PM,eBird - Traveling Count,40,1,1.021,,1
+S391424144,American Crow,Corvus brachyrhynchos,21557,10,US-AK,Juneau City and Borough,L76949144,Juneau Port,58.296108,-134.400431,2026-09-08,02:30 PM,eBird - Stationary Count,60,0,,,2
+S390463425,American Crow,Corvus brachyrhynchos,21557,10,US-WA,King,L4045629,Lake Union Park,47.6265,-122.3379028,2026-09-06,11:19 AM,eBird - Traveling Count,21,0,.44,,2,,,Union Lake walk. Lots of gulls and water birds we couldn’t positively ID.
 S336423761,American Crow,Corvus brachyrhynchos,21557,X,US-TX,Montgomery,L65424399,"508 Greenleaf Cir, Conroe TX 77302",30.256693,-95.436197,2026-05-10,08:54 AM,eBird - Traveling Count,65,1,1.7,,2
 S314516825,American Crow,Corvus brachyrhynchos,21557,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S336433698,American Crow,Corvus brachyrhynchos,21557,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
 S314159734,American Crow,Corvus brachyrhynchos,21557,X,US-TX,Montgomery,L129118,W.G. Jones State Forest (UTC 036),30.235563,-95.4852676,2026-03-28,05:57 PM,eBird - Traveling Count,116,0,5.157,,2
+S391424384,American Crow,Corvus brachyrhynchos,21557,25,US-AK,Skagway Municipality,L76949182,Skagway Port,59.452656,-135.321448,2026-09-09,07:03 PM,eBird - Traveling Count,30,0,1.207,,2
 S318119330,Fish Crow,Corvus ossifragus,21570,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
 S333756698,Fish Crow,Corvus ossifragus,21570,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-05-06,06:02 PM,eBird - Traveling Count,40,1,1.021,,1,,,,656801967 656801968
 S326808768,Fish Crow,Corvus ossifragus,21570,4,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
@@ -304,6 +327,7 @@ S336423761,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Montgomery,L654
 S313767068,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-27,06:31 PM,eBird - Traveling Count,32,0,.641,,2
 S314516825,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S336433698,Carolina Chickadee,Poecile carolinensis,22060,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-05-09,07:00 AM,eBird - Traveling Count,120,1,4.023,,1,,,"Restored iOS; lost local recordings and track data. observations recorded are from memory (conservatively), field notes, and pictures."
+S390463425,Black-capped Chickadee,Poecile atricapillus,22065,20,US-WA,King,L4045629,Lake Union Park,47.6265,-122.3379028,2026-09-06,11:19 AM,eBird - Traveling Count,21,0,.44,,2,,,Union Lake walk. Lots of gulls and water birds we couldn’t positively ID.
 S292237383,Tufted Titmouse,Baeolophus bicolor,22160,6,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-01-03,04:19 PM,eBird - Traveling Count,44,0,1.492,,2
 S269094797,Tufted Titmouse,Baeolophus bicolor,22160,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-08-23,06:22 PM,eBird - Traveling Count,27,0,.74,,2
 S279245275,Tufted Titmouse,Baeolophus bicolor,22160,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-10-13,06:30 PM,eBird - Traveling Count,24,0,.942,,1,,,New spot by the creek. Maybe visit earlier.
@@ -325,6 +349,7 @@ S321697386,Black-crested Titmouse,Baeolophus atricristatus,22163,X,US-TX,Bexar,L
 S307364174,Purple Martin,Progne subis,24081,X,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-03-08,02:34 PM,eBird - Traveling Count,10,0,.172,,2
 S312658119,Barn Swallow,Hirundo rustica,24187,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-03-24,07:36 AM,eBird - Casual Observation,,0,,,1
 S334123881,Barn Swallow,Hirundo rustica,24187,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-05-07,01:07 PM,eBird - Stationary Count,5,1,,,1
+S352379170,Barn Swallow,Hirundo rustica,24187,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-06-04,12:50 PM,eBird - Casual Observation,,0,,,1
 S350586590,Barn Swallow,Hirundo rustica,24187,X,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-05-31,04:42 PM,eBird - Traveling Count,20,0,.518,,2,,,"Hot, humid day. Extremely sunny. Cooler temps under the tree canopy/shaded trail. New disc golf course at the park has created additional available walking paths along the bayou. Insect repellent, more water needed."
 S318119395,Barn Swallow,Hirundo rustica,24187,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-03-30,06:00 PM,eBird - Traveling Count,41,0,1.261,,1
 S318119330,Barn Swallow,Hirundo rustica,24187,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
@@ -394,6 +419,7 @@ S292777369,Northern Mockingbird,Mimus polyglottos,28114,1,US-TX,Harris,L52026897
 S322120044,Northern Mockingbird,Mimus polyglottos,28114,1,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-15,12:33 PM,eBird - Casual Observation,,0,,,1,,,Outside the office/warehouse at lunchtime
 S329523506,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-29,01:31 PM,eBird - Casual Observation,,0,,,1,,,Outside office
 S334123881,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-05-07,01:07 PM,eBird - Stationary Count,5,1,,,1
+S352379170,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-06-04,12:50 PM,eBird - Casual Observation,,0,,,1
 S281556658,Northern Mockingbird,Mimus polyglottos,28114,1,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2025-10-26,05:46 PM,eBird - Traveling Count,7,0,.342,,2
 S307364174,Northern Mockingbird,Mimus polyglottos,28114,X,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-03-08,02:34 PM,eBird - Traveling Count,10,0,.172,,2
 S269094797,Northern Mockingbird,Mimus polyglottos,28114,5,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-08-23,06:22 PM,eBird - Traveling Count,27,0,.74,,2
@@ -486,6 +512,8 @@ S318119348,House Sparrow,Passer domesticus,31534,X,US-TX,Harris,L51937682,Fall C
 S318119330,House Sparrow,Passer domesticus,31534,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-06,06:01 PM,eBird - Traveling Count,74,0,3.773,,1
 S328558759,House Sparrow,Passer domesticus,31534,100,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-04-26,06:27 PM,eBird - Traveling Count,35,1,.894,,1
 S333756698,House Sparrow,Passer domesticus,31534,X,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2026-05-06,06:02 PM,eBird - Traveling Count,40,1,1.021,,1
+S390463425,House Sparrow,Passer domesticus,31534,2,US-WA,King,L4045629,Lake Union Park,47.6265,-122.3379028,2026-09-06,11:19 AM,eBird - Traveling Count,21,0,.44,,2,,,Union Lake walk. Lots of gulls and water birds we couldn’t positively ID.
+S388081995,House Sparrow,Passer domesticus,31534,40,US-TX,Montgomery,L57722940,Hughes Landing,30.170749,-95.470512,2026-08-29,05:38 PM,eBird - Traveling Count,6,1,.147,,2,,,Pre-dinner walk
 S314516825,House Sparrow,Passer domesticus,31534,X,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-03-29,02:45 PM,eBird - Traveling Count,61,0,1.752,,2
 S326808768,House Sparrow,Passer domesticus,31534,4,US-TX,Montgomery,L1425418,San Jacinto R. at I-45 (Montgomery Co.),30.248339,-95.4584877,2026-04-18,06:03 PM,eBird - Traveling Count,60,1,1.371,,1
 S342799943,House Sparrow,Passer domesticus,31534,X,BR-RJ,Rio de Janeiro,L66826972,Ipanema/Arpoador,-22.98742,-43.196121,2026-05-15,10:58 AM,eBird - Traveling Count,30,0,.805,,2
@@ -570,6 +598,7 @@ S300057008,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Bexar,L614722,S
 S321697386,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Bexar,L614722,San Pedro Springs Park (HOTE 094),29.4467731,-98.5014868,2026-04-10,09:09 AM,eBird - Traveling Count,33,0,1.094,,1
 S322120044,Northern Cardinal,Cardinalis cardinalis,34515,2,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-04-15,12:33 PM,eBird - Casual Observation,,0,,,1,,,Outside the office/warehouse at lunchtime
 S334123881,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-05-07,01:07 PM,eBird - Stationary Count,5,1,,,1
+S352379170,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Harris,L52026897,Aria Signs (private),29.926009,-95.368466,2026-06-04,12:50 PM,eBird - Casual Observation,,0,,,1
 S307364174,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-03-08,02:34 PM,eBird - Traveling Count,10,0,.172,,2
 S350586590,Northern Cardinal,Cardinalis cardinalis,34515,X,US-TX,Harris,L54503706,Fall Creek Sports Complex,29.924665,-95.239595,2026-05-31,04:42 PM,eBird - Traveling Count,20,0,.518,,2,,,"Hot, humid day. Extremely sunny. Cooler temps under the tree canopy/shaded trail. New disc golf course at the park has created additional available walking paths along the bayou. Insect repellent, more water needed."
 S269094797,Northern Cardinal,Cardinalis cardinalis,34515,1,US-TX,Harris,L51937682,Fall Creek Subdivision,29.932926,-95.277139,2025-08-23,06:22 PM,eBird - Traveling Count,27,0,.74,,2
